@@ -1,15 +1,18 @@
-import * as React from 'react';
+import { SafeAreaView, Text, View } from "react-native"
 
-import { Text, View } from "react-native"
-
+import { AuthProvider } from "./SRC/Context/AuthContext";
 import { NavigationContainer } from '@react-navigation/native';
 import { OnBoardStackScreen } from './SRC/Navigation/StackNav';
 import OnBoarding from './SRC/MainScreens/OnBoardingScreen/OnBoarding';
+import React from 'react';
 
-const App=()=>{
-  return(
+const App = () => {
+  return (
     <NavigationContainer>
-      <OnBoardStackScreen />
+      <AuthProvider>
+        <SafeAreaView />
+        <OnBoardStackScreen />
+      </AuthProvider>
     </NavigationContainer>
   )
 }

@@ -11,14 +11,17 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
+import React, { useContext } from 'react'
 
+import { AuthContext } from "../../Context/AuthContext";
 import CustomButton from "../../CustomComponents/CustomButton";
-import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { widthPercentageToDP } from "react-native-responsive-screen";
 
 const CreateAccount = () => {
     const navigation = useNavigation()
+    const { a } = useContext(AuthContext)
+    console.log(a)
     return (
         <SafeAreaView style={[styles.SafeAreaView]}>
             <StatusBar barStyle="dark-content" backgroundColor={COLORS.primary} />
@@ -53,7 +56,7 @@ const CreateAccount = () => {
                         title="Create an account"
                         titleColor={COLORS.white}
                         size="60"
-                        onPress={() => navigation.replace('RegisterScreen')}
+                        onPress={() => navigation.navigate('RegisterScreen')}
                     />
                 </View>
                 <View style={{ alignItems: "center" }}>
@@ -62,7 +65,7 @@ const CreateAccount = () => {
                         title="Sign in"
                         titleColor={COLORS.primary}
                         size="60"
-                        onPress={() => navigation.replace('Login')}
+                        onPress={() => navigation.navigate('Login')}
                     />
                 </View>
             </View>
@@ -75,25 +78,25 @@ export default CreateAccount
 
 const styles = StyleSheet.create({
     SafeAreaView: {
-      width:widthPercentageToDP('100'),
-      flex: 1,
-      backgroundColor: "#D9D9D9",
-      alignItems: "center",
-      justifyContent: "space-evenly",
+        width: widthPercentageToDP('100'),
+        flex: 1,
+        backgroundColor: "#D9D9D9",
+        alignItems: "center",
+        justifyContent: "space-evenly",
     },
     MainContainer: {
-      flex: 1,
-      backgroundColor: COLORS.white,
-      paddingLeft: 0,
-      paddingRight: 0,
-      paddingTop: 0,
-      paddingBottom: 10,
+        flex: 1,
+        backgroundColor: COLORS.white,
+        paddingLeft: 0,
+        paddingRight: 0,
+        paddingTop: 0,
+        paddingBottom: 10,
     },
     Freetext: {
-      fontSize: 17,
-      lineHeight: 22,
-      fontWeight: "bold",
-      letterSpacing: 0.25,
-      color:COLORS.textcolor
+        fontSize: 17,
+        lineHeight: 22,
+        fontWeight: "bold",
+        letterSpacing: 0.25,
+        color: COLORS.textcolor
     },
-  });
+});
