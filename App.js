@@ -1,12 +1,16 @@
+import * as React from 'react';
+
 import { Text, View } from "react-native"
 
-import React from "react"
+import { NavigationContainer } from '@react-navigation/native';
+import { OnBoardStackScreen } from './SRC/Navigation/StackNav';
+import OnBoarding from './SRC/MainScreens/OnBoardingScreen/OnBoarding';
 
 const App=()=>{
   return(
-    <View>
-            
-    </View>
+    <NavigationContainer>
+      <OnBoardStackScreen />
+    </NavigationContainer>
   )
 }
 
