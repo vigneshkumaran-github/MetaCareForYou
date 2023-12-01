@@ -56,7 +56,7 @@ const CreateAccount = () => {
                         title="Create an account"
                         titleColor={COLORS.white}
                         size="60"
-                        onPress={() => navigation.navigate('RegisterScreen')}
+                        onPress={() => navigation.navigate('Register')}
                     />
                 </View>
                 <View style={{ alignItems: "center" }}>

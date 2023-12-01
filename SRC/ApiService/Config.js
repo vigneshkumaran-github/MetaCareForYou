@@ -1,4 +1,5 @@
 export const BASE_URL = 'https://api.metacare4u.online/api/v1/';
+export const  IMAGE_BASE_URL = 'https://api.metacare4u.online/images/';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
