@@ -12,36 +12,27 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
 import React, { useState } from "react";
-import { emailValidator, passwordValidator } from "./../../Helper/Helper";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
-import Config from "../../Config/Config";
-import CustomButton from "./../../Components/CustomButton";
+import { BASE_URL } from "../../../ApiService/Config";
+import { COLORS } from "../../../Constants/DesignConstants";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon1 from "react-native-vector-icons/MaterialIcons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Toast from "react-native-simple-toast";
-import auth from "@react-native-firebase/auth";
 import axios from "axios";
-import { theme } from "../.././Constants";
+import { passwordValidator } from "../../../HelperFunctions/Helper";
 
-const { COLORS, FONTS, SIZES, FONTFAMILY } = theme;
 const { width, height } = Dimensions.get("window");
 
-GoogleSignin.configure({
-  webClientId:
-    "540417514450-hte4s1ju8i32lj7hmcq0ce7ckn27d8da.apps.googleusercontent.com", // client ID of type WEB for your server (needed to verify user ID and offline access)
-  offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-});
+// GoogleSignin.configure({
+//   webClientId:
+//     "540417514450-hte4s1ju8i32lj7hmcq0ce7ckn27d8da.apps.googleusercontent.com", // client ID of type WEB for your server (needed to verify user ID and offline access)
+//   offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+// });
 
 const ResetPassword = ({ navigation, route }) => {
   const user_type = route.params.user_type;
@@ -86,17 +77,17 @@ const ResetPassword = ({ navigation, route }) => {
           user_type: user_type,
         };
 
-        let url = Config.APIURL + "update_password";
+        let url = BASE_URL + "auth/update_password";
 
         await axios
           .post(url, payload)
           .then(function (response) {
             if (response.data.success === true) {
               //Once valide mail send Mail verification Code
-              Toast.show(response.data.message, Toast.LONG);
+              console.log(response?.data)
               nextStep();
             } else {
-              Toast.show(response.data.message, Toast.LONG);
+              console.log(response?.data)
             }
           })
           .catch(function (error) {
@@ -111,8 +102,7 @@ const ResetPassword = ({ navigation, route }) => {
   };
 
   const nextStep=async()=>{
-
-          navigation.navigate('LoginScreen')
+          navigation.replace('Login')
   }
 
   return (
@@ -133,7 +123,7 @@ const ResetPassword = ({ navigation, route }) => {
                 width: 100,
                 height: 110,
                 borderRadius: 100 / 2,
-                backgroundColor: COLORS.shadowColor,
+                backgroundColor: COLORS.shadowcolor,
                 alignItems: "center",
                 justifyContent: "center",
                 shadowOffset: { width: 0, height: 8 },
@@ -145,7 +135,7 @@ const ResetPassword = ({ navigation, route }) => {
               }}
             >
               <Image
-                source={require("../.././Assets/images/logo.png")}
+                source={require("../../../Resources/Images/logo.png")}
                 style={{
                   width: 100,
                   height: 100,

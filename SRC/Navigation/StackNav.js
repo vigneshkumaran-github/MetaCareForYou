@@ -5,15 +5,18 @@ import BookingSuccess from '../MainScreens/AppointmentScreen/BookingSuccess';
 import CreateAccount from '../MainScreens/AuthScreens/CreateAccount';
 import DoctorProfile from '../MainScreens/DoctorProfile/DoctorProfile';
 import EditProfile from '../MainScreens/ProfileScreen/Editprofile';
+import ForgotPassword from '../MainScreens/AuthScreens/ForgotPassword/ForgotPassword';
 import Help from '../MainScreens/HelpandSupport/Help';
 import Home from '../MainScreens/HomeScreens/Home';
 import Login from '../MainScreens/AuthScreens/Login';
 import NotificationScreen from '../SubScreens/Notification/NotificationScreen';
 import OnBoarding from '../MainScreens/OnBoardingScreen/OnBoarding';
+import OtpScreen from '../MainScreens/AuthScreens/ForgotPassword/OtpScreen';
 import PaymentFailed from '../MainScreens/PaymentScreens/PaymentFailed';
 import PaymentSuccess from '../MainScreens/PaymentScreens/PaymentSuccess';
 import Profile from '../MainScreens/ProfileScreen/Profile';
 import Register from '../MainScreens/AuthScreens/Register';
+import ResetPassword from '../MainScreens/AuthScreens/ForgotPassword/ResetPassword';
 import Search from '../MainScreens/SearchScreens/Search';
 import Specialist from '../MainScreens/SpecialListScreen/Specialist';
 import Subscription from '../MainScreens/Subscription/Subscription';
@@ -37,6 +40,9 @@ export const OnBoardStackScreen = () => {
             <OnboardStack.Screen name="CreateAccount" component={CreateAccount} />
             <OnboardStack.Screen name="Login" component={Login} />
             <OnboardStack.Screen name="Register" component={Register} />
+            <OnboardStack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <OnboardStack.Screen name="OtpScreen" component={OtpScreen} />
+            <OnboardStack.Screen name="ResetPassword" component={ResetPassword} />
         </OnboardStack.Navigator>
     )
 }

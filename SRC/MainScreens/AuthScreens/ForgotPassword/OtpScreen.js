@@ -12,55 +12,46 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
 import React, { useState } from "react";
-import { emailValidator, passwordValidator } from "./../../Helper/Helper";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
-import Config from "../../Config/Config";
-import CustomButton from "./../../Components/CustomButton";
+import { BASE_URL } from "../../../ApiService/Config";
+import { COLORS } from "../../../Constants/DesignConstants";
+import CustomButton from "../../../CustomComponents/CustomButton";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon1 from "react-native-vector-icons/MaterialIcons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Toast from "react-native-simple-toast";
-import auth from "@react-native-firebase/auth";
 import axios from "axios";
-import { theme } from "../.././Constants";
 
-const { COLORS, FONTS, SIZES, FONTFAMILY } = theme;
 const { width, height } = Dimensions.get("window");
 
-GoogleSignin.configure({
-  webClientId:
-    "540417514450-hte4s1ju8i32lj7hmcq0ce7ckn27d8da.apps.googleusercontent.com", // client ID of type WEB for your server (needed to verify user ID and offline access)
-  offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-});
+// GoogleSignin.configure({
+//   webClientId:
+//     "540417514450-hte4s1ju8i32lj7hmcq0ce7ckn27d8da.apps.googleusercontent.com", // client ID of type WEB for your server (needed to verify user ID and offline access)
+//   offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+// });
 
 const OtpScreen = ({ navigation, route }) => {
 
   const [userInfo, setuserinfon] = useState({});
   const [email, setOtp] = useState("");
-  
-   const [countDown, setCountDown] = React.useState(0);
+
+  const [countDown, setCountDown] = React.useState(0);
   const [runTimer, setRunTimer] = React.useState(false);
 
-  React.useEffect (()=>{
+  React.useEffect(() => {
     togglerTimer()
-  },[])
+  }, [])
 
 
-   React.useEffect(() => {
+  React.useEffect(() => {
     let timerId;
 
     if (runTimer) {
-      setCountDown(60*15);
+      setCountDown(60 * 15);
       timerId = setInterval(() => {
         setCountDown((countDown) => countDown - 1);
       }, 1000);
@@ -82,91 +73,90 @@ const OtpScreen = ({ navigation, route }) => {
     }
   }, [countDown, runTimer]);
 
- const togglerTimer = () => setRunTimer((t) => !t);
+  const togglerTimer = () => setRunTimer((t) => !t);
 
   const seconds = String(countDown % 60).padStart(2, 0);
   const minutes = String(Math.floor(countDown / 60)).padStart(2, 0);
 
 
 
-  const resendotp =async() =>
- {
-     try {
-        const payload = {
-          email_id: route.params.email,
-          user_type: route.params.user_type,
-        };
+  const resendotp = async () => {
+    try {
+      const payload = {
+        email_id: route.params.email,
+        user_type: route.params.user_type,
+      };
 
-        let url = Config.APIURL + "check_valide_mail";
+      let url = BASE_URL + "auth/check_valide_mail";
 
-        await axios
-          .post(url, payload)
-          .then(function (response) {
-            console.log(response.data)
-            if (response.data.success === true) {
-              //Once valide mail send Mail verification Code
-              Toast.show(response.data.message, Toast.LONG);
-                 setRunTimer(true)
-            } else {
-              Toast.show(response.data.message, Toast.LONG);
-            }
-          })
-          .catch(function (error) {
-            // handle error
-            return error;
-          })
-          .finally(function () {});
-      } catch (error) {
-        return error;
-      }
+      await axios
+        .post(url, payload)
+        .then(function (response) {
+          console.log(response.data)
+          if (response.data.success === true) {
+            //Once valide mail send Mail verification Code
+            console.log(response?.data)
+            setRunTimer(true)
+          } else {
+            console.log(response?.data)
+          }
+        })
+        .catch(function (error) {
+          // handle error
+          return error;
+        })
+        .finally(function () { });
+    } catch (error) {
+      return error;
+    }
 
- }
+  }
 
 
 
   const clickOnpress = async () => {
 
-      try {
-        const payload = {
-          user_email: route.params.email,
-          otp: email,
-        };
+    try {
+      const payload = {
+        user_email: route.params.email,
+        otp: email,
+      };
 
-        let url = Config.APIURL + "otp_verification";
+      let url = BASE_URL + "auth/otp_verification";
 
-        await axios
-          .post(url, payload)
-          .then(function (response) {
-            console.log(response.data)
-            if (response.data.redirect === true){
-                Toast.show(response.data.msg, Toast.LONG);
-                afterSuccess()
-            }else{
-                Toast.show(response.data.msg, Toast.LONG);
-            }
-            // if (response.data.success === true) {
-            //   //Once valide mail send Mail verification Code
-            //   afterSuccess();
-            // } else {
-            //   Toast.show(response.data.message, Toast.LONG);
-            // }
-          })
-          .catch(function (error) {
-            // handle error
-            return error;
-          })
-          .finally(function () {});
-      } catch (error) {
-        return error;
-      }
-    
+      await axios
+        .post(url, payload)
+        .then(function (response) {
+          console.log(response.data)
+          if (response.data.redirect === true) {
+            console.log(response?.data)
+            afterSuccess()
+          } else {
+            console.log(response?.data)
+          }
+          // if (response.data.success === true) {
+          //   //Once valide mail send Mail verification Code
+          //   afterSuccess();
+          // } else {
+          //   Toast.show(response.data.message, Toast.LONG);
+          // }
+        })
+        .catch(function (error) {
+          // handle error
+          return error;
+        })
+        .finally(function () { });
+    } catch (error) {
+      return error;
+    }
+
   };
 
 
-  const afterSuccess=async()=>{
+  const afterSuccess = async () => {
 
 
-          navigation.navigate('ResetPassword',{email:route.params.email,user_type:route.params.user_type})
+    navigation.navigate('ResetPassword', { email: route.params.email, user_type: route.params.user_type })
 
   }
 
@@ -200,7 +190,7 @@ const OtpScreen = ({ navigation, route }) => {
               }}
             >
               <Image
-                source={require("../.././Assets/images/logo.png")}
+                source={require("../../../Resources/Images/logo.png")}
                 style={{
                   width: 100,
                   height: 100,
@@ -245,36 +235,36 @@ const OtpScreen = ({ navigation, route }) => {
                 value={email}
               ></TextInput>
 
-               <View style={{}}>
+              <View style={{}}>
 
-                   {runTimer ? <Text style={{
-                      color: COLORS.secondary, fontSize: 14,
-                      
-                    }} >Resend OTP After {minutes}:{seconds} minutes
-                    </Text>:null}
+                {runTimer ? <Text style={{
+                  color: COLORS.secondary, fontSize: 14,
 
-                  </View>
+                }} >Resend OTP After {minutes}:{seconds} minutes
+                </Text> : null}
+
+              </View>
             </View>
 
-            
 
-          {runTimer ?  <CustomButton
+
+            {runTimer ? <CustomButton
               backgroundColor={COLORS.primary}
               title="Submit OTP"
               titleColor={COLORS.white}
               size="60"
               onPress={() => clickOnpress()}
-            />:
+            /> :
 
-             <CustomButton
-              backgroundColor={COLORS.primary}
-              title="Resend Otp"
-              titleColor={COLORS.white}
-              size="60"
-              onPress={() => resendotp()}
-            />}
+              <CustomButton
+                backgroundColor={COLORS.primary}
+                title="Resend Otp"
+                titleColor={COLORS.white}
+                size="60"
+                onPress={() => resendotp()}
+              />}
 
-            
+
 
 
           </View>

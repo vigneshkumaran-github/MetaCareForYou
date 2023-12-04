@@ -12,36 +12,31 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
 import React, { useState } from "react";
-import { emailValidator, passwordValidator } from "./../../Helper/Helper";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
-import Config from "../../Config/Config";
-import CustomButton from "./../../Components/CustomButton";
+import { BASE_URL } from "../../../ApiService/Config";
+import { COLORS } from "../../../Constants/DesignConstants";
+import CustomButton from "../../../CustomComponents/CustomButton";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon1 from "react-native-vector-icons/MaterialIcons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Toast from "react-native-simple-toast";
-import auth from "@react-native-firebase/auth";
 import axios from "axios";
-import { theme } from "../.././Constants";
+import { emailValidator } from "../../../HelperFunctions/Helper";
 
-const { COLORS, FONTS, SIZES, FONTFAMILY } = theme;
+// import Toast from "react-native-simple-toast";
+
+
 const { width, height } = Dimensions.get("window");
 
-GoogleSignin.configure({
-  webClientId:
-    "540417514450-hte4s1ju8i32lj7hmcq0ce7ckn27d8da.apps.googleusercontent.com", // client ID of type WEB for your server (needed to verify user ID and offline access)
-  offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-});
+// GoogleSignin.configure({
+//   webClientId:
+//     "540417514450-hte4s1ju8i32lj7hmcq0ce7ckn27d8da.apps.googleusercontent.com", // client ID of type WEB for your server (needed to verify user ID and offline access)
+//   offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+// });
 
 const ForgotPassword = ({ navigation, route }) => {
   const user_type = route.params.user_type;
@@ -51,15 +46,6 @@ const ForgotPassword = ({ navigation, route }) => {
   const [emailError, setEmailError] = useState("");
   
   
-  const handlePasswordVisibility = () => {
-    if (passwordIcon === "eye") {
-      setPasswordIcon("eye-off");
-      setPasswordVisibility(!passwordVisibility);
-    } else if (passwordIcon === "eye-off") {
-      setPasswordIcon("eye");
-      setPasswordVisibility(!passwordVisibility);
-    }
-  };
 
   const clickOnpress = async () => {
     var emailValid = false;
@@ -82,17 +68,17 @@ const ForgotPassword = ({ navigation, route }) => {
           user_type: user_type,
         };
 
-        let url = Config.APIURL + "check_valide_mail";
+        let url = BASE_URL + "auth/check_valide_mail";
 
         await axios
           .post(url, payload)
           .then(function (response) {
+            console.log(response?.data)
             if (response.data.success === true) {
               //Once valide mail send Mail verification Code
-              Toast.show(response.data.message, Toast.LONG);
               nextStep();
             } else {
-              Toast.show(response.data.message, Toast.LONG);
+              console.log(response?.data)
             }
           })
           .catch(function (error) {
@@ -143,7 +129,7 @@ const ForgotPassword = ({ navigation, route }) => {
               }}
             >
               <Image
-                source={require("../.././Assets/images/logo.png")}
+                source={require("../../../Resources/Images/logo.png")}
                 style={{
                   width: 100,
                   height: 100,
