@@ -1,3 +1,4 @@
+import { COLORS, FONTFAMILY, FONTS } from '../../Constants/DesignConstants';
 import {
     Dimensions,
     FlatList,
@@ -9,14 +10,16 @@ import {
     Text,
     TouchableOpacity,
     View,
-  } from "react-native";
-  import Icon from 'react-native-vector-icons/FontAwesome5';
-import React from 'react'
-import { COLORS ,FONTS,FONTFAMILY} from '../../Constants/DesignConstants';
+} from "react-native";
+
 import CustomNavbar from "../../CustomComponents/CustomNavbar";
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import React from 'react'
 import { SubscriptionCard } from "./Components";
+import { useNavigation } from '@react-navigation/native';
 
 const Subscription = () => {
+  const navigation = useNavigation()
     return (
         <SafeAreaView style={[styles.SafeAreaView]}>
           <StatusBar barStyle="dark-content" backgroundColor={COLORS.primary} />

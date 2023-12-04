@@ -1,17 +1,25 @@
+import About from '../SubScreens/AboutScreen/About';
+import Appointment from '../MainScreens/AppointmentScreen/Appointment';
+import Booking from '../MainScreens/BookingsScreen/Booking';
+import BookingSuccess from '../MainScreens/AppointmentScreen/BookingSuccess';
 import CreateAccount from '../MainScreens/AuthScreens/CreateAccount';
+import DoctorProfile from '../MainScreens/DoctorProfile/DoctorProfile';
+import EditProfile from '../MainScreens/ProfileScreen/Editprofile';
+import Help from '../MainScreens/HelpandSupport/Help';
 import Home from '../MainScreens/HomeScreens/Home';
 import Login from '../MainScreens/AuthScreens/Login';
+import NotificationScreen from '../SubScreens/Notification/NotificationScreen';
 import OnBoarding from '../MainScreens/OnBoardingScreen/OnBoarding';
-import Register from '../MainScreens/AuthScreens/Register';
-import TabNavigation from './TabNavigation/TabNavigation';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import PaymentFailed from '../MainScreens/PaymentScreens/PaymentFailed';
+import PaymentSuccess from '../MainScreens/PaymentScreens/PaymentSuccess';
 import Profile from '../MainScreens/ProfileScreen/Profile';
-import EditProfile from '../MainScreens/ProfileScreen/Editprofile';
+import Register from '../MainScreens/AuthScreens/Register';
 import Search from '../MainScreens/SearchScreens/Search';
-import About from '../MainScreens/AboutScreen/About';
-import Booking from '../MainScreens/BookingsScreen/Booking';
+import Specialist from '../MainScreens/SpecialListScreen/Specialist';
 import Subscription from '../MainScreens/Subscription/Subscription';
 import SubscriptionDetails from '../MainScreens/Subscription/SubscriptionDetails';
+import TabNavigation from './TabNavigation/TabNavigation';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // import TabNavigation from './TabNavigation/TabNavigation';
 
@@ -52,9 +60,17 @@ export const HomeStackScreen = () => {
             <HomeStack.Screen name="EditProfile" component={EditProfile} />
             <HomeStack.Screen name="Search" component={Search} />
             <HomeStack.Screen name="About" component={About} />
+            <HomeStack.Screen name="PaymentFailed" component={PaymentFailed} />
+            <HomeStack.Screen name="PaymentSuccess" component={PaymentSuccess} />
             <HomeStack.Screen name="Booking" component={Booking} />
+            <HomeStack.Screen name="Help" component={Help} />
             <HomeStack.Screen name="Subscription" component={Subscription} />
             <HomeStack.Screen name="SubscriptionDetails" component={SubscriptionDetails} />
+            <HomeStack.Screen name="Specialist" component={Specialist} />
+            <HomeStack.Screen name="DoctorProfile" component={DoctorProfile} />
+            <HomeStack.Screen name="AppointmentScreen" component={Appointment} />
+            <HomeStack.Screen name="BookingSuccess" component={BookingSuccess} />
+            <HomeStack.Screen name="NotificationScreen" component={NotificationScreen} />
         </HomeStack.Navigator>
     )
 }

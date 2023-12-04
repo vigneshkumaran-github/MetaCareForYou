@@ -22,7 +22,7 @@ const Search = () => {
 
 
   const [Loading, setIsloading] = useState(true)
-  const navigates = useNavigation();
+  const navigation = useNavigation();
 
 
   //To COLLECT All DAta
@@ -122,7 +122,7 @@ const Search = () => {
       <SafeAreaView
         style={[styles.container]}>
         <StatusBar barStyle="dark-light" backgroundColor={COLORS.primary} />
-        <CustomNavbar title="Find For More" onPress={() => navigates.goBack()} />
+        <CustomNavbar title="Find For More" onPress={() => navigation.goBack()} />
         <ScrollView showsVerticalScrollIndicator={false}>
           <KeyboardAwareScrollView
             enableOnAndroid={true}

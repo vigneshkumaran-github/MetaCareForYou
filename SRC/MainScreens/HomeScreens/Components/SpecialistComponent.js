@@ -65,7 +65,7 @@ const SpecialistComponent = ({}) => {
     async function fetchMyAPI() {
       setIsloading(true)
       
-      let url=BASE_URL+'get_specialist';
+      let url=BASE_URL+'auth/get_specialist';
       try{
      await axios
       .get(url)
@@ -91,7 +91,7 @@ const SpecialistComponent = ({}) => {
 
 
   const SpacialistClick = (id,title) => {
-     navigation.replace("SpecialistList",{CategoryId:id,CategoryName: title});
+     navigation.navigate("Specialist",{CategoryId:id,CategoryName: title});
   };
 
   const ItemSeparatorView = () => {

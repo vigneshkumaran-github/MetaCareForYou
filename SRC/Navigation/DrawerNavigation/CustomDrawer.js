@@ -1,3 +1,4 @@
+import { COLORS, FONTFAMILY } from '../../Constants/DesignConstants';
 import {
   DrawerContentScrollView,
   DrawerItem,
@@ -7,26 +8,25 @@ import {
   ImageBackground,
   Linking,
   Share,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  StyleSheet
+  View
 } from 'react-native';
+import React, { useContext } from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../../Context/AuthContext';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { IMAGE_BASE_URL } from '../../ApiService/Config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import React, { useContext } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { AuthContext } from '../../Context/AuthContext';
-import { COLORS, FONTFAMILY } from '../../Constants/DesignConstants';
 import { getInitials } from '../../HelperFunctions/Helper';
-import { IMAGE_BASE_URL } from '../../ApiService/Config';
+import { useNavigation } from '@react-navigation/native';
 
 const CustomDrawer = props => {
   const {GetUserInfo,Logout} = useContext(AuthContext)
@@ -154,7 +154,7 @@ const remove = async()=> {
                 />
               )}
               label={() => <Text style={{ color: COLORS.textcolor, fontFamily:FONTFAMILY.poppinsmedium, fontSize: 14,lineHeight:28}}>Help & Support</Text>}
-               onPress={() => navigation.navigate("HelpSupport")}
+               onPress={() => navigation.navigate("Help")}
             />
 
             <DrawerItem

@@ -20,6 +20,7 @@ import {
     SessionsComponent,
     SlatsComponent,
 } from "./Components/";
+import { COLORS, FONTFAMILY } from "../../Constants/DesignConstants";
 import React, { useContext, useEffect, useState } from "react";
 import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
 import {
@@ -27,21 +28,16 @@ import {
     widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
-
-import DateTimePicker from "@react-native-community/datetimepicker";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import Lottie from "lottie-react-native";
-import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
-import { COLORS, FONTFAMILY } from "../../Constants/DesignConstants";
-import CustomButton from "../../CustomComponents/CustomButton";
-import CustomNavbar from "../../CustomComponents/CustomNavbar";
-import Loader from "../../CustomComponents/Loader";
 import { AuthContext } from "../../Context/AuthContext";
 import { BASE_URL } from "../../ApiService/Config";
-
-
-
+import CustomButton from "../../CustomComponents/CustomButton";
+import CustomNavbar from "../../CustomComponents/CustomNavbar";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Loader from "../../CustomComponents/Loader";
+import Lottie from "lottie-react-native";
+import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -52,7 +48,8 @@ const data = [
         subscriptionExpiredDate: "22 Feb 2023, 10.43 am",
     },
 ];
-const SubscriptionDetails = ({ navigation, route }) => {
+const SubscriptionDetails = ({ route }) => {
+    const navigation = useNavigation()
     const {GetUserInfo} = useContext(AuthContext)
     const packdetails = route.params.details;
     const [rate, setRate] = useState(packdetails.pack_rate);
@@ -62,7 +59,7 @@ const SubscriptionDetails = ({ navigation, route }) => {
     const Navigation = useNavigation();
 
     const handleBackButtonClick = () => {
-        navigation.replace("HomeScreen");
+        navigation.goBack()
     };
 
     const clickOnpress = () => {
@@ -211,7 +208,7 @@ const SubscriptionDetails = ({ navigation, route }) => {
                         else {
                             discoutPercentage(response.data.data[0].discount_percentage)
                             setApplyStatus(true)
-                            Alert.alert("Success", "Coupen Code Applied");
+                            Alert.alert("Success", "Coupon Code Applied");
                         }
                     })
                     .catch(function (error) {

@@ -7,6 +7,7 @@ import Geolocation from '@react-native-community/geolocation';
 import { HomeStackScreen } from './StackNav';
 import Routes from './Routes';
 import Drawer from './DrawerNavigation/Drawer';
+import { COLORS } from '../Constants/DesignConstants';
 
 // import { LogLevel, OneSignal } from 'react-native-onesignal';
 
@@ -35,8 +36,8 @@ OneSignal.Notifications.addEventListener('click', (event) => {
 
 
 const AppNav = () => {
-    const { UserDetails } = useContext(AuthContext)
-    const isLoading = false;
+    const { UserDetails,isLoading } = useContext(AuthContext)
+    // const isLoading = false;
     // UserDetails="nnn";
 
     const [
@@ -158,7 +159,7 @@ const AppNav = () => {
         return (
             <ActivityIndicator
                 size={'large'}
-                color={colors.primarycolor}
+                color={COLORS.primary}
                 style={{ flex: 1, alignSelf: 'center', justifyContent: 'center', }}
             />
         );

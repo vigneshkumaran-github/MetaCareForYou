@@ -1,5 +1,5 @@
+import { COLORS, FONTS } from "../../../Constants/DesignConstants";
 import {
-  ActivityIndicator,
   Dimensions,
   FlatList,
   Image,
@@ -8,10 +8,8 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
-import { BASE_URL, IMAGE_BASE_URL } from "../../../ApiService/Config";
-import { COLORS, FONTS } from "../../../Constants/DesignConstants";
 import React, { useEffect, useState } from "react";
 import {
   heightPercentageToDP as hp,
@@ -19,7 +17,6 @@ import {
 } from "react-native-responsive-screen";
 
 import axios from 'axios';
-import { getInitials } from "../../../HelperFunctions/Helper";
 import { useNavigation } from "@react-navigation/native";
 
 //Specialist data
@@ -28,68 +25,64 @@ const DATA = [
     id: 1,
     doctorName: "Dr. Ravi Verma",
     Designation: "senior psychiartist",
-    avator: require("../../../Resources/Images/onboarding-7.png"),
+    avator: require("../../../Resources/Images/logo.png"),
   },
   {
     id: 2,
     doctorName: "Dr. Adam",
     Designation: "senior psychiartist",
-    avator: require("../../../Resources/Images/onboarding-7.png"),
+    avator: require("../../../Resources/Images/logo.png"),
   },
   {
     id: 3,
     doctorName: "Dr. Ravi Verma",
     Designation: "senior psychiartist",
-    avator: require("../../../Resources/Images/onboarding-7.png"),
+    avator: require("../../../Resources/Images/logo.png"),
   },
   {
     id: 4,
     doctorName: "Dr. Adam",
     Designation: "senior psychiartist",
-    avator: require("../../../Resources/Images/onboarding-7.png"),
+    avator: require("../../../Resources/Images/logo.png"),
   },
 ];
 
-const FindDoctorComponent = ({}) => {
+const Lists = (props) => {
+  console.log(props.data)
   const navigation = useNavigation();
   const [FindDoctorsData, setFindDoctorsData] = useState([]);
   const [mainTitle, setMainTitle] = useState("Find Your Best Therapist");
+//    const getTherapist = async () => {
 
-  const [Loading,setIsloading]=useState(true)
-  
+//       let url=Config.APIURL+'get_therapists';
+//       try{
+//      await axios
+//       .get(url)
+//       .then(function (response) {
+//         setFindDoctorsData(response.data.data)
+//       })
+//       .catch(function (error) {
+//         // handle error
+//          console.log(error)
+//       console.log("entered err")
+//       })
+//       .finally(function () {
+       
+//         console.log("Finally Called")
+//       });
+//     }
+//     catch(error)
+//     {
+//       console.log("entered")
+ 
+//     }
+//   };
 
-  //To COLLECT All DAta
   useEffect(()=>{
-  
-  async function fetchMyAPI() {
-    setIsloading(true)
-    let url=BASE_URL+'auth/get_therapists';
-    try{
-   await axios
-    .get(url)
-    .then(function (response) {
-      
-      setFindDoctorsData(response.data.data)
-    })
-    .catch(function (error) {
-
-    })
-    .finally(function () {
-     
-    });
-  }
-  catch(error)
-  {
-   
-  }
-
-  setIsloading(false)
-  }
-
-  fetchMyAPI()
-
-
+    setFindDoctorsData(props.data)
  },[]);
+
+
 
   const ItemSeparatorView = () => {
     return (
@@ -102,25 +95,21 @@ const FindDoctorComponent = ({}) => {
     );
   };
 
-  const FindDocters = (items) => {
+  const FindDocters = () => {
 
-    navigation.navigate('AppointmentScreen',{therapistsDetails:items});
+    navigation.replace('AppointmentScreen');
     // Toast.show("Under Construction...", Toast.LONG);
   };
-  const DoctorProfile = (items) => {
+  const DoctorProfile = () => {
 
-    navigation.navigate('DoctorProfile',{item:items});
+    navigation.replace('DoctorProfile');
     // Toast.show("Under Construction...", Toast.LONG);
   };
 
   const RenderSpalist = () => (
     <View style={[styles.Main2]}>
-      <View style={[styles.Main3]}>
-        <Text style={[styles.mainHeading]}>{mainTitle}</Text>
-      </View>
 
       <FlatList
-        horizontal
         scrollEnabled={true}
         data={FindDoctorsData}
         keyExtractor={(item, index) => index.toString()}
@@ -140,27 +129,28 @@ const FindDoctorComponent = ({}) => {
 
   const RenderSpalistItem = ({ item, index }) => (
     <View style={[styles.card, styles.elevation]}>
-      <TouchableOpacity style={[styles.cardInner1]}  onPress={() => DoctorProfile(item)}>
-      {item.profile ? <Image source={{uri: IMAGE_BASE_URL+item.profile}} style={[styles.cardImage]} />:
-        <View style={[styles.cardInneremp]}>
-    <Text style={[styles.emptyText]}>{item.first_name ? getInitials(item.first_name):null}</Text>
-      </View>}
-
-        <Text style={[styles.cardTitle]}>{item.first_name+" "+item.last_name}</Text>
-        <Text style={[styles.cardDescription]}>{item.experience && item.experience !="0" ? item.experience+" Years Experienced":"Non Experienced"} </Text>
+        <View style={[styles.cardInner1]}>
+        <View>
+      <TouchableOpacity   style={[styles.backroundLay]} onPress={() => DoctorProfile()}>
+        <Image source={item.avator} style={[styles.cardImage]} />
+       
       </TouchableOpacity>
+      </View>
 
       {/* Consult Button Layout Start*/}
+        <View>
+       <Text style={[styles.cardTitle]}>{item.doctorName}</Text>
+       </View>
       <TouchableOpacity
         style={{
-          backgroundColor: COLORS.primary,
-          borderColor: COLORS.primary,
+          backgroundColor: COLORS.secondary,
+          borderColor: COLORS.secondary,
           borderWidth: 0.5,
           borderRadius: 8,
           padding: 6,
           margin: 10,
         }}
-        onPress={() => FindDocters(item)}
+        onPress={() => FindDocters()}
       >
         <Text
           style={{
@@ -174,10 +164,12 @@ const FindDoctorComponent = ({}) => {
           Consult
         </Text>
       </TouchableOpacity>
+      
+      </View>
       {/* Consult Button Layout End*/}
     </View>
   );
-  return <>{Loading ? <ActivityIndicator style={{marginTop:20,marginBottom:20}}size="large" color={COLORS.primary} /> : <RenderSpalist />}</>;
+  return <RenderSpalist />;
 };
 const styles = StyleSheet.create({
   Main2: {
@@ -187,22 +179,18 @@ const styles = StyleSheet.create({
     padding: 5,
     marginTop: 1,
   },
-  Main3: {
-    width: wp("90%"),
-    flexDirection: "row",
-    alignItems: "center",
-  },
+
   mainHeading: {
     ...FONTS.mainHeading,
   },
   card: {
     backgroundColor: COLORS.white,
-    borderColor: COLORS.primary,
+    borderColor: COLORS.secondary,
     borderWidth: 1,
     borderRadius: 8,
-    width: wp("35"),
+    width: wp("80"),
     // height: hp("20"),
-    alignItems: "center",
+    // alignItems: "center",
     marginTop: 2,
     marginLeft: 5,
     marginBottom: 10,
@@ -218,18 +206,22 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
+
     elevation: 3,
   },
 
   cardInner1: {
-    padding:7,
-    flex: 1,
+    
+    flexDirection:'row',
+    padding:10,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent:'space-around',
+
   },
   cardImage: {
-    width: 80,
-    height: 80,
+    width: 50,
+    height: 50,
+    borderRadius:50/2,
     resizeMode: "contain",
   },
   cardTitle: {
@@ -237,7 +229,6 @@ const styles = StyleSheet.create({
   },
   cardDescription: {
     ...FONTS.cardDescription,
-    fontSize:10
   },
   cancelButton: {
     position: "absolute",
@@ -252,29 +243,16 @@ const styles = StyleSheet.create({
     shadowRadius: 2.22,
     elevation: 3,
   },
-
-  cardInneremp: {
-    marginBottom:5,
-    backgroundColor:COLORS.white,
-     width: 70,
-    height: 70,
-    borderColor:COLORS.black,
-    borderWidth: 1,
-    borderRadius: 70/2,
+  backroundLay:{
+        width: 60,
+    height: 60,
+    borderColor: COLORS.secondary,
+    borderWidth: 2.5,
+    borderRadius: 60/2,
     alignItems: "center",
     justifyContent:"center",
-    marginRight: 10,
-    marginLeft: 5,
-  },
-  emptyText:
-  {
-   color:COLORS.secondary,
-   fontWeight:"bold",
-   fontSize: 18,
-   lineHeight:28
- 
+  
   }
-
 });
 
-export default FindDoctorComponent;
+export default Lists;
