@@ -9,6 +9,7 @@ import { FindDoctorComponent, GetCareComponent, GetHelpComponent, HeaderComponen
 import React, { useState } from 'react'
 
 import { COLORS } from "../../Constants/DesignConstants";
+import HospitalComponent from "./Components/HospitalComponent";
 import SpecialistComponent from "./Components/SpecialistComponent";
 
 const Home = () => {
@@ -18,10 +19,11 @@ const Home = () => {
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.primary} />
       <ScrollView>
         <HeaderComponent location={headerlocation} />
-        <SpecialistComponent />
-        <GetCareComponent />
+        {/* <SpecialistComponent /> */}
         <TopDoctors />
-        <FindDoctorComponent />
+        <HospitalComponent />
+        {/* <FindDoctorComponent /> */}
+        <GetCareComponent />
         {/*  */}
         {/* <IssuesComponent /> */}
         <GetHelpComponent />

@@ -50,46 +50,44 @@ const DATA = [
   },
 ];
 
-const FindDoctorComponent = ({}) => {
+
+const FindDoctorComponent = ({ }) => {
   const navigation = useNavigation();
   const [FindDoctorsData, setFindDoctorsData] = useState([]);
   const [mainTitle, setMainTitle] = useState("Find Your Best Therapist");
 
-  const [Loading,setIsloading]=useState(true)
-  
-
-  //To COLLECT All DAta
-  useEffect(()=>{
-  
-  async function fetchMyAPI() {
-    setIsloading(true)
-    let url=BASE_URL+'auth/get_therapists';
-    try{
-   await axios
-    .get(url)
-    .then(function (response) {
-      
-      setFindDoctorsData(response.data.data)
-    })
-    .catch(function (error) {
-
-    })
-    .finally(function () {
-     
-    });
-  }
-  catch(error)
-  {
-   
-  }
-
-  setIsloading(false)
-  }
-
-  fetchMyAPI()
+  const [Loading, setIsloading] = useState(true)
+  const [data, setData] = useState()
 
 
- },[]);
+  //To COLLECT All DAta                                                                                                                                                                                                                                                                                                                                                        
+  useEffect(() => {                                
+
+    async function fetchMyAPI() {
+      setIsloading(true)
+      let url = BASE_URL + 'auth/get_therapists';
+      try {
+        await axios
+          .get(url)
+          .then(function (response) {
+            setFindDoctorsData(response.data.data)
+          })
+          .catch(function (error) {
+
+          })                                                                                                     
+          .finally(function () {
+          });                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+      }
+      catch (error) {  
+
+      }
+      setIsloading(false)
+    }
+
+    fetchMyAPI()
+
+
+  }, []);
 
   const ItemSeparatorView = () => {
     return (
@@ -98,18 +96,19 @@ const FindDoctorComponent = ({}) => {
         style={{
           width: 6,
         }}
-      ></View>
+      >
+      </View>
     );
   };
 
   const FindDocters = (items) => {
 
-    navigation.navigate('AppointmentScreen',{therapistsDetails:items});
+    navigation.navigate('AppointmentScreen', { therapistsDetails: items });
     // Toast.show("Under Construction...", Toast.LONG);
   };
   const DoctorProfile = (items) => {
 
-    navigation.navigate('DoctorProfile',{item:items});
+    navigation.navigate('DoctorProfile', { item: items });
     // Toast.show("Under Construction...", Toast.LONG);
   };
 
@@ -140,14 +139,14 @@ const FindDoctorComponent = ({}) => {
 
   const RenderSpalistItem = ({ item, index }) => (
     <View style={[styles.card, styles.elevation]}>
-      <TouchableOpacity style={[styles.cardInner1]}  onPress={() => DoctorProfile(item)}>
-      {item.profile ? <Image source={{uri: IMAGE_BASE_URL+item.profile}} style={[styles.cardImage]} />:
-        <View style={[styles.cardInneremp]}>
-    <Text style={[styles.emptyText]}>{item.first_name ? getInitials(item.first_name):null}</Text>
-      </View>}
+      <TouchableOpacity style={[styles.cardInner1]} onPress={() => DoctorProfile(item)}>
+        {item.profile ? <Image source={{ uri: IMAGE_BASE_URL + item.profile }} style={[styles.cardImage]} /> :
+          <View style={[styles.cardInneremp]}>
+            <Text style={[styles.emptyText]}>{item.first_name ? getInitials(item.first_name) : null}</Text>
+          </View>}
 
-        <Text style={[styles.cardTitle]}>{item.first_name+" "+item.last_name}</Text>
-        <Text style={[styles.cardDescription]}>{item.experience && item.experience !="0" ? item.experience+" Years Experienced":"Non Experienced"} </Text>
+        <Text style={[styles.cardTitle]}>{item.first_name + " " + item.last_name}</Text>
+        <Text style={[styles.cardDescription]}>{item.experience && item.experience != "0" ? item.experience + " Years Experienced" : "Non Experienced"} </Text>
       </TouchableOpacity>
 
       {/* Consult Button Layout Start*/}
@@ -177,7 +176,7 @@ const FindDoctorComponent = ({}) => {
       {/* Consult Button Layout End*/}
     </View>
   );
-  return <>{Loading ? <ActivityIndicator style={{marginTop:20,marginBottom:20}}size="large" color={COLORS.primary} /> : <RenderSpalist />}</>;
+  return <>{Loading ? <ActivityIndicator style={{ marginTop: 20, marginBottom: 20 }} size="large" color={COLORS.primary} /> : <RenderSpalist />}</>;
 };
 const styles = StyleSheet.create({
   Main2: {
@@ -222,7 +221,7 @@ const styles = StyleSheet.create({
   },
 
   cardInner1: {
-    padding:7,
+    padding: 7,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -237,7 +236,7 @@ const styles = StyleSheet.create({
   },
   cardDescription: {
     ...FONTS.cardDescription,
-    fontSize:10
+    fontSize: 10
   },
   cancelButton: {
     position: "absolute",
@@ -254,25 +253,25 @@ const styles = StyleSheet.create({
   },
 
   cardInneremp: {
-    marginBottom:5,
-    backgroundColor:COLORS.white,
-     width: 70,
+    marginBottom: 5,
+    backgroundColor: COLORS.white,
+    width: 70,
     height: 70,
-    borderColor:COLORS.black,
+    borderColor: COLORS.black,
     borderWidth: 1,
-    borderRadius: 70/2,
+    borderRadius: 70 / 2,
     alignItems: "center",
-    justifyContent:"center",
+    justifyContent: "center",
     marginRight: 10,
     marginLeft: 5,
   },
   emptyText:
   {
-   color:COLORS.secondary,
-   fontWeight:"bold",
-   fontSize: 18,
-   lineHeight:28
- 
+    color: COLORS.secondary,
+    fontWeight: "bold",
+    fontSize: 18,
+    lineHeight: 28
+
   }
 
 });

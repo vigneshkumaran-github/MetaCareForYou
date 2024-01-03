@@ -122,12 +122,12 @@ export const AuthProvider = ({ children }) => {
                 setIsLoading(false);
             } else {
                 setIsLoading(false);
-            }
+            }//  
         } catch (err) {
             setIsLoading(false);
-        }
-    };
-
+        }                                
+    };                                                                                                                          
+            
     const Logout = async () => {
         await AsyncStorage.removeItem('userDetails')
         setUserDetails(null)

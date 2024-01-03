@@ -102,7 +102,9 @@ const TimingData = [
 const Appointment = ({route}) => {
   const {GetUserInfo} = useContext(AuthContext)
   const navigation = useNavigation()
-  const TherapistDetails=route.params.therapistsDetails;
+  // const TherapistDetails=route.params.therapistsDetails;
+  const TherapistDetails={"Specialists": [{"SpecialTherapist": [Object], "createdAt": "2023-09-12 09:20:16", "id": 54, "specialist_image": "1694490616020.png", "specialist_title": "MentCouch", "updatedAt": "2023-09-12 09:20:16"}], "createdAt": "2023-09-12 09:29:18", "email": "metacareforyou@gmail.com", "experience": "3", "first_name": "Abdul", "gender": "Male", "id": 71, "last_name": "Raouf", "password": "123123123", "profile": "1694491158742.jpg", "updatedAt": "2023-09-12 09:29:18"} 
+  console.log(TherapistDetails,'IIIIIII')
   const [datePicker, setDatePicker] = useState(false);
   const [date, setDate] = useState(new Date());
   const [sessionSelected, setSessionSelected] = useState("");
@@ -116,6 +118,8 @@ const Appointment = ({route}) => {
   const [chat,setChat] =useState("");
   const [voice,setVoice] =useState("");
   const [video,setVideo] =useState("");
+   
+  /* {"Specialists": [{"SpecialTherapist": [Object], "createdAt": "2023-09-12 09:20:16", "id": 54, "specialist_image": "1694490616020.png", "specialist_title": "MentCouch", "updatedAt": "2023-09-12 09:20:16"}], "createdAt": "2023-09-12 09:29:18", "email": "metacareforyou@gmail.com", "experience": "3", "first_name": "Abdul", "gender": "Male", "id": 71, "last_name": "Raouf", "password": "123123123", "profile": "1694491158742.jpg", "updatedAt": "2023-09-12 09:29:18"}  */
 
   function showDatePicker() {
     setDatePicker(true);
@@ -123,7 +127,7 @@ const Appointment = ({route}) => {
   function onDateSelected(event, value) {
     
     setDate(value);
-    setDatePicker(false);
+    setDatePicker(false);                        
     checkDateAvailable()
 
   }
@@ -482,10 +486,10 @@ else{
 
         {/* Timing Slat For Start */}
         <Text style={{ margin: 10, ...FONTS.mainHeading, marginBottom: 20 }}>
-          Available Slats
+          Available Slots
         </Text>
         <View style={styles.sectionContainer}>
-          {Status ? <View style={{margin:10}} ><Text style={{fontSize:14,color:COLORS.secondary,fontWeight:"bold",lineHeight:22}}>No slats available on this Date.</Text></View> :
+          {Status ? <View style={{margin:10}} ><Text style={{fontSize:14,color:COLORS.secondary,fontWeight:"bold",lineHeight:22}}>No slots available on this Date.</Text></View> :
          Slats.map((item, index) => (
             <TouchableOpacity
               key={index}
@@ -516,10 +520,10 @@ else{
 
         {/* Mode For Appointment Area Start  */}
 
-        <Text style={{ margin: 10, ...FONTS.mainHeading, marginBottom: 20 }}>
+        {/* <Text style={{ margin: 10, ...FONTS.mainHeading, marginBottom: 20 }}>
           Available  Mode
-        </Text>
-        <View
+        </Text> */}
+        {/* <View
           style={{
             width: wp("100%"),
             flexDirection: "column",
@@ -653,7 +657,7 @@ else{
         </View>:null}
 
 
-        </View>
+        </View> */}
         {/* Mode For Appointment Area End  */}
 
         {/* Book Apointmnet Button Area Start */}

@@ -23,6 +23,8 @@ import Subscription from '../MainScreens/Subscription/Subscription';
 import SubscriptionDetails from '../MainScreens/Subscription/SubscriptionDetails';
 import TabNavigation from './TabNavigation/TabNavigation';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ServiceLists from '../MainScreens/ServiceListScreens/ServiceLists';
+import DoctorList from '../MainScreens/DoctorsLists/DoctorList';
 
 // import TabNavigation from './TabNavigation/TabNavigation';
 
@@ -77,6 +79,8 @@ export const HomeStackScreen = () => {
             <HomeStack.Screen name="AppointmentScreen" component={Appointment} />
             <HomeStack.Screen name="BookingSuccess" component={BookingSuccess} />
             <HomeStack.Screen name="NotificationScreen" component={NotificationScreen} />
+            <OnboardStack.Screen name="ServiceLists" component={ServiceLists} />
+            <OnboardStack.Screen name="DoctorList" component={DoctorList} />
         </HomeStack.Navigator>
     )
 }
