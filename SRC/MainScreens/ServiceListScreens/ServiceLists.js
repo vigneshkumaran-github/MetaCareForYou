@@ -8,15 +8,19 @@ import CustomNavbar from '../../CustomComponents/CustomNavbar'
 import { RFValue } from 'react-native-responsive-fontsize';
 import React from 'react'
 import ResponsiveImage from 'react-native-responsive-image';
+import { SvgXml } from 'react-native-svg'
 import { useNavigation } from '@react-navigation/native';
+import { verifiedsvg } from '../../Resources/Svg/Service';
 
 const ServiceLists = () => {
     const navigation = useNavigation()
-    const data = ['Pshycology', 'Cardiology','Pshycology', 'Cardiology','Pshycology', 'Cardiology',]
+    const data = ['Pshycology', 'Cardiology', 'Pshycology', 'Cardiology', 'Pshycology', 'Cardiology',]
     return (
         <View style={styles.container}>
             <CustomNavbar title="Multicare Hospitals" onPress={() => navigation.goBack()} />
-
+            <View style={{position:'absolute',right:responsiveWidth(4),top:responsiveHeight(1.5)}}>
+                <SvgXml xml={verifiedsvg} height={responsiveWidth(8)} width={responsiveWidth(8)} />
+            </View>
             <ScrollView style={{ marginTop: responsiveHeight(2) }}>
 
                 <View style={{ marginHorizontal: responsiveWidth(5), width: responsiveWidth(90) }}>
@@ -38,18 +42,16 @@ const ServiceLists = () => {
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: responsiveHeight(1) }}>
                         <Text style={[styles.text1, {}]}>Phone : </Text>
                         <Text style={styles.text2}>xxxx</Text>
-                        <Text style={styles.text2}>(Subscribe to see the details)</Text>
                     </View>
 
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: responsiveHeight(1) }}>
                         <Text style={[styles.text1, {}]}>Email : </Text>
                         <Text style={styles.text2}>xxxx@gmail.com</Text>
-                        <Text style={styles.text2}>(Subscribe to see the details)</Text>
                     </View>
                 </View>
 
                 {/* Service section */}
-                <Text style={[styles.headtext, { marginTop: responsiveHeight(2), marginStart: responsiveWidth(5) }]}>DepartMents</Text>
+                <Text style={[styles.headtext, { marginTop: responsiveHeight(2), marginStart: responsiveWidth(5) }]}>Services</Text>
                 <View style={styles.cardContainer}>
                     {
                         data?.map((item, index) => (
@@ -122,10 +124,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: COLORS.primary,
     },
-    btntext: {           
+    btntext: {
         color: COLORS.white,
         fontSize: RFValue(12),
-        fontFamily: FONTFAMILY.HelveticaNeuMedium,                         
+        fontFamily: FONTFAMILY.HelveticaNeuMedium,
     },
     text1: {
         color: COLORS.black,

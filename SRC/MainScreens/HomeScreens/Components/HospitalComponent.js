@@ -1,8 +1,9 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
 import { COLORS, FONTFAMILY, FONTS } from '../../../Constants/DesignConstants'
-import { responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
+
 import { RFValue } from 'react-native-responsive-fontsize'
+import React from 'react'
 import ResponsiveImage from 'react-native-responsive-image'
 import { useNavigation } from '@react-navigation/native';
 
@@ -11,7 +12,7 @@ const HospitalComponent = () => {
     const navigation = useNavigation()
     return (
         <View style={styles.container}>
-            <Text style={[styles.headtext, { marginStart: responsiveWidth(5) }]}>Top Hospitals</Text>
+            <Text style={[styles.headtext, { marginStart: responsiveWidth(5) }]}>Nearby Healthcare Provider</Text>
 
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ padding: 5 }}>
                 {

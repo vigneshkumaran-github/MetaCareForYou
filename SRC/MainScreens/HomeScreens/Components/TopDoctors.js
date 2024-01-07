@@ -86,9 +86,9 @@ const TopDoctors = () => {
 
   const RenderTopDocters = () => (
     <View style={[styles.Main2]}>
-      <View style={[styles.Main3]}>
+      {/* <View style={[styles.Main3]}>
         <Text style={[styles.mainHeading]}>{mainTitle}</Text>
-      </View>
+      </View> */}
 
       <FlatList
         horizontal

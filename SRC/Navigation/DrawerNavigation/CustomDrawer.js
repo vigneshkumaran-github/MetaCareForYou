@@ -134,7 +134,7 @@ const remove = async()=> {
              onPress={() => navigation.navigate("Booking")}
             />
 
-            <DrawerItem
+            {/* <DrawerItem
              icon={({ color, size }) => (
                 <FontAwesome5
                   name="crown"
@@ -144,7 +144,7 @@ const remove = async()=> {
               )}
               label={() => <Text style={{ color: COLORS.textcolor, fontFamily:FONTFAMILY.poppinsmedium, fontSize: 14,lineHeight:28}}>Subscription</Text>}
              onPress={() => navigation.navigate("Subscription")}
-            />
+            /> */}
             <DrawerItem
              icon={({ color, size }) => (
                 <FontAwesome5

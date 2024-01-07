@@ -23,7 +23,7 @@ const Home = () => {
         <TopDoctors />
         <HospitalComponent />
         {/* <FindDoctorComponent /> */}
-        <GetCareComponent />
+        <GetCareComponent />                                                                                                                                                                  
         {/*  */}
         {/* <IssuesComponent /> */}
         <GetHelpComponent />
