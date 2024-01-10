@@ -93,11 +93,6 @@ export function fisrtnameValidator(name,type){
         status: false,
         msg: type +" is Required! ",
       };
-    } else if (reg.test(name) === false) {
-      return {
-        status: false,
-        msg: "Enter valid name or remove spaces!",
-      };
     } else {
       return {
         status: true,

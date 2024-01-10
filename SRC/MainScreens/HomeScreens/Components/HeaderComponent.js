@@ -43,7 +43,7 @@ const notification = <Icon name="bell-badge" size={25} color="#fff" />;
 const search = <Icon1 name="search" size={23} color="#fff" />;
 
 const HeaderComponent = (route) => {
-  const { Logout ,GetUserInfo} = useContext(AuthContext)
+  const { Logout, GetUserInfo } = useContext(AuthContext)
   const totalnotification = 0;
   const navigation = useNavigation();
   const [userInfoData, setUserInfoData] = useState({});
@@ -55,29 +55,29 @@ const HeaderComponent = (route) => {
   };
 
   useEffect(() => {
-      // if (userIfo?.success === true) {
-      //   setUserInfoData(userIfo)
-      //   console.log(userIfo)
-      // }
-      // else {
-      //   console.log(userIfo)
-      // }
+    // if (userIfo?.success === true) {
+    //   setUserInfoData(userIfo)
+    //   console.log(userIfo)
+    // }
+    // else {
+    //   console.log(userIfo)
+    // }
     getLocation()
     fetchMyAPI()
   }, [])
 
-  const fetchMyAPI=async()=>{
+  const fetchMyAPI = async () => {
     console.log("CALLLLLING")
     const userIfo = await GetUserInfo();
+    console.log(userIfo)
+    if (userIfo?.success === true) {
+      setUserInfoData(userIfo?.data)
+    }
+    else {
       console.log(userIfo)
-      if(userIfo?.success===true){
-        setUserInfoData(userIfo?.data)
-      }
-      else{
-        console.log(userIfo)
-      }
+    }
   }
-  
+
   const getLocation = async () => {
     //   //To get location details
     const tok = await AsyncStorage.getItem("userDetails");
@@ -131,7 +131,7 @@ const HeaderComponent = (route) => {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => notificationScreen()}
           style={[styles.NotificationTouch]}
         >
@@ -141,7 +141,7 @@ const HeaderComponent = (route) => {
               {totalnotification > 99 ? 99 + "+" : totalnotification}
             </Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       {/* Profile And Notification Flex Bar View End */}
 

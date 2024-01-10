@@ -52,6 +52,7 @@ const TopDoctors = () => {
     .post(url)
     .then(function (response) {
       setBanners(response.data.data)
+      console.log(response?.data)
       setisLoading(false)
     })
     .catch(function (error) {
@@ -68,7 +69,7 @@ const TopDoctors = () => {
 
 
   useEffect(()=>{
-    getBanners()
+    // getBanners()
     },[]);
 
 

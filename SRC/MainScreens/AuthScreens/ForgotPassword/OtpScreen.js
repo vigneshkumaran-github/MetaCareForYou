@@ -12,12 +12,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
+import { AuthContext } from "../../../Context/AuthContext";
 import { BASE_URL } from "../../../ApiService/Config";
 import { COLORS } from "../../../Constants/DesignConstants";
 import CustomButton from "../../../CustomComponents/CustomButton";
@@ -25,6 +26,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon1 from "react-native-vector-icons/MaterialIcons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import axios from "axios";
+import { showToastGreen } from "../../../HelperFunctions/Helper";
 
 const { width, height } = Dimensions.get("window");
 
@@ -37,10 +39,11 @@ const { width, height } = Dimensions.get("window");
 const OtpScreen = ({ navigation, route }) => {
 
   const [userInfo, setuserinfon] = useState({});
-  const [email, setOtp] = useState("");
+  const [otp, setOtp] = useState("");
 
   const [countDown, setCountDown] = React.useState(0);
   const [runTimer, setRunTimer] = React.useState(false);
+  const {ResendOtp,VerifyOtp} = useContext(AuthContext)
 
   React.useEffect(() => {
     togglerTimer()
@@ -49,7 +52,6 @@ const OtpScreen = ({ navigation, route }) => {
 
   React.useEffect(() => {
     let timerId;
-
     if (runTimer) {
       setCountDown(60 * 15);
       timerId = setInterval(() => {
@@ -81,74 +83,39 @@ const OtpScreen = ({ navigation, route }) => {
 
 
   const resendotp = async () => {
-    try {
-      const payload = {
-        email_id: route.params.email,
-        user_type: route.params.user_type,
-      };
-
-      let url = BASE_URL + "auth/check_valide_mail";
-
-      await axios
-        .post(url, payload)
-        .then(function (response) {
-          console.log(response.data)
-          if (response.data.success === true) {
-            //Once valide mail send Mail verification Code
-            console.log(response?.data)
-            setRunTimer(true)
-          } else {
-            console.log(response?.data)
-          }
-        })
-        .catch(function (error) {
-          // handle error
-          return error;
-        })
-        .finally(function () { });
-    } catch (error) {
-      return error;
+    const response=await ResendOtp(route.params.email);
+    if(response?.status===true){
+      showToastGreen(response?.message)
     }
-
+    else{
+      console.log(response)
+    }
+      // const payload = {
+      //   email_id: route.params.email,
+      //   user_type: route.params.user_type,
+      // };
+      // let url = BASE_URL + "auth/check_valide_mail";
   }
 
 
 
+  
+
   const clickOnpress = async () => {
-
-    try {
-      const payload = {
-        user_email: route.params.email,
-        otp: email,
-      };
-
-      let url = BASE_URL + "auth/otp_verification";
-
-      await axios
-        .post(url, payload)
-        .then(function (response) {
-          console.log(response.data)
-          if (response.data.redirect === true) {
-            console.log(response?.data)
-            afterSuccess()
-          } else {
-            console.log(response?.data)
-          }
-          // if (response.data.success === true) {
-          //   //Once valide mail send Mail verification Code
-          //   afterSuccess();
-          // } else {
-          //   Toast.show(response.data.message, Toast.LONG);
-          // }
-        })
-        .catch(function (error) {
-          // handle error
-          return error;
-        })
-        .finally(function () { });
-    } catch (error) {
-      return error;
+    const response=await VerifyOtp(route.params.email,otp)    
+    if(response?.status==true){
+      showToastGreen(response?.message)
+      navigation.navigate('ResetPassword', { email: route.params.email})
     }
+    else{
+      console.log(response,'errooorrrr')
+    }
+    // const payload = {
+    //   user_email: route.params.email,
+    //   otp: email,
+    // };
+
+    // let url = BASE_URL + "auth/otp_verification";
 
   };
 
@@ -232,7 +199,7 @@ const OtpScreen = ({ navigation, route }) => {
                 autoCapitalize="none"
                 autoCorrect={false}
                 onChangeText={(text) => setOtp(text)}
-                value={email}
+                value={otp}
               ></TextInput>
 
               <View style={{}}>

@@ -78,7 +78,7 @@ const QuestionsComponent = () => {
 
 
   useEffect(()=>{
-    testimonials()
+    // testimonials()
     },[]);
 
 
