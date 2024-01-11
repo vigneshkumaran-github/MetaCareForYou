@@ -50,29 +50,22 @@ const DATA = [
 ];
 
 const QuestionsComponent = () => {
-  const [Testimonials, setTestimonials] = useState(DATA);
+  const [Testimonials, setTestimonials] = useState([]);
   const [mainTitle, setMainTitle] = useState("Find Your Best Doctor");
   const [isLoading,setisLoading]=useState(false);
+  const data=[
+    {
+      "content": "“Metacare4u, my health buddy in my pocket.”",
+      "author": "Raghavan"
+    },
+    {
+      "content": "“Healthcare made easy with Metacare4u. Highly recommend!”",
+      "author": "Samuel "
+    }
+  ]
 
   const testimonials = async () => {
-    setisLoading(true)
-    let url=BASE_URL+'auth/testimonials';
-    try{
-   await axios
-    .post(url)
-    .then(function (response) {
-      setTestimonials(response.data.data)
-      setisLoading(false)
-    })
-    .catch(function (error) {
-      // handle error
-       console.log(error)
-    });
-  }
-  catch(error)
-  {
-
-  }
+    // let url=BASE_URL+'auth/testimonials';
 };
 
 
@@ -102,7 +95,7 @@ const QuestionsComponent = () => {
       <FlatList
         horizontal
         scrollEnabled={true}
-        data={Testimonials}
+        data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => {
           return RenderIssuesItem({ item, index });
@@ -128,7 +121,7 @@ const QuestionsComponent = () => {
         
         <View style={[styles.flexbox]} >
         <View style={[styles.line]}></View>
-        <Text style={[styles.cardDescription]}>{"“ "+item.testimonial_content+" ”"}</Text>
+        <Text style={[styles.cardDescription]}>{"“ "+item?.content+" ”"}</Text>
       
       </View>
        <TouchableOpacity onPress={() => SpacialistClick()}>
@@ -142,8 +135,6 @@ const QuestionsComponent = () => {
         </TouchableOpacity>
       {/* </View> */}
             <Text style={{color:COLORS.secondary,fontSize:12,marginLeft:16,lineHeight: 28,fontFamily: FONTFAMILY.poppinsbold,}}>- {item.author}  </Text>
-
-
             </View>
     </TouchableOpacity>
       </View>}

@@ -124,12 +124,11 @@ const Appointment = ({route}) => {
   function showDatePicker() {
     setDatePicker(true);
   }
+  
   function onDateSelected(event, value) {
-    
     setDate(value);
     setDatePicker(false);                        
     checkDateAvailable()
-
   }
 
   const checkDateAvailable = async() =>{

@@ -22,6 +22,7 @@ import {AuthContext} from '../../Context/AuthContext';
 import CustomNavbar from '../../CustomComponents/CustomNavbar';
 import {IMAGE_BASE_URL} from '../../ApiService/Config';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import  ResponsiveImage  from 'react-native-responsive-image';
 import {getInitials} from '../../HelperFunctions/Helper';
 import {useNavigation} from '@react-navigation/native';
 
@@ -36,28 +37,41 @@ const Profile = () => {
   const [weight, setWeight] = useState('58.5');
   const [gender, setGender] = useState('Male');
   const [UserInfo, setUserInfoData] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  const data = {
+    name: 'mahendran',
+    mobile_number: '9876543211',
+    email: 'mahendran13nov@gmail.com',
+    profile_photo: 'http://localhost:3000/uploads/user/1705606396501.jpeg',
+    age: 22,
+    gender: 'male',
+    nationality: 'indian',
+    health_issue: 'fever',
+    mental_health_issue_before: false,
+    thought_of_suicide: false,
+  };
 
   const SetbasicDetails = async () => {
     //to get profile Details
     const response = await GetProfile();
-    console.log('UserIfo', response);
-    // setUserInfoData(userIfo?.data)
+    if (response?.status === true) {
+      setUserInfoData(response?.data);
+      console.log(response, 'profile data success');
+      setLoading(false);
+    } else {
+      console.log(response, 'eee');
+      setLoading(false);
+    }
     //To get location details
   };
 
   useEffect(() => {
-    SetbasicDetails();
-  }, []);
-
-  // useEffect(() => {
-  //   console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
-  //   navigation.addListener('focus', SetbasicDetails);
-  //   navigation.addListener('blur', SetbasicDetails);
-  //   return () => {
-  //     navigation.removeListener('focus', SetbasicDetails);
-  //     // navigation.removeListener('blur', handler)
-  //   };
-  // }, [navigation]);
+    navigation.addListener('focus', SetbasicDetails);
+    return () => {
+      navigation.removeListener('focus', SetbasicDetails);
+    };
+  }, [navigation]);
 
   return (
     <>
@@ -72,24 +86,22 @@ const Profile = () => {
           <View style={{width: wp('100%')}}>
             <View style={[styles.profileHeader]}>
               <View style={[styles.imageCard]}>
-                {UserInfo?.profile ? (
-                  <Image
+                {data?.profile_photo ? (
+                  <ResponsiveImage
                     style={[styles.Image]}
-                    source={{uri: IMAGE_BASE_URL + UserInfo?.profile}}
+                    source={{uri:data?.profile_photo }}
                   />
                 ) : (
                   <View style={[styles.cardInner1]}>
                     <Text style={[styles.emptyText]}>
-                      {UserInfo.first_name
-                        ? getInitials(UserInfo.first_name)
-                        : null}
+                    {getInitials(data?.name)}
                     </Text>
                   </View>
                 )}
               </View>
               <View style={{flexDirection: 'row', marginTop: 10}}>
                 <Text style={[styles.Textheads]}>
-                  {UserInfo.first_name + ' ' + UserInfo.last_name}{' '}
+                  {data?.name}
                 </Text>
                 <Icon
                   name="account-edit"
@@ -97,11 +109,11 @@ const Profile = () => {
                   color={COLORS.primary}
                   style={{marginLeft: 10}}
                   onPress={() =>
-                    navigation.navigate('EditProfile', {data: UserInfo})
+                    navigation.navigate('EditProfile', {data:data})
                   }
                 />
               </View>
-              <Text style={[styles.subTexts]}>{UserInfo.email_id}</Text>
+              <Text style={[styles.subTexts]}>{data.email}</Text>
             </View>
 
             <View style={{alignItems: 'center', padding: 25}}>
@@ -121,7 +133,7 @@ const Profile = () => {
                   autoCapitalize="none"
                   autoCorrect={false}
                   onChangeText={text => setEmail(text)}
-                  value={UserInfo.email_id}
+                  value={data?.email}
                   editable={false}></TextInput>
               </View>
 
@@ -141,8 +153,8 @@ const Profile = () => {
                   name="mobile"
                   autoCapitalize="none"
                   autoCorrect={false}
-                  onChangeText={text => setmobile(text)}
-                  value={UserInfo.mobile_number}></TextInput>
+                  onChangeText={text => setMobile(text)}
+                  value={data?.mobile_number}></TextInput>
               </View>
 
               <View>
@@ -162,7 +174,7 @@ const Profile = () => {
                   autoCorrect={false}
                   onChangeText={text => setage(text)}
                   value={
-                    UserInfo.gender === 'null' ? 'Not Updated' : UserInfo.gender
+                    data?.gender === 'null' ? 'Not Updated' : data?.gender
                   }
                   editable={false}
                   placeholder="Not updated"></TextInput>
@@ -184,9 +196,7 @@ const Profile = () => {
                   autoCapitalize="none"
                   autoCorrect={false}
                   onChangeText={text => setage(text)}
-                  value={
-                    UserInfo.age === 'null' ? 'Not Updated' : UserInfo?.age
-                  }
+                  value={ data?.age.toString()}
                   editable={false}
                   placeholder="Not updated"></TextInput>
               </View>
@@ -208,9 +218,9 @@ const Profile = () => {
                   autoCorrect={false}
                   onChangeText={text => setbloodGroup(text)}
                   value={
-                    UserInfo.nationality === 'null'
+                    data.nationality === 'null'
                       ? 'Not Updated'
-                      : UserInfo.nationality
+                      : data.nationality
                   }
                   editable={false}
                   placeholder="Not updated"></TextInput>
@@ -233,9 +243,9 @@ const Profile = () => {
                   autoCorrect={false}
                   onChangeText={text => setHeight(text)}
                   value={
-                    UserInfo.health_issue === 'null'
+                    data.health_issue === 'null'
                       ? 'Not Updated'
-                      : UserInfo.health_issue
+                      : data.health_issue
                   }
                   editable={false}
                   placeholder="Not updated"></TextInput>
@@ -260,9 +270,9 @@ const Profile = () => {
                   autoCorrect={false}
                   onChangeText={text => setWeight(text)}
                   value={
-                    UserInfo.mental_health_issue_before === 'null'
+                    data.mental_health_issue_before === 'null'
                       ? 'Not Updated'
-                      : UserInfo.mental_health_issue_before
+                      : data.mental_health_issue_before.toString()
                   }
                   editable={false}
                   placeholder="Not updated"></TextInput>
@@ -287,9 +297,9 @@ const Profile = () => {
                   autoCorrect={false}
                   onChangeText={text => setWeignt(text)}
                   value={
-                    UserInfo.thought_of_suicide === 'null'
+                    data.thought_of_suicide === 'null'
                       ? 'Not Updated'
-                      : UserInfo.thought_of_suicide
+                      : data.thought_of_suicide.toString()
                   }
                   editable={false}
                   placeholder="Not updated"></TextInput>

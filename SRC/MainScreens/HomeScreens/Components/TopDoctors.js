@@ -8,71 +8,69 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
-} from "react-native";
-import { BASE_URL, IMAGE_BASE_URL } from "../../../ApiService/Config";
-import { COLORS, FONTS } from "../../../Constants/DesignConstants";
-import React, { useEffect, useState } from "react";
+  View,
+} from 'react-native';
+import {BASE_URL, IMAGE_BASE_URL} from '../../../ApiService/Config';
+import {COLORS, FONTS} from '../../../Constants/DesignConstants';
+import React, {useEffect, useState} from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
 
-import axios from "axios";
+import {SliderBox} from 'react-native-image-slider-box';
+import axios from 'axios';
 
 //Specialist data
 const DATA = [
   {
     id: 1,
     BannerUrl:
-      "https://img.freepik.com/free-vector/gradient-mental-health-facebook-cover_52683-69907.jpg?w=1060&t=st=1671015450~exp=1671016050~hmac=9833336db5de284dc5ec5b9e3fec01759495635d544dc0d3ec725c6a1af744d6",
+      'https://img.freepik.com/free-vector/gradient-mental-health-facebook-cover_52683-69907.jpg?w=1060&t=st=1671015450~exp=1671016050~hmac=9833336db5de284dc5ec5b9e3fec01759495635d544dc0d3ec725c6a1af744d6',
   },
   {
     id: 2,
     BannerUrl:
-      "https://img.freepik.com/free-psd/medical-horizontal-banner-template_23-2148940482.jpg?w=2000",
+      'https://img.freepik.com/free-psd/medical-horizontal-banner-template_23-2148940482.jpg?w=2000',
   },
   {
     id: 3,
     BannerUrl:
-      "https://img.freepik.com/free-psd/medical-healthcare-poster-template_23-2148940481.jpg?w=2000",
+      'https://img.freepik.com/free-psd/medical-healthcare-poster-template_23-2148940481.jpg?w=2000',
   },
 ];
 
 const TopDoctors = () => {
-  const [banners, setBanners] = useState(DATA);
-  const [mainTitle, setMainTitle] = useState("Quotes for you");
-  const [isLoading,setisLoading]=useState(true);
+  const [banners, setBanners] = useState([]);
+  const [isLoading, setisLoading] = useState(false);
+  const data = [
+    {
+      image: 'https://source.unsplash.com/1024x768/?nature',
+      link: 'https://www.google.com/',
+    },
+    {
+      image: 'https://source.unsplash.com/1024x768/?tree',
+      link: 'https://www.google.com/',
+    },
+  ];
 
+  //     let url=BASE_URL+'auth/banners';
 
   const getBanners = async () => {
-    let url=BASE_URL+'auth/banners';
-    try{
-   await axios
-    .post(url)
-    .then(function (response) {
-      setBanners(response.data.data)
-      console.log(response?.data)
-      setisLoading(false)
-    })
-    .catch(function (error) {
-      // handle error
-       console.log(error)
+    data.map((item, index) => {
+      let arr = banners;
+      arr.push(item.image);
+      setBanners(arr);
     });
-  }
-  catch(error)
-  {
+  };
 
-  }
-};
-
-
-
-  useEffect(()=>{
-    // getBanners()
-    },[]);
-
-
+  useEffect(() => {
+    getBanners();
+  }, []);
 
   const ItemSeparatorView = () => {
     return (
@@ -80,62 +78,40 @@ const TopDoctors = () => {
       <View
         style={{
           width: 6,
-        }}
-      ></View>
+        }}></View>
     );
   };
 
-  const RenderTopDocters = () => (
-    <View style={[styles.Main2]}>
-      {/* <View style={[styles.Main3]}>
-        <Text style={[styles.mainHeading]}>{mainTitle}</Text>
-      </View> */}
-
-      <FlatList
-        horizontal
-        scrollEnabled={true}
-        data={banners}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => {
-          return RenderDoctersItem({ item, index });
-        }}
-        ItemSeparatorComponent={ItemSeparatorView}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingTop: 10,
-          paddingLeft: 10,
-          paddingRight: 10,
-        }}
-      />
-    </View>
+  return (
+    <SliderBox
+      images={banners}
+      sliderBoxHeight={responsiveHeight(20)}
+      onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
+      ImageComponentStyle={{
+        borderRadius: 15,
+        width: responsiveWidth(90),
+        marginTop: 5,
+      }}
+      imageLoadingColor={COLORS.primary}
+      autoplay
+      circleLoop
+      autoplayInterval={3000}
+    />
   );
-
-  const RenderDoctersItem = ({ item, index }) => (
-    <View style={[styles.card, styles.elevation]}>
-
-{isLoading ? <ActivityIndicator size="large" color={COLORS.primary} /> :
-      <Image
-        source={{ uri: IMAGE_BASE_URL+item.image }}
-        style={[styles.cardImage, styles.elevation]}
-      /> }
-     
-    </View>
-  );
-  return <RenderTopDocters />;
 };
 const styles = StyleSheet.create({
   Main2: {
-    width: wp("100%"),
+    width: wp('100%'),
     backgroundColor: COLORS.white,
-    alignItems: "center",
+    alignItems: 'center',
 
     padding: 5,
     marginTop: 0,
   },
   Main3: {
-    width: wp("90%"),
-    flexDirection: "row",
-    alignItems: "center",
+    width: wp('90%'),
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   mainHeading: {
     ...FONTS.mainHeading,
@@ -143,10 +119,10 @@ const styles = StyleSheet.create({
   card: {
     paddingTop: 5,
     paddingBottom: 5,
-    width: wp("90"),
-    height: hp("20"),
-    alignItems:'center',
-    justifyContent:"center"
+    width: wp('90'),
+    height: hp('20'),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   elevation: {
     elevation: 5,
@@ -154,9 +130,9 @@ const styles = StyleSheet.create({
   },
 
   cardImage: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
     borderRadius: 20,
   },
 });

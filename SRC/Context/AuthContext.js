@@ -12,7 +12,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({children}) => {
   // const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-  const [UserDetails, setUserDetails] = useState(null);
+  const [UserDetails, setUserDetails] = useState('hghg');
   const [UserOption, setUserOption] = useState();
   let a = 'HELLO';
   const [UserToken, setUserToken] = useState(null);
