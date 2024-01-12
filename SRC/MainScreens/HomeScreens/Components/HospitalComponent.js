@@ -1,4 +1,5 @@
 import {COLORS, FONTFAMILY, FONTS} from '../../../Constants/DesignConstants';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -11,73 +12,36 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 
+import { AuthContext } from '../../../Context/AuthContext';
 import {RFValue} from 'react-native-responsive-fontsize';
-import React from 'react';
 import ResponsiveImage from 'react-native-responsive-image';
 import {SvgXml} from 'react-native-svg';
 import {useNavigation} from '@react-navigation/native';
 import {verifiedsvg} from '../../../Resources/Svg/Service';
 
 const HospitalComponent = () => {
-  const data = [
-    {
-      id: '5dd384c718ebe5a9a415d33086935ea2ccb7f59c8b7c6c0b5d9730f2824e633656da2c0d6c0f16837fea10',
-      name: 'Mayo Hospital',
-      mobile_number: '8098629612',
-      email: 'mayo@gmail.com',
-      address:
-        'Welcome to Greenwood General Hospital, where compassionate care meets cutting-edge medicine. Nestled in the heart of the city, Greenwood General is a leading healthcare institution dedicated to providing exceptional medical services to our community.Level 5, Menara MyIPO. PJ Sentral, Lot 12, Persiaran Barat, Seksyen 52 46200 Petaling Jaya Selangor.Welcome to General Hospital, where compassionate care meets cutting-edge medicine. Nestled in the heart of the city, Greenwood General is a leading healthcare institution dedicated to providing exceptional medical services to our community.Level 5, Menara MyIPO. PJ Sentral, Lot 12, Persiaran Barat, Seksyen 52 46200 Petaling Jaya Selangor.',
-      about_us:
-        'Welcome to General Hospital, where compassionate care meets cutting-edge medicine. Nestled in the heart of the city, Greenwood General is a leading healthcare institution dedicated to providing exceptional medical services to our community.',
-      appointments_open: false,
-      is_verified: false,
-      profile_photo: 'http://localhost:3000/uploads/user/2.jpg',
-      distance: '0.65 Km',
-    },
-    {
-      id: '26792a89a226f6bb728f948f2957ee085b785c307e6574a02eb60ff34a1eceafe6807376b88ff0714000fa',
-      name: 'Johns Hopkins Hospital',
-      mobile_number: '8098629614',
-      email: 'john@gmail.com',
-      address:
-        'Level 5, Menara MyIPO. PJ Sentral, Lot 12, Persiaran Barat, Seksyen 52 46200 Petaling Jaya Selangor.',
-      about_us:
-        'Welcome to General Hospital, where compassionate care meets cutting-edge medicine. Nestled in the heart of the city, Greenwood General is a leading healthcare institution dedicated to providing exceptional medical services to our community.',
-      appointments_open: false,
-      is_verified: false,
-      profile_photo: 'http://localhost:3000/uploads/user/4.jpg',
-      distance: '0.65 Km',
-    },
-    {
-      id: '7ad5a291fbafb7d4fac23e3fc7ba37dcd0df6ad91a51a5e7c983aa105a87735f4d2ba2f9267770c3a3e5d6',
-      name: 'Greenwood Hospital',
-      mobile_number: '8098629611',
-      email: 'green@gmail.com',
-      address:
-        'Level 5, Menara MyIPO. PJ Sentral, Lot 12, Persiaran Barat, Seksyen 52 46200 Petaling Jaya Selangor.',
-      about_us:
-        'Welcome to General Hospital, where compassionate care meets cutting-edge medicine. Nestled in the heart of the city, Greenwood General is a leading healthcare institution dedicated to providing exceptional medical services to our community.',
-      appointments_open: true,
-      is_verified: true,
-      profile_photo: 'http://localhost:3000/uploads/user/1.jpg',
-      distance: '0.65 Km',
-    },
-    {
-      id: 'be0065b5c6062f1ad573fe48d862de5f73ed3e00e8ba06f8ed89e0b5363890805464fdd6a070200d1fa73d',
-      name: 'Toronto Hospital',
-      mobile_number: '8098629613',
-      email: 'toronto@gmail.com',
-      address:
-        'Level 5, Menara MyIPO. PJ Sentral, Lot 12, Persiaran Barat, Seksyen 52 46200 Petaling Jaya Selangor.',
-      about_us:
-        'Welcome to Greenwood General Hospital, where compassionate care meets cutting-edge medicine. Nestled in the heart of the city, Greenwood General is a leading healthcare institution dedicated to providing exceptional medical services to our community.Welcome to General Hospital, where compassionate care meets cutting-edge medicine. Nestled in the heart of the city, Greenwood General is a leading healthcare institution dedicated to providing exceptional medical services to our community.',
-      appointments_open: true,
-      is_verified: true,
-      profile_photo: 'http://localhost:3000/uploads/user/3.jpg',
-      distance: '0.65 Km',
-    },
-  ];
+  const [data, setData] = useState([]);
   const navigation = useNavigation();
+  const {GetHospitals} = useContext(AuthContext)
+  const [loading,setLoading] = useState(true)
+
+  const getData=async()=>{
+    const response = await  GetHospitals();
+    if(response?.status===true){
+      setLoading(false)
+      setData(response?.data)
+    }
+    else{
+      setLoading(false)
+      console.log(response,'eee')
+    }
+  }
+
+  useEffect(() => {
+  getData()
+  }, [])
+
+  
   return (
     <View style={styles.container}>
       <Text style={[styles.headtext, {marginStart: responsiveWidth(5)}]}>

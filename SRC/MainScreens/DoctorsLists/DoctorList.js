@@ -1,11 +1,13 @@
 import {COLORS, FONTFAMILY} from '../../Constants/DesignConstants';
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 
+import ActivityLoader from '../../CustomComponents/ActivityLoader';
+import {AuthContext} from '../../Context/AuthContext';
 import {BASE_URL} from '../../ApiService/Config';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import CustomNavbar from '../../CustomComponents/CustomNavbar';
@@ -14,41 +16,22 @@ import {RFValue} from 'react-native-responsive-fontsize';
 import ResponsiveImage from 'react-native-responsive-image';
 import {ScrollView} from 'react-native-gesture-handler';
 import axios from 'axios';
+import moment from 'moment';
+import {showToastGreen} from '../../HelperFunctions/Helper';
 import {useNavigation} from '@react-navigation/native';
 
-const DoctorList = () => {
+const DoctorList = ({route}) => {
   const navigation = useNavigation();
-  const [Loading, setIsloading] = useState(true);
+  const [loading, setIsloading] = useState(true);
   const [TherapistList, setTherapist] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [datePicker, setDatePicker] = useState(false);
   const [date, setDate] = useState(new Date());
   const [selected, setSelected] = useState('');
-  const data = [
-    {
-      id: 'a817769409a08f0644be58da650fa2d6eab474092a9ba044436f8ec5ce3a576b41c437e323c95b3db6f95a',
-      name: 'Cena',
-      mobile_number: '8787372828',
-      gender: 'male',
-      experience: 2,
-      profile_photo:
-        'https://ui-avatars.com/api/?background=F4740D&color=fff&name=Cena',
-      specialists: [
-        'Coronary Artery Disease Specialist',
-        'Hypertension Specialist',
-      ],
-    },
-    {
-      id: '085e12b827a31e77ddeb3c33eabd208529978acfe4b4d5dc55d79dd97ef32080309f125b4d50bc8349f7bb',
-      name: 'Rock',
-      mobile_number: '8737372828',
-      gender: 'male',
-      experience: 2,
-      profile_photo:
-        'https://ui-avatars.com/api/?background=F4740D&color=fff&name=Rock',
-      specialists: ['Cognitive Specialist', 'Behavioral Specialist'],
-    },
-  ];
+  const [data, setData] = useState([]);
+  const {serviceData} = route.params;
+  const {GetTherapists, CheckDate, BookAppointment} = useContext(AuthContext);
+  const [id, setId] = useState('');
 
   //To COLLECT All DAta
   // useEffect(() => {
@@ -86,49 +69,94 @@ const DoctorList = () => {
   function onDateSelected(event, value) {
     setDate(value);
     setDatePicker(false);
-    checkDateAvailable();
+    const formatedDate = moment(value).format('YYYY-MM-DD');
+    checkDateAvailable(formatedDate);
   }
+
+  const checkDateAvailable = async date => {
+    setIsloading(true);
+    const response = await CheckDate(id, date);
+    console.log(response);
+    if (response?.status === true) {
+      showToastGreen(response?.message);
+      bookAppointment(date);
+    } else {
+      console.log(response, 'eee');
+      setIsloading(false);
+    }
+  };
+
+  const bookAppointment = async date => {
+    const result = await BookAppointment(id, date);
+    if (result?.status === true) {
+      setIsloading(false);
+      showToastGreen(result?.message);
+    } else {
+      console.log(result, 'eee');
+      setIsloading(false);
+    }
+  };
+
+  const getData = async () => {
+    const response = await GetTherapists(serviceData?.hospital_service_id);
+    if (response?.status === true) {
+      setData(response?.data);
+      setIsloading(false);
+    } else {
+      setIsloading(false);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <View style={styles.container}>
       <CustomNavbar title="Our Doctors" onPress={() => navigation.goBack()} />
 
-      <ScrollView>
-        {data?.map((item, index) => (
-          <TouchableOpacity key={index} style={styles.card}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <ResponsiveImage
-                source={{uri: item?.profile_photo}}
-                style={styles.image}
-                borderRadius={responsiveWidth(20) / 2}
-                resizeMode={'contain'}
-              />
+      <>
+        {data?.length > 0 ? (
+          <ScrollView>
+            {data?.map((item, index) => (
+              <TouchableOpacity key={index} style={styles.card}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <ResponsiveImage
+                    source={{uri: item?.profile_photo}}
+                    style={styles.image}
+                    borderRadius={responsiveWidth(20) / 2}
+                    resizeMode={'contain'}
+                  />
 
-              <View
-                style={{
-                  justifyContent: 'space-evenly',
-                  marginStart: responsiveWidth(2),
-                  width: responsiveWidth(60),
-                }}>
-                <Text style={styles.text1}>{item?.name}</Text>
-                <>
-                  {item?.specialists?.map((item, index) => (
-                    <Text style={styles.text3}>{item}</Text>
-                  ))}
-                </>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text style={styles.text3}>Gender : {item?.gender}</Text>
-                  <Text style={styles.text3}>exp : {item?.experience}yrs</Text>
+                  <View
+                    style={{
+                      justifyContent: 'space-evenly',
+                      marginStart: responsiveWidth(2),
+                      width: responsiveWidth(60),
+                    }}>
+                    <Text style={styles.text1}>{item?.name}</Text>
+                    <>
+                      {item?.specialists?.map((item, index) => (
+                        <Text key={index} style={styles.text3}>
+                          {item}
+                        </Text>
+                      ))}
+                    </>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text style={styles.text3}>Gender : {item?.gender}</Text>
+                      <Text style={styles.text3}>
+                        exp : {item?.experience}yrs
+                      </Text>
+                    </View>
+                  </View>
                 </View>
-              </View>
-            </View>
 
-            {/* <Text
+                {/* <Text
               numberOfLines={3}
               ellipsizeMode="tail"
               style={[
@@ -142,29 +170,46 @@ const DoctorList = () => {
               {item?.}
             </Text> */}
 
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => {
-                // navigation.navigate('AppointmentScreen')
-                onBookPress();
-              }}>
-              <Text style={styles.btntext}>Book Appointment</Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
-        ))}
+                <TouchableOpacity
+                  style={styles.btn}
+                  onPress={() => {
+                    // navigation.navigate('AppointmentScreen')
+                    setId(item.id);
+                    onBookPress();
+                  }}>
+                  <Text style={styles.btntext}>Book Appointment</Text>
+                </TouchableOpacity>
+              </TouchableOpacity>
+            ))}
 
-        {datePicker && (
-          <DateTimePicker
-            minimumDate={new Date()}
-            value={date}
-            mode={'date'}
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-            is24Hour={true}
-            onChange={onDateSelected}
-            // style={styleSheet.datePicker}
-          />
+            {datePicker && (
+              <DateTimePicker
+                minimumDate={new Date()}
+                value={date}
+                mode={'date'}
+                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                is24Hour={true}
+                onChange={onDateSelected}
+                // style={styleSheet.datePicker}
+              />
+            )}
+          </ScrollView>
+        ) : (
+          <Text style={{alignSelf: 'center'}}>No Data Found !</Text>
         )}
-      </ScrollView>
+      </>
+
+      {loading && (
+        <View
+          style={{
+            position: 'absolute',
+            height: responsiveHeight(100),
+            backgroundColor: 'rgba(0,0,0,0.2)',
+          }}>
+          <ActivityLoader size={'large'} style={{flex: 1}} />
+        </View>
+      )}
+
       <Modal
         animationType="fade"
         transparent={true}

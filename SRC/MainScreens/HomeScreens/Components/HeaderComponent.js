@@ -1,4 +1,4 @@
-import { COLORS, FONTFAMILY } from "../../../Constants/DesignConstants";
+import {COLORS, FONTFAMILY} from '../../../Constants/DesignConstants';
 import {
   Dimensions,
   FlatList,
@@ -9,49 +9,39 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AuthContext } from "../../../Context/AuthContext";
+import {AuthContext} from '../../../Context/AuthContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/MaterialIcons';
-import { getInitials } from "../../../HelperFunctions/Helper";
-import { getUserLocationInfo } from "../../../ApiService/API/LocationApi";
-import { useNavigation } from "@react-navigation/native";
+import {getInitials} from '../../../HelperFunctions/Helper';
+import {getUserLocationInfo} from '../../../ApiService/API/LocationApi';
+import { responsiveWidth } from 'react-native-responsive-dimensions';
+import {useNavigation} from '@react-navigation/native';
 
 // import Toast from "react-native-simple-toast";
 
-
-
 // import { getUserInfoRemote, getUserLocationInfo } from "../../../Remote/UserRemote";
-
-
-
-
-
-
-
-
-
 
 const notification = <Icon name="bell-badge" size={25} color="#fff" />;
 const search = <Icon1 name="search" size={23} color="#fff" />;
 
-const HeaderComponent = (route) => {
-  const { Logout, GetUserInfo } = useContext(AuthContext)
+const HeaderComponent = ({data}) => {
+  const {Logout, GetUserInfo} = useContext(AuthContext);
   const totalnotification = 0;
   const navigation = useNavigation();
   const [userInfoData, setUserInfoData] = useState({});
   const [Locality, setLocality] = useState();
   const [Country, setCountry] = useState();
-  const [mainTitle, setMainTitle] = useState("Get Care");
+  const [mainTitle, setMainTitle] = useState('Get Care');
   const searchScreen = () => {
-    navigation.navigate("Search");
+    navigation.navigate('Search');
   };
 
   useEffect(() => {
@@ -62,48 +52,45 @@ const HeaderComponent = (route) => {
     // else {
     //   console.log(userIfo)
     // }
-    getLocation()
-    fetchMyAPI()
-  }, [])
+    getLocation();
+    fetchMyAPI();
+  }, []);
 
   const fetchMyAPI = async () => {
-    console.log("CALLLLLING")
+    console.log('CALLLLLING');
     const userIfo = await GetUserInfo();
-    console.log(userIfo)
+    console.log(userIfo);
     if (userIfo?.success === true) {
-      setUserInfoData(userIfo?.data)
+      setUserInfoData(userIfo?.data);
+    } else {
+      console.log(userIfo);
     }
-    else {
-      console.log(userIfo)
-    }
-  }
+  };
 
   const getLocation = async () => {
     //   //To get location details
-    const tok = await AsyncStorage.getItem("userDetails");
-    console.log("USER", tok)
+    const tok = await AsyncStorage.getItem('userDetails');
+    console.log('USER', tok);
     const location = await getUserLocationInfo();
-    console.log(location)
+    console.log(location);
     if (location) {
       setLocality(location.locality);
       setCountry(location.countryName);
     }
-  }
-
-
+  };
 
   const profileScreen = () => {
     // Logout()
-    navigation.openDrawer()
+    navigation.openDrawer();
     // navigation.navigate("ProfileScreen");
     // navigation.replace("SubscriptionScreen");
   };
 
   const notificationScreen = () => {
-    navigation.navigate("NotificationScreen");
+    navigation.navigate('NotificationScreen');
   };
   const RequestCall = async () => {
-    Toast.show("Under Construction...", Toast.LONG);
+    Toast.show('Under Construction...', Toast.LONG);
   };
 
   const RenderHeader = () => (
@@ -112,22 +99,26 @@ const HeaderComponent = (route) => {
       <View style={[styles.ProfileLayout]}>
         <TouchableOpacity
           onPress={() => profileScreen()}
-          style={[styles.ProfileTouch]}
-        >
-
-
-          {userInfoData.profile ? <Image style={[styles.ProfileImage]} source={{ uri: Config.IMAGE_BASE_URL + userInfoData.profile }} />
-            :
+          style={[styles.ProfileTouch]}>
+          {data?.profile_photo ? (
+            <Image
+              style={[styles.ProfileImage]}
+              source={{uri: data?.profile_photo}}
+            />
+          ) : (
             <View style={[styles.cardInner1]}>
-              <Text style={[styles.emptyText]}>{userInfoData.first_name ? getInitials(userInfoData.first_name) : null}</Text>
-            </View>}
+              <Text style={[styles.emptyText]}>
+                {data?.name ? getInitials(data.name) : null}
+              </Text>
+            </View>
+          )}
 
-
-
-          <View style={{ flex: 1 }}>
-            <Text style={[styles.ProfileName]}>{userInfoData.first_name + " " + userInfoData.last_name}</Text>
+          <View style={{flex: 1}}>
+            <Text style={[styles.ProfileName]}>{data?.name}</Text>
             <Text style={[styles.ProfileStatic]}>
-              {Locality != undefined ? Locality + " ," + Country : "Please Enable Your location"}
+              {Locality != undefined
+                ? Locality + ' ,' + Country
+                : 'Please Enable Your location'}
             </Text>
           </View>
         </TouchableOpacity>
@@ -149,18 +140,17 @@ const HeaderComponent = (route) => {
       <View style={[styles.SearchLayout]}>
         <TouchableOpacity
           onPress={() => searchScreen()}
-          style={[styles.SearchTouch]}
-        >
+          style={[styles.SearchTouch]}>
           <View style={[styles.SearchTextLayout]}>
-            <Text style={[styles.SearchText]}>
-              Search & Explore More...
-            </Text>
+            <Text style={[styles.SearchText]}>Search & Explore More...</Text>
           </View>
           <View style={[styles.SearchIconLayout]}>
-            {search/* <Image
+            {
+              search /* <Image
               style={[styles.SearchIcon]}
               source={require("../../.././Assets/images/Vector.png")}
-            ></Image> */}
+            ></Image> */
+            }
           </View>
         </TouchableOpacity>
       </View>
@@ -173,8 +163,8 @@ const HeaderComponent = (route) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: COLORS.primary,
-    width: wp("100"),
-    height: hp("20"),
+    width: wp('100'),
+    height: hp('20'),
     marginBottom: 5,
     padding: 3,
     borderBottomLeftRadius: 70,
@@ -185,26 +175,28 @@ const styles = StyleSheet.create({
   },
   ProfileLayout: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     margin: 9,
   },
   ProfileTouch: {
     marginTop: 10,
     flex: 1,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   ProfileImage: {
-    width: 45,
-    height: 45,
-    borderRadius: 45 / 2,
-    resizeMode: "contain",
-    marginRight: 10
+    width: responsiveWidth(13),
+    height: responsiveWidth(13),
+    borderRadius: responsiveWidth(13) / 2,
+    resizeMode: 'contain',
+    marginRight: 10,
+    borderWidth:0.5,
+    borderColor:'white'
   },
   ProfileName: {
     color: COLORS.white,
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontFamily: FONTFAMILY.poppinssemibold,
   },
   ProfileStatic: {
@@ -222,37 +214,37 @@ const styles = StyleSheet.create({
     width: 40,
   },
   SearchLayout: {
-    width: wp("85%"),
+    width: wp('85%'),
     height: 40,
     borderRadius: 15,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     marginLeft: 25,
     marginBottom: 22,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#52006A",
-    shadowOffset: { width: 1, height: 1 },
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#52006A',
+    shadowOffset: {width: 1, height: 1},
     shadowOpacity: 0.4,
     shadowRadius: 3,
     elevation: 20,
   },
 
   SearchTouch: {
-    width: wp("90%"),
+    width: wp('90%'),
     height: 50,
     backgroundColor: COLORS.white,
-    borderColor: "white",
+    borderColor: 'white',
     borderWidth: 1,
     borderRadius: 25,
-    alignItems: "center",
-    flexDirection: "row",
-    position: "absolute",
+    alignItems: 'center',
+    flexDirection: 'row',
+    position: 'absolute',
   },
   SearchTextLayout: {
-    width: wp("70%"),
+    width: wp('70%'),
   },
   SearchText: {
-    color: "#8D8D8D",
+    color: '#8D8D8D',
     fontFamily: FONTFAMILY.poppinssemibold,
     fontSize: 12,
     marginLeft: 15,
@@ -260,14 +252,14 @@ const styles = StyleSheet.create({
   SearchIcon: {
     width: 20,
     height: 17,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   SearchIconLayout: {
     width: 40,
     height: 40,
     borderRadius: 25,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: COLORS.primary,
     marginLeft: 20,
   },
@@ -282,8 +274,6 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 20 / 2,
-
-
   },
   tabBadgeText: {
     color: 'white',
@@ -297,20 +287,17 @@ const styles = StyleSheet.create({
     borderColor: COLORS.black,
     borderWidth: 1,
     borderRadius: 22,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 10,
     marginLeft: 5,
   },
-  emptyText:
-  {
+  emptyText: {
     color: COLORS.secondary,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 18,
-    lineHeight: 28
-
-  }
-
+    lineHeight: 28,
+  },
 });
 
 export default HeaderComponent;

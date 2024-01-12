@@ -1,8 +1,5 @@
-import { COLORS, FONTFAMILY } from '../../Constants/DesignConstants';
-import {
-  DrawerContentScrollView,
-  DrawerItem,
-} from '@react-navigation/drawer';
+import {COLORS, FONTFAMILY} from '../../Constants/DesignConstants';
+import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {
   Image,
   ImageBackground,
@@ -11,51 +8,37 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AuthContext } from '../../Context/AuthContext';
+import {AuthContext} from '../../Context/AuthContext';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { IMAGE_BASE_URL } from '../../ApiService/Config';
+import {IMAGE_BASE_URL} from '../../ApiService/Config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { getInitials } from '../../HelperFunctions/Helper';
-import { useNavigation } from '@react-navigation/native';
+import {getInitials} from '../../HelperFunctions/Helper';
+import { responsiveWidth } from 'react-native-responsive-dimensions';
+import {useNavigation} from '@react-navigation/native';
 
 const CustomDrawer = props => {
-  const {GetUserInfo,Logout} = useContext(AuthContext)
-  const navigation=useNavigation();
+  const {GetUserInfo, Logout, profileData} = useContext(AuthContext);
+  const navigation = useNavigation();
 
-  const [name,setName]=React.useState();
-  const [profile,setProfile]=React.useState();
-
-  React.useEffect(() => {
-    
-    async function fetchMyAPI() {
-      const userIfo = await GetUserInfo(); 
-       setName(userIfo.data?.first_name)
-       setProfile(userIfo?.data?.profile)
-    }
-
-    fetchMyAPI()
-  }, [])
-
-
-
-
-
+  const [name, setName] = React.useState();
+  const [profile, setProfile] = React.useState();
   const onShare = async () => {
     try {
       const result = await Share.share({
-       title: 'App link',
-  message: 'Hi, I just invited you to use the Metacare4U app! Step1: Use my link to download the app Step2: Register using your Email Address to register your Acoount. Step3: Start using  24x7 online  Consulting  & more . 40+ Crore Indians consult with Metacare4u. It`s 100% safe & secure Download the app now.',
-  url: "https://play.google.com/store/apps/details?id=com.metacareforyou",
+        title: 'App link',
+        message:
+          'Hi, I just invited you to use the Metacare4U app! Step1: Use my link to download the app Step2: Register using your Email Address to register your Acoount. Step3: Start using  24x7 online  Consulting  & more . 40+ Crore Indians consult with Metacare4u. It`s 100% safe & secure Download the app now.',
+        url: 'https://play.google.com/store/apps/details?id=com.metacareforyou',
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -71,9 +54,9 @@ const CustomDrawer = props => {
     }
   };
 
-const remove = async()=> {
-    Logout()
-}
+  const remove = async () => {
+    Logout();
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -81,60 +64,74 @@ const remove = async()=> {
         {...props}
         contentContainerStyle={{backgroundColor: COLORS.primary}}>
         <TouchableOpacity
-         onPress={() => navigation.navigate("Profile")}
-          style={{padding: 10,flexDirection:'row',margin:10}}>
-            <View>
-          {/* <Image
+          onPress={() => navigation.navigate('Profile')}
+          style={{padding: 10, flexDirection: 'row', margin: 10}}>
+          <View>
+            {/* <Image
             source={require('./../../Assets/images/profile.png')}
             style={{height: 50, width: 50, borderRadius: 25, marginBottom: 10}}
           /> */}
-          {profile ? <Image style={[styles.ProfileImage]} source={{uri:IMAGE_BASE_URL+profile.profile}}/>
-                : 
-                <View style={[styles.cardInner1]}>
-    <Text style={[styles.emptyText]}>{name ? getInitials(name):null}</Text>
-      </View> }
-
+            {profileData?.profile_photo ? (
+              <Image
+                style={[styles.ProfileImage]}
+                source={{uri: profileData?.profile_photo}}
+              />
+            ) : (
+              <View style={[styles.cardInner1]}>
+                <Text style={[styles.emptyText]}>
+                  {name ? getInitials(profileData?.name) : null}
+                </Text>
+              </View>
+            )}
           </View>
-          <View style={{marginLeft:10,marginTop:5}}>
-          <Text
-            style={{
-              color: COLORS.white,
-              fontSize: 13.5,
-              fontFamily:FONTFAMILY.poppinsbold ,
-            }}>
-            {name ? name:null}
-          </Text>
+          <View style={{marginLeft: 10, marginTop: 5}}>
             <Text
               style={{
                 color: COLORS.white,
-                fontFamily:FONTFAMILY.poppinsmedium,
+                fontSize: 13.5,
+                fontFamily: FONTFAMILY.poppinsbold,
+              }}>
+              {profileData?.name}
+            </Text>
+            <Text
+              style={{
+                color: COLORS.white,
+                fontFamily: FONTFAMILY.poppinsmedium,
                 fontSize: 12,
               }}>
               View Your Profile & Edit
             </Text>
-            </View>
-            <View style={{alignItems:'center',marginLeft:30,marginTop:13}}>
+          </View>
+          <View style={{alignItems: 'center', marginLeft: 30, marginTop: 13}}>
             <FontAwesome5 name="angle-right" size={20} color={COLORS.white} />
-            </View>
-          </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
 
-
-      
-        <View style={{width:wp('78%'),backgroundColor: 'white',}}>
+        <View style={{width: wp('78%'), backgroundColor: 'white'}}>
           {/* <DrawerItemList {...props} /> */}
           <DrawerItem
-          icon={({ color, size }) => (
-                <FontAwesome5
-                  name="file-medical"
-                  color={COLORS.textcolor}
-                  size={20}
-                />
-              )}
-              label={() => <Text style={{ color: COLORS.textcolor, fontFamily:FONTFAMILY.poppinsmedium, fontSize: 14,lineHeight:28}}>Appointments</Text>}
-             onPress={() => navigation.navigate("Booking")}
-            />
+            icon={({color, size}) => (
+              <FontAwesome5
+                name="file-medical"
+                color={COLORS.textcolor}
+                size={20}
+              />
+            )}
+            label={() => (
+              <Text
+                style={{
+                  color: COLORS.textcolor,
+                  fontFamily: FONTFAMILY.poppinsmedium,
+                  fontSize: 14,
+                  lineHeight: 28,
+                }}>
+                Appointments
+              </Text>
+            )}
+            onPress={() => navigation.navigate('Booking')}
+          />
 
-            {/* <DrawerItem
+          {/* <DrawerItem
              icon={({ color, size }) => (
                 <FontAwesome5
                   name="crown"
@@ -145,69 +142,114 @@ const remove = async()=> {
               label={() => <Text style={{ color: COLORS.textcolor, fontFamily:FONTFAMILY.poppinsmedium, fontSize: 14,lineHeight:28}}>Subscription</Text>}
              onPress={() => navigation.navigate("Subscription")}
             /> */}
-            <DrawerItem
-             icon={({ color, size }) => (
-                <FontAwesome5
-                  name="headset"
-                  color={COLORS.textcolor}
-                  size={20}
-                />
-              )}
-              label={() => <Text style={{ color: COLORS.textcolor, fontFamily:FONTFAMILY.poppinsmedium, fontSize: 14,lineHeight:28}}>Help & Support</Text>}
-               onPress={() => navigation.navigate("Help")}
-            />
+          <DrawerItem
+            icon={({color, size}) => (
+              <FontAwesome5 name="headset" color={COLORS.textcolor} size={20} />
+            )}
+            label={() => (
+              <Text
+                style={{
+                  color: COLORS.textcolor,
+                  fontFamily: FONTFAMILY.poppinsmedium,
+                  fontSize: 14,
+                  lineHeight: 28,
+                }}>
+                Help & Support
+              </Text>
+            )}
+            onPress={() => navigation.navigate('Help')}
+          />
 
-            <DrawerItem
-             icon={({ color, size }) => (
-                <Ionicons
-                  name="information-circle-outline"
-                  color={COLORS.textcolor}
-                  size={22}
-                />
-              )}
-              label={() => <Text style={{ color: COLORS.textcolor, fontFamily:FONTFAMILY.poppinsmedium, fontSize: 14,lineHeight:28}}>About</Text>}
-               onPress={() => navigation.navigate("About")}
-            />
+          <DrawerItem
+            icon={({color, size}) => (
+              <Ionicons
+                name="information-circle-outline"
+                color={COLORS.textcolor}
+                size={22}
+              />
+            )}
+            label={() => (
+              <Text
+                style={{
+                  color: COLORS.textcolor,
+                  fontFamily: FONTFAMILY.poppinsmedium,
+                  fontSize: 14,
+                  lineHeight: 28,
+                }}>
+                About
+              </Text>
+            )}
+            onPress={() => navigation.navigate('About')}
+          />
 
-              <DrawerItem
-             icon={({ color, size }) => (
-                <MaterialIcons
-                  name="privacy-tip"
-                  color={COLORS.textcolor}
-                  size={22}
-                />
-              )}
-              label={() => <Text style={{ color: COLORS.textcolor, fontFamily:FONTFAMILY.poppinsmedium, fontSize: 14,lineHeight:28}}>Privacy policy</Text>}
-             onPress={() => Linking.openURL('https://metacare4u.com/privacy-policy-1')}
-            />
+          <DrawerItem
+            icon={({color, size}) => (
+              <MaterialIcons
+                name="privacy-tip"
+                color={COLORS.textcolor}
+                size={22}
+              />
+            )}
+            label={() => (
+              <Text
+                style={{
+                  color: COLORS.textcolor,
+                  fontFamily: FONTFAMILY.poppinsmedium,
+                  fontSize: 14,
+                  lineHeight: 28,
+                }}>
+                Privacy policy
+              </Text>
+            )}
+            onPress={() =>
+              Linking.openURL('https://metacare4u.com/privacy-policy-1')
+            }
+          />
 
-
-
-
-               <DrawerItem
-             icon={({ color, size }) => (
-                <MaterialIcons
-                  name="file-present"
-                  color={COLORS.textcolor}
-                  size={22}
-                />
-              )}
-              label={() => <Text style={{ color: COLORS.textcolor, fontFamily:FONTFAMILY.poppinsmedium, fontSize: 14,lineHeight:28}}>Terms of Service</Text>}
-               onPress={() => Linking.openURL('https://metacare4u.com/terms-%26-conditions')}
-            />
-              <DrawerItem
-             icon={({ color, size }) => (
-                <Ionicons
-                  name="share-social-outline"
-                  color={COLORS.textcolor}
-                  size={22}
-                />
-              )}
-              label={() => <Text style={{ color: COLORS.textcolor, fontFamily:FONTFAMILY.poppinsmedium, fontSize: 14,lineHeight:28}}>Tell a Friend</Text>}
-             onPress={onShare}
-            />
-
-
+          <DrawerItem
+            icon={({color, size}) => (
+              <MaterialIcons
+                name="file-present"
+                color={COLORS.textcolor}
+                size={22}
+              />
+            )}
+            label={() => (
+              <Text
+                style={{
+                  color: COLORS.textcolor,
+                  fontFamily: FONTFAMILY.poppinsmedium,
+                  fontSize: 14,
+                  lineHeight: 28,
+                }}>
+                Terms of Service
+              </Text>
+            )}
+            onPress={() =>
+              Linking.openURL('https://metacare4u.com/terms-%26-conditions')
+            }
+          />
+          <DrawerItem
+            icon={({color, size}) => (
+              <Ionicons
+                name="share-social-outline"
+                color={COLORS.textcolor}
+                size={22}
+              />
+            )}
+            label={() => (
+              <Text
+                style={{
+                  color: COLORS.textcolor,
+                  fontFamily: FONTFAMILY.poppinsmedium,
+                  fontSize: 14,
+                  lineHeight: 28,
+                }}>
+                Tell a Friend
+              </Text>
+            )}
+            onPress={onShare}
+          />
         </View>
       </DrawerContentScrollView>
       <View style={{padding: 20, borderTopWidth: 1, borderTopColor: '#ccc'}}>
@@ -224,16 +266,26 @@ const remove = async()=> {
             </Text>
           </View>
         </TouchableOpacity> */}
-        <TouchableOpacity onPress={() => remove()} style={{paddingVertical: 15}}>
-          <View style={{flexDirection: 'row', alignItems: 'center',justifyContent:'center',backgroundColor:COLORS.primary,padding:10,borderRadius:25}}>
+        <TouchableOpacity
+          onPress={() => remove()}
+          style={{paddingVertical: 15}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.primary,
+              padding: 10,
+              borderRadius: 25,
+            }}>
             <Ionicons name="exit-outline" size={20} color={COLORS.white} />
             <Text
               style={{
                 fontSize: 14,
-               fontFamily:FONTFAMILY.poppinsmedium,
+                fontFamily: FONTFAMILY.poppinsmedium,
                 marginLeft: 10,
-                lineHeight:28,
-                color:COLORS.white
+                lineHeight: 28,
+                color: COLORS.white,
               }}>
               Sign Out
             </Text>
@@ -244,36 +296,34 @@ const remove = async()=> {
   );
 };
 
-
-
 const styles = StyleSheet.create({
-cardInner1: {
-  backgroundColor:COLORS.white,
-   width: 44,
-  height: 44,
-  borderColor:COLORS.black,
-  borderWidth: 1,
-  borderRadius: 22,
-  alignItems: "center",
-  justifyContent:"center",
-  marginRight: 10,
-  marginLeft: 5,
-},
-emptyText:
-{
- color:COLORS.secondary,
- fontWeight:"bold",
- fontSize: 18,
- lineHeight:28
-
-},
-ProfileImage: {
- width: 45,
- height: 45,
- borderRadius: 45 / 2,
- resizeMode: "contain",
- marginRight:10
-},
+  cardInner1: {
+    backgroundColor: COLORS.white,
+    width: 44,
+    height: 44,
+    borderColor: COLORS.black,
+    borderWidth: 1,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+    marginLeft: 5,
+  },
+  emptyText: {
+    color: COLORS.secondary,
+    fontWeight: 'bold',
+    fontSize: 18,
+    lineHeight: 28,
+  },
+  ProfileImage: {
+    width: responsiveWidth(13),
+    height: responsiveWidth(13),
+    borderRadius: responsiveWidth(13) / 2,
+    resizeMode: 'contain',
+    marginRight: 10,
+    borderWidth:0.5,
+    borderColor:'white'
+  },
 });
 
 export default CustomDrawer;

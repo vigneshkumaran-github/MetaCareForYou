@@ -4,7 +4,8 @@ const {
   getUserdetails,
 } = require('../../HelperFunctions/Helper');
 
-import {BASE_URL} from '../Config';
+import {BASE_URL, axiosInstanceWithAuth} from '../Config';
+
 import axios from 'axios';
 
 export const getUserInfoRemote = async () => {
@@ -50,4 +51,29 @@ export const getTestimonialsApi = async () => {
       return err.response.data;
     }
   };
+
+  export const getHospitalsApi = async () => {
+    try {
+      const response = await axiosInstanceWithAuth.get(`/customer/hospitals?search=&latitude=11.03733800&longitude=77.03668500&page=1`);
+      return response?.data;
+    } catch (err) {
+      console.log(err.response.data.error.message);
+      showToastRed(err.response.data.error.message);
+      console.log(err, 'err');
+      return err.response.data;
+    }
+  };
+
+  export const getServicesApi = async (id) => {
+    try {
+      const response = await axiosInstanceWithAuth.get(`/customer/hospitals/${id}/services?page=1`);
+      return response?.data;
+    } catch (err) {
+      console.log(err.response.data.error.message);
+      showToastRed(err.response.data.error.message);
+      console.log(err, 'err');
+      return err.response.data;
+    }
+  };
+
 

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {BASE_URL, IMAGE_BASE_URL} from '../../../ApiService/Config';
 import {COLORS, FONTS} from '../../../Constants/DesignConstants';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -22,6 +22,7 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 
+import {AuthContext} from '../../../Context/AuthContext';
 import {SliderBox} from 'react-native-image-slider-box';
 import axios from 'axios';
 
@@ -46,26 +47,36 @@ const DATA = [
 
 const TopDoctors = () => {
   const [banners, setBanners] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
-  const data = [
-    {
-      image: 'https://source.unsplash.com/1024x768/?nature',
-      link: 'https://www.google.com/',
-    },
-    {
-      image: 'https://source.unsplash.com/1024x768/?tree',
-      link: 'https://www.google.com/',
-    },
-  ];
+  const [isLoading, setisLoading] = useState(true);
+  const {GetBanners} = useContext(AuthContext);
+  const [data,setData] = useState([])
+  // const data = [
+  //   {
+  //     image: 'https://source.unsplash.com/1024x768/?nature',
+  //     link: 'https://www.google.com/',
+  //   },
+  //   {
+  //     image: 'https://source.unsplash.com/1024x768/?tree',
+  //     link: 'https://www.google.com/',
+  //   },
+  // ];
 
   //     let url=BASE_URL+'auth/banners';
 
   const getBanners = async () => {
-    data.map((item, index) => {
-      let arr = banners;
-      arr.push(item.image);
-      setBanners(arr);
-    });
+    const response = await GetBanners();
+    console.log(response);
+    if (response?.status === true) {
+      setData(response?.data);
+      response?.data.map((item, index) => {
+        let arr = banners;
+        arr.push(item.image);
+        setBanners(arr);
+      });
+      setisLoading(false);
+    } else {
+      setisLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -83,20 +94,30 @@ const TopDoctors = () => {
   };
 
   return (
-    <SliderBox
-      images={banners}
-      sliderBoxHeight={responsiveHeight(20)}
-      onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
-      ImageComponentStyle={{
-        borderRadius: 15,
-        width: responsiveWidth(90),
-        marginTop: 5,
-      }}
-      imageLoadingColor={COLORS.primary}
-      autoplay
-      circleLoop
-      autoplayInterval={3000}
-    />
+    <View>
+      {!isLoading ? (
+        <SliderBox
+          images={banners}
+          sliderBoxHeight={responsiveHeight(20)}
+          onCurrentImagePressed={index =>
+            console.warn(`image ${data[index]?.link} pressed`)
+          }
+          ImageComponentStyle={{
+            borderRadius: 15,
+            width: responsiveWidth(90),
+            marginTop: 5,
+          }}
+          imageLoadingColor={COLORS.primary}
+          autoplay
+          circleLoop
+          autoplayInterval={3000}
+        />
+      ) : (
+        <View style={{alignItems: 'center', justifyContent: 'center',height:responsiveHeight(20)}}>
+          <ActivityIndicator size={'small'} color={COLORS.primary} />
+        </View>
+      )}
+    </View>
   );
 };
 const styles = StyleSheet.create({

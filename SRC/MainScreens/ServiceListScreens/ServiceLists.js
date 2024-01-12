@@ -1,4 +1,5 @@
 import {COLORS, FONTFAMILY} from '../../Constants/DesignConstants';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -11,11 +12,12 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 
+import ActivityLoader from '../../CustomComponents/ActivityLoader';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { AuthContext } from '../../Context/AuthContext';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import CustomNavbar from '../../CustomComponents/CustomNavbar';
 import {RFValue} from 'react-native-responsive-fontsize';
-import React from 'react';
 import ResponsiveImage from 'react-native-responsive-image';
 import {SvgXml} from 'react-native-svg';
 import {useNavigation} from '@react-navigation/native';
@@ -24,38 +26,25 @@ import {verifiedsvg} from '../../Resources/Svg/Service';
 const ServiceLists = ({route}) => {
   const navigation = useNavigation();
   const {hospitalData} = route.params;
-  const data = [
-    {
-      id: 'ad39c77c9ba186f1c380fc3a1aab77d7d18ed0eda102c104e3d5b55a642bbdeef4ed1d2cfdec1bd1e200eb',
-      name: 'Cardiology',
-      about_us:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled",
-    },
-    {
-      id: '1e52f0f58eb45672f3a3cf92e58a759447936ae56145a3485cbd242b48a2866a2dcb0d4b6eac6839b6e210',
-      name: 'Dermatology',
-      about_us:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled",
-    },
-    {
-      id: '0bcd8011bd632e0f683fa74d19e1da7a8a7aa6f9f256062bb2c10908ef48261d3e534d2345634f679b5823',
-      name: 'Orthopedics',
-      about_us:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled",
-    },
-    {
-      id: '5e128d68f12af7bb03a47a22e5bfbe7dd8544537add8632eaba0bc0a7277f17368071c545a049b7846ebf1',
-      name: 'Neurology',
-      about_us:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled",
-    },
-    {
-      id: '22d621a34fbbb6e5aa306afb020c1e656afecc7fec4c3437935f604a6f83e3312e1d65aa338cb15e785369',
-      name: 'Ophthalmology',
-      about_us:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled",
-    },
-  ];
+  const [data,setData] = useState([])
+  const {GetServices} = useContext(AuthContext)
+  const [loading,setLoading] = useState(true)
+
+ const getData=async()=>{
+  const response = await GetServices(hospitalData?.id);
+  if(response?.status===true){
+    setData(response?.data)
+    setLoading(false)
+  }
+  else{
+    console.log(response,'eee')
+    setLoading(false)
+  }
+ }
+  useEffect(() => {
+  getData()
+  }, [])
+
   return (
     <View style={styles.container}>
       <CustomNavbar
@@ -76,7 +65,7 @@ const ServiceLists = ({route}) => {
           />
         </View>
       )}
-      <ScrollView style={{marginTop: responsiveHeight(2)}}>
+      {!loading ?<ScrollView style={{marginTop: responsiveHeight(2)}}>
         <View
           style={{
             marginHorizontal: responsiveWidth(5),
@@ -106,7 +95,7 @@ const ServiceLists = ({route}) => {
             {hospitalData?.address}
           </Text>
 
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
@@ -114,9 +103,9 @@ const ServiceLists = ({route}) => {
             }}>
             <Text style={[styles.text1, {}]}>Phone : </Text>
             <Text style={styles.text2}>xxxx</Text>
-          </View>
+          </View> */}
 
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
@@ -124,7 +113,7 @@ const ServiceLists = ({route}) => {
             }}>
             <Text style={[styles.text1, {}]}>Email : </Text>
             <Text style={styles.text2}>xxxx@gmail.com</Text>
-          </View>
+          </View> */}
         </View>
 
         {/* Service section */}
@@ -168,7 +157,7 @@ const ServiceLists = ({route}) => {
                   <TouchableOpacity
                     style={styles.btn}
                     onPress={() => {
-                      navigation.navigate('DoctorList');
+                      navigation.navigate('DoctorList',{serviceData:item});
                     }}>
                     <Text style={styles.btntext}>Explore</Text>
                   </TouchableOpacity>
@@ -182,6 +171,8 @@ const ServiceLists = ({route}) => {
           ))}
         </View>
       </ScrollView>
+      :
+     <ActivityLoader size={'large'} style={{flex:1}} />}
     </View>
   );
 };
