@@ -21,7 +21,7 @@ const TabNavigation = ({ navigation }) => {
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Icon name="home-outline" color={COLORS.textColor} size={22} />
+            <Icon name="home-outline" color={COLORS.textcolor} size={22} />
           ),
         }}
       />
@@ -32,7 +32,7 @@ const TabNavigation = ({ navigation }) => {
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Icon name="head-check-outline" color={COLORS.textColor} size={22} />
+            <Icon name="head-check-outline" color={COLORS.textcolor} size={22} />
           ),
         }}
       />
@@ -54,7 +54,7 @@ const TabNavigation = ({ navigation }) => {
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Icon name="history" color={COLORS.textColor} size={22} />
+            <Icon name="history" color={COLORS.textcolor} size={22} />
           ),
         }}
       />

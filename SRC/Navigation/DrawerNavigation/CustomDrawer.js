@@ -128,7 +128,7 @@ const CustomDrawer = props => {
                 Appointments
               </Text>
             )}
-            onPress={() => navigation.navigate('Booking')}
+            onPress={() => navigation.navigate('History')}
           />
 
           {/* <DrawerItem

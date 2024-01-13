@@ -5,8 +5,8 @@ import moment from 'moment';
 
 // @ts-ignore
 
-export const BASE_URL = 'https://0181-2401-4900-4dd0-c950-7467-6a81-91a5-f395.ngrok-free.app/api/v2';
-// export const BASE_URL = 'http://54.179.118.199:8080/api/v2';
+// export const BASE_URL = 'http://192.168.43.241:3000/api/v2';
+export const BASE_URL = 'http://54.179.118.199:8080/api/v2';
 // export const BASE_URL='https://api.metacare4u.online/api/v1/auth/'
 export const IMAGE_BASE_URL = 'https://api.metacare4u.online/images/';
 

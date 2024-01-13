@@ -49,6 +49,7 @@ const Profile = () => {
   const SetbasicDetails = async () => {
     //to get profile Details
     const response = await GetProfile();
+    console.log(response)
     if (response?.status === true) {
       setProfileData(response?.data);
       setLoading(false);
@@ -104,7 +105,7 @@ const Profile = () => {
                   style={{marginLeft: 10}}
                   onPress={() =>
                     navigation.navigate('EditProfile', {
-                      profileData: profileData,
+                      data: profileData,
                     })
                   }
                 />
@@ -268,9 +269,9 @@ const Profile = () => {
                   autoCorrect={false}
                   onChangeText={text => setWeight(text)}
                   value={
-                    profileData?.mental_health_issue_before === 'null'
-                      ? 'Not Updated'
-                      : profileData?.mental_health_issue_before
+                    profileData?.mental_health_issue_before === false
+                      ? 'No'
+                      : 'Yes'
                   }
                   editable={false}
                   placeholder="Not updated"></TextInput>
@@ -295,9 +296,9 @@ const Profile = () => {
                   autoCorrect={false}
                   onChangeText={text => setWeignt(text)}
                   value={
-                    profileData?.thought_of_suicide === 'null'
-                      ? 'Not Updated'
-                      : profileData?.thought_of_suicide
+                    profileData?.thought_of_suicide  === false
+                    ? 'No'
+                    : 'Yes'
                   }
                   editable={false}
                   placeholder="Not updated"></TextInput>

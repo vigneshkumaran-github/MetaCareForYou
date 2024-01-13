@@ -1,9 +1,10 @@
-import { Pressable, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, Text, TouchableOpacity } from "react-native";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
+import { COLORS } from "../Constants/DesignConstants";
 import React from "react";
 
 const CustomButton = ({
@@ -12,6 +13,7 @@ const CustomButton = ({
   titleColor,
   size,
   onPress,
+  loading
 }) => {
   return (
     <TouchableOpacity
@@ -22,7 +24,9 @@ const CustomButton = ({
       }}
       onPress={onPress}
     >
-      <Text style={{ ...styles.Buttontext, color: titleColor }}>{title}</Text>
+      {!loading ? <Text style={{ ...styles.Buttontext, color: titleColor }}>{title}</Text>
+      :
+      <ActivityIndicator size={'small'} color={COLORS.white}/>}
     </TouchableOpacity>
   );
 };

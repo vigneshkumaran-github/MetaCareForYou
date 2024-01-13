@@ -26,7 +26,7 @@ export const AuthProvider = ({children}) => {
         email: email,
         password: password,
       });
-      console.log(response?.data);
+      console.log(response);
       if (response.data?.status) {
         showToastGreen(response?.data?.message);
         setUserDetails(response?.data?.data);
@@ -143,7 +143,8 @@ export const AuthProvider = ({children}) => {
     GetServices:apiCall.getServicesApi,
     GetTherapists:apiCall.getTherapistsApi,
     CheckDate:apiCall.checkDateApi,
-    BookAppointment:apiCall.bookAppointmentApi
+    BookAppointment:apiCall.bookAppointmentApi,
+    GetHistory:apiCall.getHistoryApi,
   };
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

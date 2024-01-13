@@ -9,72 +9,71 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { COLORS, FONTFAMILY, FONTS } from "../../../Constants/DesignConstants";
-import React, { useEffect, useState } from "react";
+} from 'react-native';
+import {COLORS, FONTFAMILY, FONTS} from '../../../Constants/DesignConstants';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
-import { BASE_URL } from "../../../ApiService/Config";
-import Icon from "react-native-vector-icons/AntDesign";
-import Toast from "react-native-simple-toast";
-import axios from "axios";
+import {AuthContext} from '../../../Context/AuthContext';
+import {BASE_URL} from '../../../ApiService/Config';
+import Icon from 'react-native-vector-icons/AntDesign';
+import Toast from 'react-native-simple-toast';
+import axios from 'axios';
 
 //Specialist data
 const DATA = [
   {
     id: 1,
-    issuesName: "Anxiety Issues?",
-    question: "If you could see a measuring scale above people’s heads what would you want this scale to measure?Their status in society their level of happiness, their wealth, etc.?",
+    issuesName: 'Anxiety Issues?',
+    question:
+      'If you could see a measuring scale above people’s heads what would you want this scale to measure?Their status in society their level of happiness, their wealth, etc.?',
   },
   {
     id: 2,
-    issuesName: "Stress Issues?",
-      question: "If you could see a measuring scale above people’s heads what would you want this scale to measure?Their status in society their level of happiness, their wealth, etc.?",
-
+    issuesName: 'Stress Issues?',
+    question:
+      'If you could see a measuring scale above people’s heads what would you want this scale to measure?Their status in society their level of happiness, their wealth, etc.?',
   },
   {
     id: 3,
-    issuesName: "Anxiety Issues?",
-    question: "If you could see a measuring scale above people’s heads what would you want this scale to measure?Their status in society their level of happiness, their wealth, etc.?",
-
+    issuesName: 'Anxiety Issues?',
+    question:
+      'If you could see a measuring scale above people’s heads what would you want this scale to measure?Their status in society their level of happiness, their wealth, etc.?',
   },
   {
     id: 4,
-    issuesName: "Anxiety Issues?",
-       question: "If you could see a measuring scale above people’s heads what would you want this scale to measure?Their status in society their level of happiness, their wealth, etc.?",
-
+    issuesName: 'Anxiety Issues?',
+    question:
+      'If you could see a measuring scale above people’s heads what would you want this scale to measure?Their status in society their level of happiness, their wealth, etc.?',
   },
 ];
 
 const QuestionsComponent = () => {
   const [Testimonials, setTestimonials] = useState([]);
-  const [mainTitle, setMainTitle] = useState("Find Your Best Doctor");
-  const [isLoading,setisLoading]=useState(false);
-  const data=[
-    {
-      "content": "“Metacare4u, my health buddy in my pocket.”",
-      "author": "Raghavan"
-    },
-    {
-      "content": "“Healthcare made easy with Metacare4u. Highly recommend!”",
-      "author": "Samuel "
-    }
-  ]
+  const [mainTitle, setMainTitle] = useState('Find Your Best Doctor');
+  const [isLoading, setisLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const {GetTestimonials} = useContext(AuthContext);
+
+  // let url=BASE_URL+'auth/testimonials';
 
   const testimonials = async () => {
-    // let url=BASE_URL+'auth/testimonials';
-};
+    const response = await GetTestimonials();
+    if (response?.status === true) {
+      setData(response?.data);
+      setisLoading(false);
+    } else {
+      console.log(response, 'eee');
+      setisLoading(false);
+    }
+  };
 
-
-
-  useEffect(()=>{
-    // testimonials()
-    },[]);
-
-
+  useEffect(() => {
+    testimonials()
+  }, []);
 
   const ItemSeparatorView = () => {
     return (
@@ -82,12 +81,11 @@ const QuestionsComponent = () => {
       <View
         style={{
           width: 6,
-        }}
-      ></View>
+        }}></View>
     );
   };
   const SpacialistClick = () => {
-    Toast.show("Under Construction...", Toast.LONG);
+    Toast.show('Under Construction...', Toast.LONG);
   };
 
   const RenderIssues = () => (
@@ -97,8 +95,8 @@ const QuestionsComponent = () => {
         scrollEnabled={true}
         data={data}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => {
-          return RenderIssuesItem({ item, index });
+        renderItem={({item, index}) => {
+          return RenderIssuesItem({item, index});
         }}
         ItemSeparatorComponent={ItemSeparatorView}
         showsHorizontalScrollIndicator={false}
@@ -111,49 +109,63 @@ const QuestionsComponent = () => {
     </View>
   );
 
-  const RenderIssuesItem = ({ item, index }) => (
+  const RenderIssuesItem = ({item, index}) => (
     <View style={[styles.card, styles.elevation]}>
+      {isLoading ? (
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      ) : (
+        <View style={[styles.cardInner1]}>
+          <View style={[styles.flexbox]}>
+            <View style={[styles.line]}></View>
+            <Text style={[styles.cardDescription]}>
+              {'“ ' + item?.content + ' ”'}
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => SpacialistClick()}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                padding: 10,
+                marginTop: 10,
+                JustifyContent: 'center',
+              }}>
+              {/* <View style={[styles.cardImageLay]}> */}
 
-{isLoading ? <ActivityIndicator size="large" color={COLORS.primary} /> :
-
-
-      <View style={[styles.cardInner1]}>
-        
-        <View style={[styles.flexbox]} >
-        <View style={[styles.line]}></View>
-        <Text style={[styles.cardDescription]}>{"“ "+item?.content+" ”"}</Text>
-      
-      </View>
-       <TouchableOpacity onPress={() => SpacialistClick()}>
-        <View style={{flexDirection:'row',alignItems:"center",padding:10,marginTop:10,JustifyContent:"center"}}>
-    {/* <View style={[styles.cardImageLay]}> */}
-
-
-    
-        <TouchableOpacity onPress={() => SpacialistClick()}>
-          <Icon style={{marginLeft:15}} name="wechat" size={24} />
-        </TouchableOpacity>
-      {/* </View> */}
-            <Text style={{color:COLORS.secondary,fontSize:12,marginLeft:16,lineHeight: 28,fontFamily: FONTFAMILY.poppinsbold,}}>- {item.author}  </Text>
+              <TouchableOpacity onPress={() => SpacialistClick()}>
+                <Icon style={{marginLeft: 15}} name="wechat" size={24} />
+              </TouchableOpacity>
+              {/* </View> */}
+              <Text
+                style={{
+                  color: COLORS.secondary,
+                  fontSize: 12,
+                  marginLeft: 16,
+                  lineHeight: 28,
+                  fontFamily: FONTFAMILY.poppinsbold,
+                }}>
+                - {item?.author}{' '}
+              </Text>
             </View>
-    </TouchableOpacity>
-      </View>}
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
   return <RenderIssues />;
 };
 const styles = StyleSheet.create({
   Main2: {
-    width: wp("100%"),
+    width: wp('100%'),
     backgroundColor: COLORS.white,
-    alignItems: "center",
+    alignItems: 'center',
     padding: 5,
     marginTop: 1,
   },
   Main3: {
-    width: wp("90%"),
-    flexDirection: "row",
-    alignItems: "center",
+    width: wp('90%'),
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   mainHeading: {
     ...FONTS.mainHeading,
@@ -163,14 +175,14 @@ const styles = StyleSheet.create({
     borderColor: COLORS.secondary,
     borderWidth: 1.5,
     borderRadius: 8,
-    width: wp("70"),
+    width: wp('70'),
     // height: hp("20"),
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
     marginTop: 2,
     marginLeft: 5,
     marginBottom: 10,
-    alignItems:"center",
-    justifyContent:"center"
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   elevation: {
     // elevation: 3,
@@ -190,23 +202,23 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
   },
-//     cardImageLay: {
-//     marginLeft:10,
-//      width: 40,
-//     height: 40,
-//     borderColor: 'black',
-//     borderWidth: 2.5,
-//     borderRadius: 20,
-//     alignItems: "center",
-//     justifyContent:"center",
-//   },
+  //     cardImageLay: {
+  //     marginLeft:10,
+  //      width: 40,
+  //     height: 40,
+  //     borderColor: 'black',
+  //     borderWidth: 2.5,
+  //     borderRadius: 20,
+  //     alignItems: "center",
+  //     justifyContent:"center",
+  //   },
   cardImage: {
-    marginLeft:10,
-     width: 30,
+    marginLeft: 10,
+    width: 30,
     height: 30,
     borderWidth: 2,
     borderRadius: 15,
-     resizeMode: "contain",
+    resizeMode: 'contain',
   },
   cardTitle: {
     ...FONTS.cardTitle,
@@ -217,14 +229,13 @@ const styles = StyleSheet.create({
     ...FONTS.cardDescription,
   },
   line: {
-  
     borderWidth: 2,
     borderColor: COLORS.secondary,
   },
-  flexbox:{
+  flexbox: {
     padding: 5,
-    flexDirection:'row'
-  }
+    flexDirection: 'row',
+  },
 });
 
 export default QuestionsComponent;

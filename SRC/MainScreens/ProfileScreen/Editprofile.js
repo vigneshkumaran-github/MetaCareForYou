@@ -15,13 +15,17 @@ import {
 import {BASE_URL, IMAGE_BASE_URL} from '../../ApiService/Config';
 import {COLORS, FONTFAMILY, FONTS} from '../../Constants/DesignConstants';
 import React, {useContext, useEffect, useState} from 'react';
-import {getInitials, showToastGreen, showToastRed} from '../../HelperFunctions/Helper';
+import {
+  getInitials,
+  showToastGreen,
+  showToastRed,
+} from '../../HelperFunctions/Helper';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 
-import  AsyncStorage  from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../../Context/AuthContext';
 import CustomNavbar from '../../CustomComponents/CustomNavbar';
 import DocumentPicker from 'react-native-document-picker';
@@ -47,8 +51,9 @@ const EditProfile = ({route}) => {
   const [suicide, setSuicide] = useState(data?.thought_of_suicide);
   const [UserInfo, setUserInfoData] = useState(data);
   const [isLoadig, setIsloading] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(data?.profile_photo);
 
-  const [singleFile, setSingleFile] = useState(data?.profile_photo);
+  const [singleFile, setSingleFile] = useState(null);
 
   useEffect(() => {}, []);
 
@@ -89,45 +94,46 @@ const EditProfile = ({route}) => {
     setIsloading(true);
     // If file selected then create FormData
     const fileToUpload = singleFile;
+    console.log(fileToUpload);
     const data = new FormData();
-    data.append('name',firstName)
+    data.append('name', firstName);
     data.append('mobile_number', mobile);
-    data.append('gender', gender);
-    data.append('age', age);
-    data.append('nationality', nationality);
-    data.append('health_issue', healthIsseue);
+
+    gender && data.append('gender', gender);
+    age && data.append('age', age);
+    nationality && data.append('nationality', nationality);
+    healthIsseue && data.append('health_issue', healthIsseue);
     data.append('mental_health_issue_before', mentalHealthIsseue);
     data.append('thought_of_suicide', suicide);
     data.append('email', email);
-    data.append('profile_photo', fileToUpload);
-    console.log(data)
+    data.append('profile_photo', singleFile ? fileToUpload[0] : '');
+    console.log(data);
 
     // let url = BASE_URL + 'auth/update_profile';
 
     try {
-        response = await fetch(BASE_URL + '/customer', {
-          method: 'PUT',
-          body: data,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + (await AsyncStorage.getItem('userToken')),
-          },
-        });
-        let responseJson = await response.json();
-        console.log(responseJson);
-        if (responseJson.status === true) {
-          navigation.goBack()
-          showToastGreen(responseJson.message)
-          setIsloading(false)
-        }
-        else {
-          showToastRed(responseJson?.error?.message)
-          setIsloading(false)
-        }
-      } catch (err) {
-        console.log(err);
+      response = await fetch(BASE_URL + '/customer', {
+        method: 'PUT',
+        body: data,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Accept: 'application/json',
+          Authorization: 'Bearer ' + (await AsyncStorage.getItem('userToken')),
+        },
+      });
+      let responseJson = await response.json();
+      console.log(responseJson);
+      if (responseJson.status === true) {
+        navigation.goBack();
+        showToastGreen(responseJson.message);
+        setIsloading(false);
+      } else {
+        showToastRed(responseJson?.error?.message);
+        setIsloading(false);
       }
+    } catch (err) {
+      console.log(err);
+    }
 
     if (response) {
       navigation.goBack();
@@ -158,15 +164,15 @@ const EditProfile = ({route}) => {
                       style={[styles.Image]}
                       source={{uri: singleFile[0].uri}}
                     />
-                  ) : data?.profile ? (
+                  ) : data?.profile_photo ? (
                     <Image
                       style={[styles.Image]}
-                      source={{uri: IMAGE_BASE_URL + UserInfo.profile}}
+                      source={{uri: data?.profile_photo}}
                     />
                   ) : (
                     <View style={[styles.cardInner1]}>
                       <Text style={[styles.emptyText]}>
-                        {getInitials(firstName)}
+                        {getInitials(data?.name)}
                       </Text>
                     </View>
                   )}
@@ -187,9 +193,7 @@ const EditProfile = ({route}) => {
                   onPress={selectFile}>
                   <Icon name="account-edit" size={25} color={COLORS.primary} />
                 </TouchableOpacity>
-                <Text style={[styles.Textheads]}>
-                  {UserInfo.first_name + ' ' + UserInfo.last_name}{' '}
-                </Text>
+                <Text style={[styles.Textheads]}>{data?.name}</Text>
               </View>
 
               <View style={{alignItems: 'center', padding: 25}}>
@@ -281,12 +285,12 @@ const EditProfile = ({route}) => {
                   <View style={{flexDirection: 'row', width: wp('85')}}>
                     <TouchableOpacity
                       style={
-                        gender === 'Male' ? styles.selected : styles.unselected
+                        gender === 'male' ? styles.selected : styles.unselected
                       }
-                      onPress={() => setGender('Male')}>
+                      onPress={() => setGender('male')}>
                       <Text
                         style={
-                          gender === 'Male'
+                          gender === 'male'
                             ? styles.optionSelected
                             : styles.optionUnSelected
                         }>
@@ -295,14 +299,14 @@ const EditProfile = ({route}) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={
-                        gender === 'Female'
+                        gender === 'female'
                           ? styles.selected
                           : styles.unselected
                       }
-                      onPress={() => setGender('Female')}>
+                      onPress={() => setGender('female')}>
                       <Text
                         style={
-                          gender === 'Female'
+                          gender === 'female'
                             ? styles.optionSelected
                             : styles.optionUnSelected
                         }>
@@ -312,14 +316,14 @@ const EditProfile = ({route}) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={
-                        gender === 'Others'
+                        gender === 'others'
                           ? styles.selected
                           : styles.unselected
                       }
-                      onPress={() => setGender('Others')}>
+                      onPress={() => setGender('others')}>
                       <Text
                         style={
-                          gender === 'Others'
+                          gender === 'others'
                             ? styles.optionSelected
                             : styles.optionUnSelected
                         }>
@@ -347,7 +351,7 @@ const EditProfile = ({route}) => {
                     autoCapitalize="none"
                     autoCorrect={false}
                     onChangeText={text => setAge(text)}
-                    value={age === 'null' ? '' : age}
+                    value={age === null ? 'Not Updated' : age?.toString()}
                     placeholder="Not updated"></TextInput>
                 </View>
 
@@ -368,7 +372,7 @@ const EditProfile = ({route}) => {
                     autoCapitalize="none"
                     autoCorrect={false}
                     onChangeText={text => setNationality(text)}
-                    value={nationality == 'null' ? '' : nationality}
+                    value={nationality == 'null' ? 'Not Updated' : nationality}
                     placeholder="Not updated"></TextInput>
                 </View>
 
@@ -401,14 +405,14 @@ const EditProfile = ({route}) => {
                   <View style={{flexDirection: 'row', width: wp('85')}}>
                     <TouchableOpacity
                       style={
-                        mentalHealthIsseue === 'Yes'
+                        mentalHealthIsseue === true
                           ? styles.selected
                           : styles.unselected
                       }
-                      onPress={() => setMentalHealthIsseue('Yes')}>
+                      onPress={() => setMentalHealthIsseue(true)}>
                       <Text
                         style={
-                          mentalHealthIsseue === 'Yes'
+                          mentalHealthIsseue === true
                             ? styles.optionSelected
                             : styles.optionUnSelected
                         }>
@@ -417,14 +421,14 @@ const EditProfile = ({route}) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={
-                        mentalHealthIsseue === 'No'
+                        mentalHealthIsseue === false
                           ? styles.selected
                           : styles.unselected
                       }
-                      onPress={() => setMentalHealthIsseue('No')}>
+                      onPress={() => setMentalHealthIsseue(false)}>
                       <Text
                         style={
-                          mentalHealthIsseue === 'No'
+                          mentalHealthIsseue === false
                             ? styles.optionSelected
                             : styles.optionUnSelected
                         }>
@@ -443,12 +447,12 @@ const EditProfile = ({route}) => {
                   <View style={{flexDirection: 'row', width: wp('85')}}>
                     <TouchableOpacity
                       style={
-                        suicide === 'Yes' ? styles.selected : styles.unselected
+                        suicide === true ? styles.selected : styles.unselected
                       }
-                      onPress={() => setSuicide('Yes')}>
+                      onPress={() => setSuicide(true)}>
                       <Text
                         style={
-                          suicide === 'Yes'
+                          suicide === true
                             ? styles.optionSelected
                             : styles.optionUnSelected
                         }>
@@ -457,12 +461,12 @@ const EditProfile = ({route}) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={
-                        suicide === 'No' ? styles.selected : styles.unselected
+                        suicide === false ? styles.selected : styles.unselected
                       }
-                      onPress={() => setSuicide('No')}>
+                      onPress={() => setSuicide(false)}>
                       <Text
                         style={
-                          suicide === 'No'
+                          suicide === false
                             ? styles.optionSelected
                             : styles.optionUnSelected
                         }>

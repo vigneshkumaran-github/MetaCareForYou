@@ -89,6 +89,7 @@ const DoctorList = ({route}) => {
   const bookAppointment = async date => {
     const result = await BookAppointment(id, date);
     if (result?.status === true) {
+      console.log(result)
       setIsloading(false);
       showToastGreen(result?.message);
     } else {
@@ -190,6 +191,7 @@ const DoctorList = ({route}) => {
                 display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                 is24Hour={true}
                 onChange={onDateSelected}
+                onTouchCancel={()=>{console.log('cancelled')}}
                 // style={styleSheet.datePicker}
               />
             )}

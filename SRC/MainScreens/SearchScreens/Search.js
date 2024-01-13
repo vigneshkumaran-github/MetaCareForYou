@@ -1,134 +1,131 @@
-import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { BASE_URL, IMAGE_BASE_URL } from '../../ApiService/Config';
-import { COLORS, FONTFAMILY } from '../../Constants/DesignConstants'
-import React, { useEffect, useState } from 'react'
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {BASE_URL, IMAGE_BASE_URL} from '../../ApiService/Config';
+import {COLORS, FONTFAMILY} from '../../Constants/DesignConstants';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AuthContext} from '../../Context/AuthContext';
 import CustomNavbar from '../../CustomComponents/CustomNavbar';
-import Icon from "react-native-vector-icons/Octicons";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/Octicons';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {RFValue} from 'react-native-responsive-fontsize';
+import ResponsiveImage from 'react-native-responsive-image';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from 'axios';
-import { getInitials } from '../../HelperFunctions/Helper';
-import { useNavigation } from '@react-navigation/native';
+import {getInitials} from '../../HelperFunctions/Helper';
+import {useNavigation} from '@react-navigation/native';
 
 const Search = () => {
   const [searchKey, setSearchKey] = useState('');
-  const [filteredDataSource, setFilteredDataSource] = useState([]);
-  const [masterDataSource, setMasterDataSource] = useState([]);
-
-
-  const [Loading, setIsloading] = useState(true)
+  const [data, setData] = useState([]);
   const navigation = useNavigation();
+  const {GetHospitals} = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState();
 
-
-  //To COLLECT All DAta
-  useEffect(() => {
-
-    async function fetchMyAPI() {
-      let url = BASE_URL + 'auth/get_therapists';
-      try {
-        await axios
-          .get(url)
-          .then(function (response) {
-
-            setFilteredDataSource(response.data.data)
-            setMasterDataSource(response.data.data)
-            setIsloading(false)
-          })
-          .catch(function (error) {
-
-          })
-          .finally(function () {
-
-          });
-      }
-      catch (error) {
-
-      }
-
-      setIsloading(false)
+  const searchText = text => {
+    setSearchKey(text);
+    if (text?.length && text?.length > 2) {
+      getData();
     }
+    else{
+      getData()
+    }
+  };
 
-    fetchMyAPI()
+  const getData = async () => {
+    console.log(searchKey);
+    const loc = await AsyncStorage.getItem('location_details');
+    const response = await GetHospitals(
+      loc?.latitude,
+      loc?.longitude,
+      1,
+      searchKey,
+    );
+    if (response?.status === true) {
+      setLoading(false);
+      setData(response?.data);
+      setPageCount(response?.data?.length);
+      console.log(response);
+    } else {
+      setLoading(false);
+      console.log(response, 'eee');
+    }
+  };
 
+  const getData2 = async pagenum => {
+    setLoading2(true);
+    const response = await GetHospitals(lat, lang, pagenum, searchKey);
+    if (response?.status === true) {
+      setLoading2(false);
+      setData([...data, ...response?.data]);
+      setPageCount(response?.data?.length);
+    } else {
+      setLoading2(false);
+      console.log(response, 'eee');
+    }
+  };
 
+  const loadMore = async () => {
+    console.log(page);
+    console.log(pageCount);
+    if (pageCount === 10 && !loading2) {
+      getData2(page + 1);
+      setPage(page + 1);
+    }
+  };
+
+  useEffect(() => {
+    setPage(1)
+    getData();
   }, []);
 
+  useEffect(() => {
+    navigation.addListener('blur', () => setSearchKey(''));
+    return () => {
+      navigation.removeListener('blur', () => setSearchKey(''));
+    };
+  }, [navigation]);
 
-  const clickOnpress = (items) => {
-    navigation.navigate('AppointmentScreen', { therapistsDetails: items });
+  //  let url = BASE_URL + 'auth/get_therapists';
+
+  const clickOnpress = items => {
+    navigation.navigate('AppointmentScreen', {therapistsDetails: items});
   };
 
-  const filterList = (list) => {
-    return list.filter((listItem) =>
-      listItem.therapistName
-        .toLowerCase()
-        .includes(allData.toLowerCase()) ||
-      listItem.therapistDisgnation.toLowerCase().includes(allData.toLowerCase()),
-    );
-  }
-
-
-  const searchFilterFunction = (text) => {
-    // Check if searched text is not blank
-    if (text) {
-      // Inserted text is not blank
-      // Filter the masterDataSource
-      // Update FilteredDataSource
-      const newData = masterDataSource.filter(
-        function (item) {
-
-          var special = item.Specialists ? item.Specialists.map(x => x.specialist_title).join(", ") : "";
-
-          const itemData = item.first_name
-            ? item.first_name.toUpperCase()
-            : ''.toUpperCase();
-          const textData = text.toUpperCase();
-
-          const itemDatalast = item.last_name
-            ? item.last_name.toUpperCase()
-            : ''.toUpperCase();
-          const textDatalast = text.toUpperCase();
-
-          const itemData1 = special
-            ? special.toUpperCase()
-            : ''.toUpperCase();
-
-          const textData1 = text.toUpperCase();
-
-          const itemData2 = item.experience
-            ? item.experience.toUpperCase()
-            : ''.toUpperCase();
-          const textData2 = text.toUpperCase();
-
-          return itemDatalast.indexOf(textDatalast) > -1 || itemData.indexOf(textData) > -1 || itemData1.indexOf(textData1) > -1 || itemData2.indexOf(textData2) > -1;
-        });
-      setFilteredDataSource(newData);
-      setSearchKey(text);
-
-    } else {
-      // Inserted text is blank
-      // Update FilteredDataSource with masterDataSource
-      setFilteredDataSource(masterDataSource);
-      setSearchKey(text);
-    }
-  };
   return (
     <>
-      <SafeAreaView
-        style={[styles.container]}>
+      <SafeAreaView style={[styles.container]}>
         <StatusBar barStyle="dark-light" backgroundColor={COLORS.primary} />
-        <CustomNavbar title="Find For More" onPress={() => navigation.goBack()} />
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <CustomNavbar
+          title="Find For More"
+          onPress={() => navigation.goBack()}
+        />
+        <ScrollView onScroll={loadMore} showsVerticalScrollIndicator={false}>
           <KeyboardAwareScrollView
             enableOnAndroid={true}
-            style={{ flex: 1 }}
-            behavior="padding"
-          >
+            style={{flex: 1}}
+            behavior="padding">
             {/* Search lay*/}
             <View style={[styles.SearchLayout]}>
               <View style={[styles.subLayout]}>
@@ -136,66 +133,94 @@ const Search = () => {
                   style={[styles.textBox]}
                   value={searchKey}
                   placeholderTextColor={COLORS.textcolor}
-                  keyboardType='default'
-                  placeholder={'Search for Therapist,Spacialist,Experience...'}
+                  keyboardType="default"
+                  placeholder={'Search for Hospitals...'}
                   underlineColorAndroid="transparent"
-                  onChangeText={(text) => searchFilterFunction(text)}
+                  onChangeText={text => searchText(text)}
                   // onClear={(text) => searchFilterFunction('')}
                   returnKeyType="done"
                 />
-                <TouchableOpacity style={[styles.TouchSearch]} >
+                <TouchableOpacity
+                  style={[styles.TouchSearch]}
+                  onPress={() => {
+                    searchText(searchKey);
+                  }}>
                   <Icon name="search" size={14} color={COLORS.white} />
                 </TouchableOpacity>
               </View>
             </View>
             {/* Search lay */}
 
+            {loading ? (
+              <ActivityIndicator
+                style={{marginTop: 20, marginBottom: 20}}
+                size="large"
+                color={COLORS.primary}
+              />
+            ) : (
+              <View style={{width: wp('90%')}}>
+                {data.length ? (
+                  data.map((item, index) => (
+                    <TouchableOpacity
+                      style={styles.card}
+                      onPress={() => {
+                        navigation.navigate('ServiceLists', {
+                          hospitalData: item,
+                        });
+                      }}>
+                      <ResponsiveImage
+                        source={{
+                          uri: item?.profile_photo,
+                        }}
+                        style={styles.Image}
+                        borderRadius={responsiveWidth(15) / 2}
+                      />
 
-            {Loading ? <ActivityIndicator style={{ marginTop: 20, marginBottom: 20 }} size="large" color={COLORS.primary} /> :
-              <View style={{ width: wp('90%') }}>
-                {filteredDataSource.length ? filteredDataSource.map((listItem, index) => (
-                  <View key={index} style={[styles.card]}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                      <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity style={[styles.imageCard]}>
-                          {listItem.profile ? <Image source={{ uri: IMAGE_BASE_URL + listItem.profile }} style={[styles.Image]} /> :
-                            <View style={[styles.cardInneremp]}>
-                              <Text style={[styles.emptyText]}>{listItem.first_name ? getInitials(listItem.first_name) : null}</Text>
-                            </View>}
-                        </TouchableOpacity>
-                        <View style={{ marginLeft: 10, marginTop: 3 }}>
-                          <Text style={[styles.Name]}>{listItem.first_name + " " + listItem.last_name}</Text>
-                          <Text style={[styles.Designation]}>{listItem.Specialists ? listItem.Specialists.map(x => x.specialist_title).join(", ") : "No data Found"}</Text>
-                          <View style={{ flexDirection: 'row' }}>
-                            <Icon name="history" size={13} color={'blue'} style={{ marginTop: 8, marginRight: 5 }} />
-                            <Text style={[styles.Location]}>{listItem.experience && listItem.experience != "0" ? listItem.experience + " Years Experienced" : "Non Experienced"} </Text>
-                          </View>
-                        </View>
+                      <View
+                        style={{
+                          justifyContent: 'space-between',
+                          height: responsiveHeight(7),
+                          marginStart: responsiveWidth(2),
+                          width: responsiveWidth(60),
+                        }}>
+                        <Text
+                          numberOfLines={2}
+                          ellipsizeMode="tail"
+                          style={styles.Name}>
+                          {item?.name}
+                        </Text>
+                        <Text
+                          numberOfLines={2}
+                          ellipsizeMode="tail"
+                          style={styles.Designation}>
+                          {item?.address}
+                        </Text>
                       </View>
-                      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                        <TouchableOpacity onPress={() => { clickOnpress(listItem) }} style={{ backgroundColor: COLORS.primary, padding: 10, borderRadius: 10 }}>
-                          <Icon name="plus" size={18} color={COLORS.white} />
-                        </TouchableOpacity>
-                      </View>
-                    </View>
+                    </TouchableOpacity>
+                  ))
+                ) : (
+                  <View style={{alignItems: 'center'}}>
+                    <Text style={[styles.Designation]}>
+                      Your Search "{searchKey}" didn't match any results...
+                    </Text>
                   </View>
-                )) : <View style={{ alignItems: 'center' }}><Text style={[styles.Designation]}>Your Search "{searchKey}" didn't match any results...</Text></View>}
-              </View>}
+                )}
+              </View>
+            )}
           </KeyboardAwareScrollView>
-
         </ScrollView>
       </SafeAreaView>
     </>
   );
-}
+};
 
-export default Search
+export default Search;
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.white,
     alignItems: 'center',
-    flex: 1
+    flex: 1,
   },
   SearchLayout: {
     width: wp('90%'),
@@ -209,10 +234,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#D9D9D9',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
-  textBox:
-  {
+  textBox: {
     borderRadius: 25,
     width: wp('72%'),
     height: 45,
@@ -222,8 +246,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     backgroundColor: '#D9D9D9',
   },
-  TouchSearch:
-  {
+  TouchSearch: {
     width: 30,
     height: 30,
     alignItems: 'center',
@@ -236,10 +259,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: COLORS.white,
     borderRadius: 10,
-    width: wp("87%"),
-    marginTop: 2,
-    marginLeft: 5,
-    marginBottom: 10,
+    width: responsiveWidth(90),
     shadowColor: '#000',
     shadowOffset: {
       width: 1,
@@ -248,6 +268,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 5,
     elevation: 2.5,
+    alignSelf: 'center',
+    height: responsiveHeight(10),
+    marginVertical: responsiveHeight(1),
+    marginHorizontal: responsiveWidth(5),
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   imageCard: {
     width: 70,
@@ -255,38 +281,31 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
     borderWidth: 1.5,
     borderRadius: 70 / 2,
-    alignItems: "center",
-    justifyContent: "center",
-
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   Image: {
-    width: 65,
-    height: 65,
-    borderWidth: 2,
-    borderRadius: 65 / 2,
-    resizeMode: "contain",
+    width: responsiveWidth(15),
+    height: responsiveWidth(15),
   },
   Name: {
     fontFamily: FONTFAMILY.poppinsbold,
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     lineHeight: 22,
     color: COLORS.secondary,
   },
   Designation: {
-    marginTop: 3,
     fontFamily: FONTFAMILY.poppinsbold,
-    fontSize: 11,
-    fontWeight: "bold",
-    lineHeight: 22,
+    fontSize: RFValue(11),
+    fontWeight: '500',
     color: COLORS.black,
-    width: wp(50)
   },
   Location: {
     marginTop: 3,
     fontFamily: FONTFAMILY.poppinsbold,
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     lineHeight: 22,
     color: COLORS.textColor,
   },
@@ -295,16 +314,13 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 60 / 2,
-    alignItems: "center",
-    justifyContent: "center",
-
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  emptyText:
-  {
+  emptyText: {
     color: COLORS.secondary,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 18,
-    lineHeight: 28
-  }
-
+    lineHeight: 28,
+  },
 });

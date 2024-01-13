@@ -20,6 +20,7 @@ import {
 } from "react-native-responsive-screen";
 
 import Toast from "react-native-simple-toast";
+import { showToastGreen } from "../../../HelperFunctions/Helper";
 
 //Specialist data
 
@@ -41,7 +42,7 @@ const GetHelpComponent = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.getHelp]}
-          
+          onPress={()=>{}}
         >
           <Text style={[styles.getcarebuttonText]}>
             Any quries ask us to find solutions
