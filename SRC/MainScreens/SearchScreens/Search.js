@@ -37,7 +37,7 @@ const Search = () => {
   const [searchKey, setSearchKey] = useState('');
   const [data, setData] = useState([]);
   const navigation = useNavigation();
-  const {GetHospitals} = useContext(AuthContext);
+  const {GetHospitals,locationData} = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [loading2, setLoading2] = useState(false);
   const [page, setPage] = useState(1);
@@ -55,10 +55,9 @@ const Search = () => {
 
   const getData = async () => {
     console.log(searchKey);
-    const loc = await AsyncStorage.getItem('location_details');
     const response = await GetHospitals(
-      loc?.latitude,
-      loc?.longitude,
+      locationData?.latitude,
+      locationData?.longitude,
       1,
       searchKey,
     );

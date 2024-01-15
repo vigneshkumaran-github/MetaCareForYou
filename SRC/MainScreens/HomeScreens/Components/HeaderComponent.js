@@ -33,7 +33,7 @@ const notification = <Icon name="bell-badge" size={25} color="#fff" />;
 const search = <Icon1 name="search" size={23} color="#fff" />;
 
 const HeaderComponent = ({data}) => {
-  const {Logout, GetUserInfo} = useContext(AuthContext);
+  const {Logout, GetUserInfo,locationData} = useContext(AuthContext);
   const totalnotification = 0;
   const navigation = useNavigation();
   const [userInfoData, setUserInfoData] = useState({});
@@ -45,33 +45,12 @@ const HeaderComponent = ({data}) => {
   };
 
   useEffect(() => {
-    // if (userIfo?.success === true) {
-    //   setUserInfoData(userIfo)
-    //   console.log(userIfo)
-    // }
-    // else {
-    //   console.log(userIfo)
-    // }
     getLocation();
-    fetchMyAPI();
-  }, []);
-
-  const fetchMyAPI = async () => {
-    console.log('CALLLLLING');
-    const userIfo = await GetUserInfo();
-    console.log(userIfo);
-    if (userIfo?.success === true) {
-      setUserInfoData(userIfo?.data);
-    } else {
-      console.log(userIfo);
-    }
-  };
+  }, [locationData]);
 
   const getLocation = async () => {
     //   //To get location details
-    const tok = await AsyncStorage.getItem('userDetails');
-    console.log('USER', tok);
-    const location = await getUserLocationInfo();
+    const location = await getUserLocationInfo(locationData);
     console.log(location);
     if (location) {
       setLocality(location.locality);
@@ -118,7 +97,7 @@ const HeaderComponent = ({data}) => {
             <Text style={[styles.ProfileStatic]}>
               {Locality != undefined
                 ? Locality + ' ,' + Country
-                : 'Please Enable Your location'}
+                : 'Fetching Location...'}
             </Text>
           </View>
         </TouchableOpacity>

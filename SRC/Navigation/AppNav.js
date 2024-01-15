@@ -1,23 +1,15 @@
-import { ActivityIndicator, PermissionsAndroid, StatusBar } from 'react-native';
-import React, { useContext } from 'react';
+import {ActivityIndicator, PermissionsAndroid, StatusBar} from 'react-native';
+import React, {useContext} from 'react';
 
-import  AsyncStorage  from '@react-native-async-storage/async-storage';
-import { AuthContext } from '../Context/AuthContext';
-import Geolocation from '@react-native-community/geolocation';
-import { HomeStackScreen } from './StackNav';
-import Routes from './Routes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AuthContext} from '../Context/AuthContext';
+import {COLORS} from '../Constants/DesignConstants';
 import Drawer from './DrawerNavigation/Drawer';
-import { COLORS } from '../Constants/DesignConstants';
+import Geolocation from '@react-native-community/geolocation';
+import {HomeStackScreen} from './StackNav';
+import Routes from './Routes';
 
 // import { LogLevel, OneSignal } from 'react-native-onesignal';
-
-
-
-
-
-
-
-
 
 /* // Remove this method to stop OneSignal Debugging
 OneSignal.Debug.setLogLevel(LogLevel.Verbose);
@@ -34,140 +26,123 @@ OneSignal.Notifications.addEventListener('click', (event) => {
   console.log('OneSignal: notification clicked:', event);
 }); */
 
-
 const AppNav = () => {
-    const { UserDetails,isLoading } = useContext(AuthContext)
-    // const isLoading = false;
-    // UserDetails="nnn";
+  const {UserDetails, isLoading, setLocationData} = useContext(AuthContext);
+  // const isLoading = false;
+  // UserDetails="nnn";
 
-    const [
-    currentLongitude,
-    setCurrentLongitude
-  ] = React.useState('...');
-  const [
-    currentLatitude,
-    setCurrentLatitude
-  ] = React.useState('...');
-  const [
-    locationStatus,
-    setLocationStatus
-  ] = React.useState('');
+  const [currentLongitude, setCurrentLongitude] = React.useState('...');
+  const [currentLatitude, setCurrentLatitude] = React.useState('...');
+  const [locationStatus, setLocationStatus] = React.useState('');
 
-  console.log(locationStatus)
+  console.log(locationStatus);
 
-  React.useEffect(() => {
-    const requestLocationPermission = async () => {
-      if (Platform.OS === 'ios') {
-        getOneTimeLocation();
-        subscribeLocationLocation();
-      } else {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-              title: 'Location Access Required',
-              message: 'This App needs to Access your location',
-            },
-          );
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            //To Check, If Permission is granted
-            getOneTimeLocation();
-            subscribeLocationLocation();
-          } else {
-            
-            setLocationStatus('Permission Denied');
-          }
-        } catch (err) {
-          console.warn(err);
-        }
-      }
-    };
-    requestLocationPermission();
-    return () => {
-      Geolocation.clearWatch(watchID);
-    };
-  }, []);
+  // React.useEffect(() => {
+  //   const requestLocationPermission = async () => {
+  //     if (Platform.OS === 'ios') {
+  //       getOneTimeLocation();
+  //       subscribeLocationLocation();
+  //     } else {
+  //       try {
+  //         const granted = await PermissionsAndroid.request(
+  //           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  //           {
+  //             title: 'Location Access Required',
+  //             message: 'This App needs to Access your location',
+  //           },
+  //         );
+  //         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //           //To Check, If Permission is granted
+  //           getOneTimeLocation();
+  //           subscribeLocationLocation();
+  //         } else {
+  //           setLocationStatus('Permission Denied');
+  //         }
+  //       } catch (err) {
+  //         console.warn(err);
+  //       }
+  //     }
+  //   };
+  //   requestLocationPermission();
+  //   return () => {
+  //     Geolocation.clearWatch(watchID);
+  //   };
+  // }, []);
 
-  const getOneTimeLocation = () => {
-    setLocationStatus('Getting Location ...');
-    Geolocation.getCurrentPosition(
-      //Will give you the current location
-      (position) => {
-        setLocationStatus('You are Here');
+  // const getOneTimeLocation = () => {
+  //   setLocationStatus('Getting Location ...');
+  //   Geolocation.getCurrentPosition(
+  //     //Will give you the current location
+  //     position => {
+  //       setLocationStatus('You are Here');
 
-        //getting the Longitude from the location json
-        const currentLongitude = 
-          JSON.stringify(position.coords.longitude);
+  //       //getting the Longitude from the location json
+  //       const currentLongitude = JSON.stringify(position.coords.longitude);
 
-        //getting the Latitude from the location json
-        const currentLatitude = 
-          JSON.stringify(position.coords.latitude);
+  //       //getting the Latitude from the location json
+  //       const currentLatitude = JSON.stringify(position.coords.latitude);
 
-        //Setting Longitude state
-        setCurrentLongitude(currentLongitude);
-        
-        //Setting Longitude state
-        setCurrentLatitude(currentLatitude);
-      },
-      (error) => {
-        setLocationStatus(error.message);
-      },
-      {
-        enableHighAccuracy: false,
-        timeout: 30000,
-        maximumAge: 1000
-      },
-    );
-  };
+  //       //Setting Longitude state
+  //       setCurrentLongitude(currentLongitude);
 
-  const subscribeLocationLocation = () => {
-    watchID =  Geolocation.watchPosition(
-      (position) => {
-        //Will give you the location on location change
-        
-        setLocationStatus('You are Here');
-        console.log(position);
+  //       //Setting Longitude state
+  //       setCurrentLatitude(currentLatitude);
+  //     },
+  //     error => {
+  //       setLocationStatus(error.message);
+  //     },
+  //     {
+  //       enableHighAccuracy: false,
+  //       timeout: 30000,
+  //       maximumAge: 1000,
+  //     },
+  //   );
+  // };
 
-        const jsonValue = JSON.stringify(position.coords)
-        AsyncStorage.setItem('location_details', jsonValue);
+  // const subscribeLocationLocation = () => {
+  //   watchID = Geolocation.watchPosition(
+  //     position => {
+  //       //Will give you the location on location change
 
-        //getting the Longitude from the location json        
-        const currentLongitude =
-          JSON.stringify(position.coords.longitude);
+  //       setLocationStatus('You are Here');
+  //       console.log(position);
 
-        //getting the Latitude from the location json
-        const currentLatitude = 
-          JSON.stringify(position.coords.latitude);
+  //       const jsonValue = JSON.stringify(position.coords);
+  //       AsyncStorage.setItem('location_details', jsonValue);
+  //       setLocationData(jsonValue);
+  //       //getting the Longitude from the location json
+  //       const currentLongitude = JSON.stringify(position.coords.longitude);
 
-        //Setting Longitude state
-        setCurrentLongitude(currentLongitude);
+  //       //getting the Latitude from the location json
+  //       const currentLatitude = JSON.stringify(position.coords.latitude);
 
-        //Setting Latitude state
-        setCurrentLatitude(currentLatitude);
-      },
-      (error) => {
-        setLocationStatus(error.message);
-      },
-      {
-        enableHighAccuracy: false,
-        maximumAge: 1000
-      },
-    );
-  };
+  //       //Setting Longitude state
+  //       setCurrentLongitude(currentLongitude);
 
-    if (isLoading) {
-        return (
-            <ActivityIndicator
-                size={'large'}
-                color={COLORS.primary}
-                style={{ flex: 1, alignSelf: 'center', justifyContent: 'center', }}
-            />
-        );
-    }
+  //       //Setting Latitude state
+  //       setCurrentLatitude(currentLatitude);
+  //     },
+  //     error => {
+  //       setLocationStatus(error.message);
+  //     },
+  //     {
+  //       enableHighAccuracy: false,
+  //       maximumAge: 1000,
+  //     },
+  //   );
+  // };
 
+  if (isLoading) {
     return (
-        UserDetails === null ? <Routes /> : <Drawer />
+      <ActivityIndicator
+        size={'large'}
+        color={COLORS.primary}
+        style={{flex: 1, alignSelf: 'center', justifyContent: 'center'}}
+      />
     );
+  }
+
+  return UserDetails === null ? <Routes /> : <Drawer />;
 };
 
 export default AppNav;

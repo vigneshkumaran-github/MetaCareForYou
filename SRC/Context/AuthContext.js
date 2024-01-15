@@ -16,6 +16,7 @@ export const AuthProvider = ({children}) => {
   const [UserOption, setUserOption] = useState();
   const [profilePhoto, setProfilePhoto] = useState('');
   const [profileData, setProfileData] = useState();
+  const [locationData, setLocationData] = useState();
   let a = 'HELLO';
   const [UserToken, setUserToken] = useState(null);
 
@@ -129,8 +130,12 @@ export const AuthProvider = ({children}) => {
     setUserDetails,
     isLoading,
     setIsLoading,
-    profilePhoto, setProfilePhoto,
-    profileData,setProfileData,
+    profilePhoto,
+    setProfilePhoto,
+    profileData,
+    setProfileData,
+    locationData,
+    setLocationData,
     GetUserInfo: apiCall.getUserInfoRemote,
     SendOtp: apiCall.sendOtpApi,
     ResendOtp: apiCall.resendOtpApi,
@@ -139,15 +144,14 @@ export const AuthProvider = ({children}) => {
     GetProfile: apiCall.getProfileApi,
     GetBanners: apiCall.getBannersApi,
     GetTestimonials: apiCall.getTestimonialsApi,
-    GetHospitals:apiCall.getHospitalsApi,
-    GetServices:apiCall.getServicesApi,
-    GetTherapists:apiCall.getTherapistsApi,
-    CheckDate:apiCall.checkDateApi,
-    BookAppointment:apiCall.bookAppointmentApi,
-    GetHistory:apiCall.getHistoryApi,
+    GetHospitals: apiCall.getHospitalsApi,
+    GetServices: apiCall.getServicesApi,
+    GetTherapists: apiCall.getTherapistsApi,
+    CheckDate: apiCall.checkDateApi,
+    BookAppointment: apiCall.bookAppointmentApi,
+    GetHistory: apiCall.getHistoryApi,
   };
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
-
