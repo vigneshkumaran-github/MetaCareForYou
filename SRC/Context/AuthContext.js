@@ -50,7 +50,7 @@ export const AuthProvider = ({children}) => {
       return response?.data;
     } catch (err) {
       console.log(err.response.data.error.message);
-      showToastRed(err?.data?.message);
+      // showToastRed(err?.data?.message);
       console.log(err);
       return err.response?.data;
     }
@@ -136,6 +136,7 @@ export const AuthProvider = ({children}) => {
     setProfileData,
     locationData,
     setLocationData,
+    UserToken,setUserToken,
     GetUserInfo: apiCall.getUserInfoRemote,
     SendOtp: apiCall.sendOtpApi,
     ResendOtp: apiCall.resendOtpApi,

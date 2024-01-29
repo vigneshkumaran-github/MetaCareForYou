@@ -3,6 +3,7 @@ import {
   Dimensions,
   FlatList,
   Image,
+  Linking,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -73,6 +74,7 @@ const TopDoctors = () => {
         arr.push(item.image);
         setBanners(arr);
       });
+      console.log(banners)
       setisLoading(false);
     } else {
       setisLoading(false);
@@ -100,7 +102,8 @@ const TopDoctors = () => {
           images={banners}
           sliderBoxHeight={responsiveHeight(20)}
           onCurrentImagePressed={index =>
-            console.warn(`image ${data[index]?.link} pressed`)
+            // console.log(`image ${data[index]?.link} pressed`)
+            Linking.openURL(data[index]?.link)
           }
           ImageComponentStyle={{
             borderRadius: 15,

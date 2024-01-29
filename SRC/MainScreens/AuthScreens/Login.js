@@ -76,11 +76,13 @@ const Login = () => {
     if (emailValid && passwordValid) {
       setLoader(true);
       const result = await LoginApi(email, password, userOption);
-      if (result?.success === true) {
+      if (result?.status === true) {
         console.log(result, 'RESULT');
         setUserDetails(result?.data);
         setLoader(false);
+        showToastGreen(result?.message);
       } else {
+        showToastGreen(result?.message);
         setLoader(false);
       }
     }

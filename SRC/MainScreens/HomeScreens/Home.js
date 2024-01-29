@@ -32,13 +32,18 @@ const Home = () => {
   const {profileData, setProfileData, GetProfile} = useContext(AuthContext);
   const Version = DeviceInfo.getVersion();
 
-  const getProfiledata = async () => {
+  const SetbasicDetails = async () => {
+    //to get profile Details
     const response = await GetProfile();
+    console.log(response)
     if (response?.status === true) {
       setProfileData(response?.data);
+      setLoading(false);
     } else {
       console.log(response, 'eee');
+      setLoading(false);
     }
+    //To get location details
   };
 
   const updateApp = async () => {
@@ -81,7 +86,7 @@ const Home = () => {
   // }
 
   useEffect(() => {
-    getProfiledata();
+    SetbasicDetails();
   }, []);
 
   return (
