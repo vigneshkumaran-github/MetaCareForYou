@@ -53,10 +53,11 @@ export const getTestimonialsApi = async () => {
 };
 
 export const getHospitalsApi = async (lat, long, page) => {
+  // 11.03733800  77.03668500
   console.log(lat,long,page,"**********************************************")
   try {
     const response = await axiosInstanceWithAuth.get(
-      `/customer/hospitals?search=&latitude=${lat}&longitude=${long}&page=${page}`,
+      `/customer/hospitals?search=&latitude=${'11.03733800'}&longitude=${'77.03668500'}&page=${page}`,
     );
     return response?.data;
   } catch (err) {
