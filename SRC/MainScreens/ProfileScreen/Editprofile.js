@@ -33,6 +33,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Loader from '../../CustomComponents/Loader';
 import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
 const EditProfile = ({route}) => {
   const {data} = route?.params;
@@ -46,9 +48,11 @@ const EditProfile = ({route}) => {
   const [nationality, setNationality] = useState(data?.nationality);
   const [healthIsseue, setHealthIsseue] = useState(data?.health_issue);
   const [mentalHealthIsseue, setMentalHealthIsseue] = useState(
-    data?.mental_health_issue_before,
+    data?.mental_health_issue_before ? data?.mental_health_issue_before : false,
   );
-  const [suicide, setSuicide] = useState(data?.thought_of_suicide);
+  const [suicide, setSuicide] = useState(
+    data?.thought_of_suicide ? data?.thought_of_suicide : false,
+  );
   const [UserInfo, setUserInfoData] = useState(data);
   const [isLoadig, setIsloading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(data?.profile_photo);
@@ -79,7 +83,7 @@ const EditProfile = ({route}) => {
       // Handling any exception (If any)
       if (DocumentPicker.isCancel(err)) {
         // If user canceled the document selection
-        alert('Canceled');
+        // alert('Canceled');
       } else {
         // For Unknown Error
         alert('Unknown Error: ' + JSON.stringify(err));
@@ -91,7 +95,7 @@ const EditProfile = ({route}) => {
   const updateProfile = async () => {
     // Check if any file is selected or not
     // if (singleFile !== null) {
-    setIsloading(true);
+    // setIsloading(true);
     // If file selected then create FormData
     const fileToUpload = singleFile;
     console.log(fileToUpload);
@@ -100,9 +104,9 @@ const EditProfile = ({route}) => {
     data.append('mobile_number', mobile);
 
     gender && data.append('gender', gender);
-    age && data.append('age', age);
-    nationality && data.append('nationality', nationality);
-    healthIsseue && data.append('health_issue', healthIsseue);
+    data.append('age', age);
+    data.append('nationality', nationality);
+    data.append('health_issue', healthIsseue);
     data.append('mental_health_issue_before', mentalHealthIsseue);
     data.append('thought_of_suicide', suicide);
     data.append('email', email);
@@ -110,20 +114,41 @@ const EditProfile = ({route}) => {
     console.log(data);
 
     // let url = BASE_URL + 'auth/update_profile';
+    // response = await fetch(BASE_URL + '/profile/update', {
+    //   method: 'POST',
+    //   body: formData,
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data',
+    //     Accept: 'application/json',
+    //     Authorization: 'Bearer ' + (await AsyncStorage.getItem('userToken')),
+    //   },
+    // });
 
     try {
-      response = await fetch(BASE_URL + '/customer', {
-        method: 'PUT',
-        body: data,
+      setIsloading(true);
+      console.log('1');
+      // const response = await fetch(BASE_URL + '/customer', {
+      //   method: 'PUT',
+      //   body: data,
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //     "Accept": 'application/json',
+      //     "Authorization": 'Bearer ' + (await AsyncStorage.getItem('userToken')),
+      //   },
+      //   timeout:15000,
+      // });
+      const response = await axios.putForm(BASE_URL + '/customer', data, {
         headers: {
+          timeout: 15000,
           'Content-Type': 'multipart/form-data',
           Accept: 'application/json',
           Authorization: 'Bearer ' + (await AsyncStorage.getItem('userToken')),
         },
       });
-      let responseJson = await response.json();
-      console.log(responseJson);
-      if (responseJson.status === true) {
+      console.log('2');
+      let responseJson = await response.data;
+      console.log(responseJson, 'responseJson');
+      if (responseJson?.status === true) {
         navigation.goBack();
         showToastGreen(responseJson.message);
         setIsloading(false);
@@ -132,12 +157,13 @@ const EditProfile = ({route}) => {
         setIsloading(false);
       }
     } catch (err) {
-      console.log(err);
+      setIsloading(false);
+      console.log(err, 'from catch');
     }
 
-    if (response) {
-      navigation.goBack();
-    }
+    // if (response) {
+    //   navigation.goBack();
+    // }
 
     // } else {
 
@@ -198,17 +224,10 @@ const EditProfile = ({route}) => {
 
               <View style={{alignItems: 'center', padding: 25}}>
                 <View>
-                  <Text style={[styles.subTexts]}>First Name</Text>
+                  <Text style={[styles.subTexts]}>Full Name</Text>
                   <TextInput
                     keyboardType="default"
-                    style={{
-                      width: wp('85'),
-                      borderWidth: 0.5,
-                      height: 40,
-                      borderColor: 'gray',
-                      marginBottom: 10,
-                      paddingHorizontal: 10,
-                    }}
+                    style={styles.input}
                     name="email"
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -242,14 +261,7 @@ const EditProfile = ({route}) => {
                   <TextInput
                     keyboardType="email-address"
                     placeholderTextColor={COLORS.lightGray}
-                    style={{
-                      width: wp('85'),
-                      borderWidth: 0.5,
-                      height: 40,
-                      borderColor: 'gray',
-                      marginBottom: 10,
-                      paddingHorizontal: 10,
-                    }}
+                    style={styles.input}
                     name="email"
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -263,14 +275,7 @@ const EditProfile = ({route}) => {
                   <TextInput
                     keyboardType="default"
                     placeholderTextColor={COLORS.lightGray}
-                    style={{
-                      width: wp('85'),
-                      borderWidth: 0.5,
-                      height: 40,
-                      borderColor: 'gray',
-                      marginBottom: 10,
-                      paddingHorizontal: 10,
-                    }}
+                    style={styles.input}
                     name="mobile"
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -339,14 +344,7 @@ const EditProfile = ({route}) => {
                   <TextInput
                     keyboardType="default"
                     placeholderTextColor={COLORS.lightGray}
-                    style={{
-                      width: wp('85'),
-                      borderWidth: 0.5,
-                      height: 40,
-                      borderColor: 'gray',
-                      marginBottom: 10,
-                      paddingHorizontal: 10,
-                    }}
+                    style={styles.input}
                     name="email"
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -360,14 +358,7 @@ const EditProfile = ({route}) => {
                   <TextInput
                     keyboardType="default"
                     placeholderTextColor={COLORS.lightGray}
-                    style={{
-                      width: wp('85'),
-                      borderWidth: 0.5,
-                      height: 40,
-                      borderColor: 'gray',
-                      marginBottom: 10,
-                      paddingHorizontal: 10,
-                    }}
+                    style={styles.input}
                     name="bloodGroup"
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -381,14 +372,7 @@ const EditProfile = ({route}) => {
                   <TextInput
                     keyboardType="default"
                     placeholderTextColor={COLORS.lightGray}
-                    style={{
-                      width: wp('85'),
-                      borderWidth: 0.5,
-                      height: 40,
-                      borderColor: 'gray',
-                      marginBottom: 10,
-                      paddingHorizontal: 10,
-                    }}
+                    style={styles.input}
                     name="email"
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -534,7 +518,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     fontFamily: FONTFAMILY.poppinsregular,
-    fontSize: 14,
+    fontSize: RFValue(14),
     fontWeight: 'bold',
     lineHeight: 22,
     color: COLORS.black,
@@ -610,6 +594,18 @@ const styles = StyleSheet.create({
     fontSize: 28,
     lineHeight: 32,
   },
+  input:{
+    width: wp('85'),
+    borderWidth: 0.5,
+    height: responsiveHeight(6),
+    borderColor: 'gray',
+    marginBottom: 10,
+    paddingHorizontal: responsiveWidth(4),
+    color: COLORS.textcolor,
+    fontSize: RFValue(14),
+    fontFamily: FONTFAMILY.HelveticaNeuMedium,
+    borderRadius:7
+  }
 });
 
 // #endregion

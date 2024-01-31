@@ -20,9 +20,11 @@ const TabNavigation = ({ navigation }) => {
         component={Home}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="home-outline" color={COLORS.textcolor} size={22} />
+          tabBarIcon: ({ color, size,focused }) => (
+            <Icon name="home-outline" color={focused ?COLORS.primary : COLORS.black} size={22} />
           ),
+          tabBarInactiveTintColor:COLORS.black,
+          tabBarActiveTintColor:COLORS.primary
         }}
       />
       <Tab.Screen
@@ -31,9 +33,11 @@ const TabNavigation = ({ navigation }) => {
         initialParams={{ icon: "message-circle" }}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="head-check-outline" color={COLORS.textcolor} size={22} />
+          tabBarIcon: ({ color, size,focused }) => (
+            <Icon name="head-check-outline" color={focused ?COLORS.primary :COLORS.black} size={22} />
           ),
+          tabBarInactiveTintColor:COLORS.black,
+          tabBarActiveTintColor:COLORS.primary
         }}
       />
       {/* <Tab.Screen
@@ -53,9 +57,11 @@ const TabNavigation = ({ navigation }) => {
         initialParams={{ icon: "user" }}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="history" color={COLORS.textcolor} size={22} />
+          tabBarIcon: ({ color, size,focused }) => (
+            <Icon name="history" color={focused ?COLORS.primary :COLORS.black} size={22} />
           ),
+          tabBarInactiveTintColor:COLORS.black,
+          tabBarActiveTintColor:COLORS.primary
         }}
       />
       <Tab.Screen
@@ -64,9 +70,11 @@ const TabNavigation = ({ navigation }) => {
         initialParams={{ icon: "user" }}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="account-check-outline" color={"black"} size={22} />
+          tabBarIcon: ({ color, size,focused }) => (
+            <Icon name="account-check-outline" color={focused ?COLORS.primary :COLORS.black} size={22} />
           ),
+          tabBarInactiveTintColor:COLORS.black,
+          tabBarActiveTintColor:COLORS.primary
         }}
       />
     </Tab.Navigator>

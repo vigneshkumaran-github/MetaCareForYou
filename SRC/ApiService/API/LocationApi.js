@@ -5,16 +5,16 @@ import {useContext} from 'react';
 export const getUserLocationInfo = async (locationData) => {
   try {
     const value = await getLocations();
-    console.log(locationData,'jsjkxjjj');
+    // console.log(locationData,'jsjkxjjj');
 
     if (locationData?.latitude) {
       const url =
         'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=' +
-        '9.3560742' +
+        locationData?.latitude +
         '&longitude=' +
-        '78.8621505';
+        locationData?.longitude;
       const response = await axios.get(url);
-      console.log(response)
+      // console.log(response)
       return response.data;
     }
   } catch (err) {

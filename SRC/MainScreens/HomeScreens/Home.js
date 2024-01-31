@@ -26,11 +26,13 @@ import {COLORS} from '../../Constants/DesignConstants';
 import DeviceInfo from 'react-native-device-info';
 import HospitalComponent from './Components/HospitalComponent';
 import SpecialistComponent from './Components/SpecialistComponent';
+import Banner2 from './Components/Banner2';
 
 const Home = () => {
   const [headerlocation, setHeaderLoaction] = useState({});
   const {profileData, setProfileData, GetProfile} = useContext(AuthContext);
   const Version = DeviceInfo.getVersion();
+  const [loading,setLoading] = useState(true)
 
   const SetbasicDetails = async () => {
     //to get profile Details
@@ -90,7 +92,7 @@ const Home = () => {
   }, []);
 
   return (
-    <SafeAreaView style={[styles.SafeAreaView]}>
+    <SafeAreaView style={[styles.SafeAreaView,{backgroundColor:COLORS.white}]}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.primary} />
       <ScrollView>
         <HeaderComponent data={profileData} location={headerlocation} />
@@ -99,6 +101,7 @@ const Home = () => {
         <HospitalComponent />
         {/* <FindDoctorComponent /> */}
         <GetCareComponent />
+        <Banner2 />
         {/*  */}
         {/* <IssuesComponent /> */}
         <GetHelpComponent />

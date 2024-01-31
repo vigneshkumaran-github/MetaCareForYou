@@ -21,12 +21,13 @@ import {
 
 import {AuthContext} from '../../../Context/AuthContext';
 import {BASE_URL} from '../../../ApiService/Config';
-import {COLORS} from '../../../Constants/DesignConstants';
+import {COLORS, FONTFAMILY} from '../../../Constants/DesignConstants';
 import CustomButton from '../../../CustomComponents/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/MaterialIcons';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import axios from 'axios';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 // import Toast from "react-native-simple-toast";
 
@@ -45,6 +46,7 @@ const ForgotPassword = ({navigation, route}) => {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const {SendOtp} = useContext(AuthContext);
+  const [loading,setLoading] = useState(false)
 
   const clickOnpress = async () => {
     var emailValid = false;
@@ -61,11 +63,15 @@ const ForgotPassword = ({navigation, route}) => {
 
     //Once text box Validated
     if (emailValid) {
-      console.log('called sendotp')
+      setLoading(true)
       const response = await SendOtp(email);
       if (response?.status === true) {
         showToastGreen(response?.message);
         navigation.navigate('OtpScreen', {email: email});
+        setLoading(false)
+      }
+      else{
+        setLoading(false)
       }
     }
   };
@@ -125,6 +131,7 @@ const ForgotPassword = ({navigation, route}) => {
                     marginLeft: 10,
                     fontSize: 14,
                     fontWeight: 'bold',
+                    color:COLORS.textcolor
                   }}>
                   Email I'd
                 </Text>
@@ -161,6 +168,9 @@ const ForgotPassword = ({navigation, route}) => {
                   height: 40,
                   borderBottomColor: 'gray',
                   marginBottom: 20,
+                  color: COLORS.textcolor,
+                  fontFamily: FONTFAMILY.HelveticaNeuMedium,
+                  fontSize: RFValue(14),
                 }}
                 name="email"
                 autoCapitalize="none"
@@ -184,7 +194,8 @@ const ForgotPassword = ({navigation, route}) => {
               titleColor={COLORS.white}
               size="60"
               onPress={() => clickOnpress()}
-            />
+              loading={loading}
+           />
           </View>
 
           {/* </View> */}

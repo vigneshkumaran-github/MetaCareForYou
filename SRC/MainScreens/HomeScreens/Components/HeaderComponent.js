@@ -38,7 +38,7 @@ const HeaderComponent = ({data}) => {
   const navigation = useNavigation();
   const [userInfoData, setUserInfoData] = useState({});
   const [Locality, setLocality] = useState();
-  const [Country, setCountry] = useState();
+  const [city, setCity] = useState();
   const [mainTitle, setMainTitle] = useState('Get Care');
   const searchScreen = () => {
     navigation.navigate('Search');
@@ -54,7 +54,7 @@ const HeaderComponent = ({data}) => {
     console.log(location);
     if (location) {
       setLocality(location.locality);
-      setCountry(location.countryName);
+      setCity(location.city);
     }
   };
 
@@ -96,7 +96,7 @@ const HeaderComponent = ({data}) => {
             <Text style={[styles.ProfileName]}>{data?.name}</Text>
             <Text style={[styles.ProfileStatic]}>
               {Locality != undefined
-                ? Locality + ' ,' + Country
+                ? Locality + ' ,' + city
                 : 'Fetching Location...'}
             </Text>
           </View>
@@ -121,7 +121,7 @@ const HeaderComponent = ({data}) => {
           onPress={() => searchScreen()}
           style={[styles.SearchTouch]}>
           <View style={[styles.SearchTextLayout]}>
-            <Text style={[styles.SearchText]}>Search & Explore More...</Text>
+            <Text style={[styles.SearchText]}>Search Hospitals & Explore More...</Text>
           </View>
           <View style={[styles.SearchIconLayout]}>
             {

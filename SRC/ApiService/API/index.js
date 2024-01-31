@@ -1,5 +1,5 @@
 import { bookAppointmentApi, checkDateApi, getTherapistsApi } from './DoctorApi';
-import { getBannersApi, getHospitalsApi, getServicesApi, getTestimonialsApi, getUserInfoRemote } from './HomeApi';
+import { getBannersApi, getHospitalsApi, getServicesApi, getTestimonialsApi, getUserInfoRemote ,searchHospitalsApi} from './HomeApi';
 import { resendOtpApi, resetPasswordApi, sendOtpApi, verifyOtpApi } from './AuthApi';
 
 import { getHistoryApi } from './HistoryApi';
@@ -20,4 +20,5 @@ export default {
     checkDateApi,
     bookAppointmentApi,
     getHistoryApi,
+    searchHospitalsApi
 }

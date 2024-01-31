@@ -67,7 +67,7 @@ export function passwordValidator(password) {
         } else if (password.indexOf(" ") >= 0) {
             return {
                 status: false,
-                msg: "Can't contain spaces!",
+                msg: "Shouldn't contain spaces!",
             };
         } else {
             return {
@@ -147,12 +147,12 @@ export function MobileValidator(mobile) {
     } else if (mobile.length <= 9) {
       return {
         status: false,
-        msg: "Check Your Mobile!",
+        msg: "Check Your Mobile Number!",
       };
     } else if (mobile.indexOf(" ") >= 0) {
       return {
         status: false,
-        msg: "Can't contain spaces!",
+        msg: "Shouldn't contain spaces!",
       };
     } else {
       return {
@@ -180,7 +180,7 @@ export function ExperienceValidator(experience) {
     else if (experience.indexOf(" ") >= 0) {
       return {
         status: false,
-        msg: "Can't contain spaces!",
+        msg: "Shouldn't contain spaces!",
       };
     } else {
       return {

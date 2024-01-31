@@ -27,15 +27,8 @@ export const AuthProvider = ({children}) => {
         email: email,
         password: password,
       });
-      console.log(response);
       if (response.data?.status) {
         showToastGreen(response?.data?.message);
-        setUserDetails(response?.data?.data);
-        setUserToken(response.data?.data?.accessToken);
-        await AsyncStorage.setItem(
-          'userDetails',
-          JSON.stringify(response.data?.data),
-        );
         await AsyncStorage.setItem(
           'userToken',
           response.data?.data?.accessToken,
@@ -44,13 +37,19 @@ export const AuthProvider = ({children}) => {
           'refreshToken',
           response?.data?.data?.refreshToken,
         );
+        setUserDetails(response?.data?.data);
+        setUserToken(response.data?.data?.accessToken);
+        await AsyncStorage.setItem(
+          'userDetails',
+          JSON.stringify(response.data?.data),
+        );
       } else {
-        showToastRed('shjdhjsdhsgd');
+        // showToastRed(res);
       }
       return response?.data;
     } catch (err) {
       console.log(err.response.data.error.message);
-      // showToastRed(err?.data?.message);
+      showToastRed(err.response.data.error.message);
       console.log(err);
       return err.response?.data;
     }
@@ -71,8 +70,6 @@ export const AuthProvider = ({children}) => {
           'userDetails',
           JSON.stringify(response.data?.data),
         );
-        setUserDetails(response?.data?.data);
-        setUserToken(response?.data?.data?.accessToken);
         await AsyncStorage.setItem(
           'userToken',
           response?.data?.data?.accessToken,
@@ -81,12 +78,8 @@ export const AuthProvider = ({children}) => {
           'refreshToken',
           response?.data?.data?.refreshToken,
         );
-        /*   OneSignal.User.pushSubscription.optIn()
-                                  OneSignal.User.addTag("user_type", response.data?.data?.user_type.toString());
-                                  OneSignal.User.pushSubscription.addEventListener('change', (subscription) => {
-                                      console.log('OneSignal: subscription changed:', subscription);
-                                      UpdateSubId(subscription?.current?.id);
-                                  }); */
+        setUserToken(response?.data?.data?.accessToken);
+        setUserDetails(response?.data?.data);
       }
       return response.data;
     } catch (err) {
@@ -100,9 +93,10 @@ export const AuthProvider = ({children}) => {
   const checkUser = async () => {
     setIsLoading(true);
     try {
-      const details = await AsyncStorage.getItem('userDetails');
-      if (details) {
-        setUserDetails(details);
+      const token = await AsyncStorage.getItem('userToken');
+      if (token) {
+        // setUserDetails(details);
+        setUserToken(token);
         setIsLoading(false);
       } else {
         setIsLoading(false);
@@ -113,8 +107,9 @@ export const AuthProvider = ({children}) => {
   };
 
   const Logout = async () => {
-    await AsyncStorage.removeItem('userDetails');
-    setUserDetails(null);
+    await AsyncStorage.removeItem('userToken');
+    await AsyncStorage.removeItem('refreshToken');
+    setUserToken(null);
   };
 
   useEffect(() => {
@@ -136,7 +131,8 @@ export const AuthProvider = ({children}) => {
     setProfileData,
     locationData,
     setLocationData,
-    UserToken,setUserToken,
+    UserToken,
+    setUserToken,
     GetUserInfo: apiCall.getUserInfoRemote,
     SendOtp: apiCall.sendOtpApi,
     ResendOtp: apiCall.resendOtpApi,
@@ -151,6 +147,7 @@ export const AuthProvider = ({children}) => {
     CheckDate: apiCall.checkDateApi,
     BookAppointment: apiCall.bookAppointmentApi,
     GetHistory: apiCall.getHistoryApi,
+    SearchHospitals:apiCall.searchHospitalsApi,
   };
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

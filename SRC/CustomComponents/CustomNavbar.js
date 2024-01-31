@@ -1,40 +1,40 @@
-import { COLORS, FONTFAMILY, FONTS } from "../Constants/DesignConstants";
-import { Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {COLORS, FONTFAMILY, FONTS} from '../Constants/DesignConstants';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import React from "react";
+import React from 'react';
+import {RFValue} from 'react-native-responsive-fontsize';
 
-const CustomNavbar = ({
-  title,
-  onPress,
-}) => {
+const CustomNavbar = ({title, onPress}) => {
   return (
-        <View style={styles.navBar} >
-          <TouchableOpacity style={[styles.NavbarLeftTop]} onPress={onPress}> 
-            <View style={[styles.NavbarIcon]}>
-            <Icon name="md-arrow-undo-sharp"   size={25} color={COLORS.primary} />
-            </View>
-
-          </TouchableOpacity>
-
-          <View style={styles.navBarTitleStyle}>
-            <Text style={styles.NavbarText}>{title}</Text>
-          </View>
-
-          <View style={styles.navBarItemStyle}>
-          </View>
-
+    <View style={styles.navBar}>
+      <TouchableOpacity style={[styles.NavbarLeftTop]} onPress={onPress}>
+        <View style={[styles.NavbarIcon]}>
+          <Icon name="md-arrow-undo-sharp" size={25} color={COLORS.primary} />
         </View>
+      </TouchableOpacity>
+
+      <View style={styles.navBarTitleStyle}>
+        <Text style={styles.NavbarText}>{title}</Text>
+      </View>
+
+      <View style={styles.navBarItemStyle}></View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-
-navBar: {
+  navBar: {
     width: wp('100%'),
     height: 55,
     flexDirection: 'row',
@@ -53,22 +53,30 @@ navBar: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  NavbarLeftTop:{
-flex: 1, 
-height: 55, 
-justifyContent: 'center', 
-marginLeft: 20 
+  NavbarLeftTop: {
+    flex: 1,
+    height: 55,
+    justifyContent: 'center',
+    marginLeft: 20,
   },
- NavbarIcon:{
-    backgroundColor:'white',width:40,height:40,borderRadius:20,alignItems:'center',justifyContent: 'center', shadowColor: "black",
-    shadowOffset: { width: 1, height: 1 },
+  NavbarIcon: {
+    backgroundColor: 'white',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: 'black',
+    shadowOffset: {width: 1, height: 1},
     shadowOpacity: 0.4,
     shadowRadius: 7,
-    elevation: 5,},
-    NavbarText:{
-        ...FONTS.NavBarHeading
-    }
-  
-
+    elevation: 5,
+  },
+  NavbarText: {
+    color: COLORS.black,
+    fontFamily: FONTFAMILY.HelveticaNeuMedium,
+    fontSize: RFValue(18),
+    fontWeight: '700',
+  },
 });
 export default CustomNavbar;

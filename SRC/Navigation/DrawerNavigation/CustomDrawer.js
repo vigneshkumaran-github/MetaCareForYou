@@ -4,13 +4,14 @@ import {
   Image,
   ImageBackground,
   Linking,
+  Modal,
   Share,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -25,6 +26,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {getInitials} from '../../HelperFunctions/Helper';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
 import {useNavigation} from '@react-navigation/native';
+import LogoutPopUp from './LogoutPopUp';
 
 const CustomDrawer = props => {
   const {GetUserInfo, Logout, profileData} = useContext(AuthContext);
@@ -32,6 +34,7 @@ const CustomDrawer = props => {
 
   const [name, setName] = React.useState();
   const [profile, setProfile] = React.useState();
+  const [modalVisible,setModalVisible] = useState(false)
   const onShare = async () => {
     try {
       const result = await Share.share({
@@ -55,7 +58,7 @@ const CustomDrawer = props => {
   };
 
   const remove = async () => {
-    Logout();
+    setModalVisible(!modalVisible)
   };
 
   return (
@@ -202,7 +205,7 @@ const CustomDrawer = props => {
               </Text>
             )}
             onPress={() =>
-              Linking.openURL('https://metacare4u.com/privacy-policy-1')
+              Linking.openURL('https://metacare4u.life/privacy-policy')
             }
           />
 
@@ -226,7 +229,7 @@ const CustomDrawer = props => {
               </Text>
             )}
             onPress={() =>
-              Linking.openURL('https://metacare4u.com/terms-%26-conditions')
+              Linking.openURL('https://metacare4u.life/terms-and-conditions')
             }
           />
           <DrawerItem
@@ -291,6 +294,18 @@ const CustomDrawer = props => {
             </Text>
           </View>
         </TouchableOpacity>
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+          <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+         <LogoutPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} />
+         </View>
+        </Modal>
       </View>
     </View>
   );

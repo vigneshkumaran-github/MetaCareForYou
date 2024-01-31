@@ -24,12 +24,13 @@ import {
 
 import {AuthContext} from '../../../Context/AuthContext';
 import {BASE_URL} from '../../../ApiService/Config';
-import {COLORS} from '../../../Constants/DesignConstants';
+import {COLORS, FONTFAMILY} from '../../../Constants/DesignConstants';
 import CustomButton from '../../../CustomComponents/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/MaterialIcons';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import axios from 'axios';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 const {width, height} = Dimensions.get('window');
 
@@ -47,6 +48,7 @@ const ResetPassword = ({navigation, route}) => {
   const [passwordError, setPasswordError] = useState('');
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [passwordIcon, setPasswordIcon] = useState('eye');
+  const [loading,setLoading] = useState(false)
   const {ResetPassword} = useContext(AuthContext);
 
   const handlePasswordVisibility = () => {
@@ -74,12 +76,15 @@ const ResetPassword = ({navigation, route}) => {
 
     //Once text box Validated
     if (passwordValid) {
+      setLoading(true)
       const response = await ResetPassword(route.params.email, password);
       if (response?.status === true) {
         showToastGreen(response?.message);
+        setLoading(false)
         navigation.replace('Login');
       } else {
         console.log('eeeeee');
+        setLoading(false)
       }
       // const payload = {
       //   email_id: route.params.email,
@@ -148,7 +153,9 @@ const ResetPassword = ({navigation, route}) => {
                   style={{
                     marginTop: 5,
                     marginLeft: 10,
-                    fontSize: 14,
+                    color: COLORS.textcolor,
+                    fontFamily: FONTFAMILY.HelveticaNeuMedium,
+                    fontSize: RFValue(14),
                     fontWeight: 'bold',
                   }}>
                   Password
@@ -185,6 +192,9 @@ const ResetPassword = ({navigation, route}) => {
                     height: 40,
                     borderBottomColor: 'gray',
                     marginBottom: 10,
+                    color: COLORS.textcolor,
+                    fontFamily: FONTFAMILY.HelveticaNeuMedium,
+                    fontSize: RFValue(14),
                   }}
                   name="password"
                   autoCapitalize="none"
@@ -211,6 +221,7 @@ const ResetPassword = ({navigation, route}) => {
               title="Reset Password"
               titleColor={COLORS.white}
               size="60"
+              loading={loading}
               onPress={() => clickOnpress()}
             />
           </View>

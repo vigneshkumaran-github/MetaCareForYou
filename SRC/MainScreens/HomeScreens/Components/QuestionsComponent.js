@@ -117,8 +117,8 @@ const QuestionsComponent = () => {
         <View style={[styles.cardInner1]}>
           <View style={[styles.flexbox]}>
             <View style={[styles.line]}></View>
-            <Text style={[styles.cardDescription]}>
-              {'“ ' + item?.content + ' ”'}
+            <Text style={[styles.cardDescription]}  numberOfLines={2} ellipsizeMode='tail'> 
+              {'“ ' + item?.content + ' ”'}shhhh shhhs hhhs hhbdhb hd hb dh
             </Text>
           </View>
           <TouchableOpacity onPress={() => SpacialistClick()}>
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 8,
     width: wp('70'),
-    // height: hp("20"),
+    height: hp("15"),
     alignItems: 'flex-start',
     marginTop: 2,
     marginLeft: 5,
@@ -185,9 +185,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   elevation: {
-    // elevation: 3,
-    // shadowColor: COLORS.shadowcolor,
-
     shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
@@ -202,16 +199,6 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
   },
-  //     cardImageLay: {
-  //     marginLeft:10,
-  //      width: 40,
-  //     height: 40,
-  //     borderColor: 'black',
-  //     borderWidth: 2.5,
-  //     borderRadius: 20,
-  //     alignItems: "center",
-  //     justifyContent:"center",
-  //   },
   cardImage: {
     marginLeft: 10,
     width: 30,

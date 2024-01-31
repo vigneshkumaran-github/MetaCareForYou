@@ -55,6 +55,9 @@ export const AuthStackScreen = () => {
             <AuthStack.Screen name="CreateAccount" component={CreateAccount} />
             <AuthStack.Screen name="Login" component={Login} />
             <AuthStack.Screen name="Register" component={Register} />
+            <OnboardStack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <OnboardStack.Screen name="OtpScreen" component={OtpScreen} />
+            <OnboardStack.Screen name="ResetPassword" component={ResetPassword} />
         </AuthStack.Navigator>
     )
 }

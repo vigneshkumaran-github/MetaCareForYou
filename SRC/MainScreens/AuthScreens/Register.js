@@ -29,7 +29,7 @@ import {
 } from 'react-native-responsive-screen';
 
 import {AuthContext} from '../../Context/AuthContext';
-import {COLORS} from '../../Constants/DesignConstants';
+import {COLORS, FONTFAMILY} from '../../Constants/DesignConstants';
 import {Checkbox} from 'react-native-paper';
 import CustomButton from '../../CustomComponents/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -37,6 +37,7 @@ import Icon1 from 'react-native-vector-icons/MaterialIcons';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Loader from '../../CustomComponents/Loader';
 import {useNavigation} from '@react-navigation/native';
+import {RFValue} from 'react-native-responsive-fontsize';
 
 const Register = () => {
   const {createAccount} = useContext(AuthContext);
@@ -82,13 +83,12 @@ const Register = () => {
     var emailValid = false;
     var passwordValid = false;
     if (!checked) {
-      showToastGreen('agshashagsha');
       // Alert.alert("sjhhs")
     }
     //First Name Validation Area
     const FirstNameValidation = await fisrtnameValidator(
       firstName,
-      'First Name',
+      'Full Name',
     );
 
     if (FirstNameValidation.status === true) {
@@ -162,7 +162,6 @@ const Register = () => {
       showToastGreen(result?.message);
       setLoader(false);
     } else {
-      showToastRed(result?.message);
       setLoader(false);
     }
   };
@@ -381,9 +380,9 @@ const Register = () => {
                     />
                     <Text style={[styles.LableCheck]}>I accept the </Text>
                     <TouchableOpacity
-                      onPress={() => {
-                        redirectTerms();
-                      }}>
+                    onPress={() =>
+                      Linking.openURL('https://metacare4u.life/terms-and-conditions')
+                    }>
                       <Text style={[styles.LableColor]}>
                         terms and conditions{' '}
                       </Text>
@@ -489,11 +488,13 @@ const styles = StyleSheet.create({
     color: COLORS.textcolor,
   },
   WelcomeSignup: {
-    fontSize: 14,
     lineHeight: 24,
     lineHeight: 28,
     fontWeight: 'bold',
     letterSpacing: 0.25,
+    color: COLORS.textcolor,
+    fontFamily: FONTFAMILY.HelveticaNeuMedium,
+    fontSize: RFValue(14),
   },
   areYou: {
     fontSize: 14,
@@ -582,6 +583,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderBottomWidth: 0.5,
     borderBottomColor: 'gray',
+    color: COLORS.textcolor,
+    fontFamily: FONTFAMILY.HelveticaNeuMedium,
+    fontSize: RFValue(14),
   },
   Logostyle: {
     width: 100,
@@ -591,14 +595,18 @@ const styles = StyleSheet.create({
   Lable: {
     marginTop: 3,
     marginLeft: 10,
-    fontSize: 14,
+    color: COLORS.textcolor,
+    fontFamily: FONTFAMILY.HelveticaNeuMedium,
+    fontSize: RFValue(14),
     fontWeight: 'bold',
   },
   LableCheck: {
     marginTop: 8,
     marginLeft: 5,
-    fontSize: 14,
     fontWeight: 'bold',
+    color:COLORS.textcolor,
+    fontFamily:FONTFAMILY.HelveticaNeuMedium,
+    fontSize:RFValue(14)
   },
   HaveAccount: {
     marginTop: 10,

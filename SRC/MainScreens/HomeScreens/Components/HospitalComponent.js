@@ -36,14 +36,11 @@ const HospitalComponent = () => {
   const [pageCount, setPageCount] = useState();
 
   const getData = async latlong => {
-    // showToastGreen('called')
-    // console.log(locationData, 'iiiiiiiii');
     const response = await GetHospitals(
       latlong?.latitude,
       latlong?.longitude,
       1,
     );
-    console.log(response);
     if (response?.status === true) {
       setLoading(false);
       setData(response?.data);
@@ -95,7 +92,6 @@ const HospitalComponent = () => {
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           //To Check, If Permission is granted
           await getOneTimeLocation();
-          await subscribeLocationLocation();
         } else {
           // setLocationStatus('Permission Denied');
         }
@@ -111,6 +107,7 @@ const HospitalComponent = () => {
 
   const getOneTimeLocation = async () => {
     // setLocationStatus('Getting Location ...');
+
     Geolocation.getCurrentPosition(
       //Will give you the current location
       position => {
@@ -121,6 +118,7 @@ const HospitalComponent = () => {
 
         //getting the Latitude from the location json
         const currentLatitude = JSON.stringify(position.coords.latitude);
+
         setLocationData(position.coords);
         getData(position?.coords);
 
@@ -139,6 +137,7 @@ const HospitalComponent = () => {
         maximumAge: 1000,
       },
     );
+    await subscribeLocationLocation();
   };
 
   const subscribeLocationLocation = async () => {

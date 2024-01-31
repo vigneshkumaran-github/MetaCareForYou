@@ -27,7 +27,7 @@ OneSignal.Notifications.addEventListener('click', (event) => {
 }); */
 
 const AppNav = () => {
-  const {UserDetails, isLoading, setLocationData} = useContext(AuthContext);
+  const {UserDetails, isLoading, setLocationData,UserToken} = useContext(AuthContext);
   // const isLoading = false;
   // UserDetails="nnn";
 
@@ -35,7 +35,6 @@ const AppNav = () => {
   const [currentLatitude, setCurrentLatitude] = React.useState('...');
   const [locationStatus, setLocationStatus] = React.useState('');
 
-  console.log(locationStatus);
 
   // React.useEffect(() => {
   //   const requestLocationPermission = async () => {
@@ -142,7 +141,7 @@ const AppNav = () => {
     );
   }
 
-  return UserDetails === null ? <Routes /> : <Drawer />;
+  return UserToken === null ? <Routes /> : <Drawer />;
 };
 
 export default AppNav;

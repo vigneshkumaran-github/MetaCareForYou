@@ -33,9 +33,9 @@ export const getBannersApi = async () => {
     const response = await axiosInstanceWithAuth.get(`/customer/banners`);
     return response?.data;
   } catch (err) {
-    console.log(err.response.data.error.message);
-    showToastRed(err.response.data.error.message);
-    console.log(err, 'err');
+    console.log(err, 'err############################################');
+    // console.log(err.response.data.error.message);
+    // showToastRed(err.response.data.error.message);
     return err.response.data;
   }
 };
@@ -52,12 +52,28 @@ export const getTestimonialsApi = async () => {
   }
 };
 
-export const getHospitalsApi = async (lat, long, page) => {
+export const getHospitalsApi = async (lat, long, page,searchkey) => {
   // 11.03733800  77.03668500
   console.log(lat,long,page,"**********************************************")
   try {
     const response = await axiosInstanceWithAuth.get(
       `/customer/hospitals?search=&latitude=${'11.03733800'}&longitude=${'77.03668500'}&page=${page}`,
+    );
+    return response?.data;
+  } catch (err) {
+    console.log(err.response.data.error.message);
+    showToastRed(err.response.data.error.message);
+    console.log(err, 'err');
+    return err.response.data;
+  }
+};
+
+export const searchHospitalsApi = async (lat, long, page,searchkey) => {
+  // 11.03733800  77.03668500
+  console.log(lat,long,page,"**********************************************")
+  try {
+    const response = await axiosInstanceWithAuth.get(
+      `/customer/hospitals?search=${searchkey}&latitude=${'11.03733800'}&longitude=${'77.03668500'}&page=${page}`,
     );
     return response?.data;
   } catch (err) {

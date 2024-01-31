@@ -17,6 +17,7 @@ const Drawer = () => {
                 drawerInactiveTintColor: COLORS.black,
                 drawerItemStyle: { marginLeft: 10, marginRight: 10 },
                 drawerLabelStyle: { color: COLORS.black, fontSize: 10 },
+                swipeEdgeWidth: -10,
             }}>
             <Drawerc.Screen name="HomeScreen" component={HomeStackScreen} options={{ headerShown: false }} />
         </Drawerc.Navigator>

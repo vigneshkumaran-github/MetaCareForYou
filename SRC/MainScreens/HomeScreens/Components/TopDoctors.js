@@ -50,7 +50,7 @@ const TopDoctors = () => {
   const [banners, setBanners] = useState([]);
   const [isLoading, setisLoading] = useState(true);
   const {GetBanners} = useContext(AuthContext);
-  const [data,setData] = useState([])
+  const [data, setData] = useState([]);
   // const data = [
   //   {
   //     image: 'https://source.unsplash.com/1024x768/?nature',
@@ -74,7 +74,7 @@ const TopDoctors = () => {
         arr.push(item.image);
         setBanners(arr);
       });
-      console.log(banners)
+      console.log(banners);
       setisLoading(false);
     } else {
       setisLoading(false);
@@ -96,7 +96,7 @@ const TopDoctors = () => {
   };
 
   return (
-    <View>
+    <View style={{backgroundColor: COLORS.white}}>
       {!isLoading ? (
         <SliderBox
           images={banners}
@@ -116,7 +116,12 @@ const TopDoctors = () => {
           autoplayInterval={3000}
         />
       ) : (
-        <View style={{alignItems: 'center', justifyContent: 'center',height:responsiveHeight(20)}}>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: responsiveHeight(20),
+          }}>
           <ActivityIndicator size={'small'} color={COLORS.primary} />
         </View>
       )}

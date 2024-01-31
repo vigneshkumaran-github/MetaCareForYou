@@ -14,20 +14,21 @@ import {
   View,
 } from 'react-native';
 import React, {useContext, useState} from 'react';
-import {emailValidator, passwordValidator} from '../../HelperFunctions/Helper';
+import {emailValidator, passwordValidator, showToastGreen, showToastRed} from '../../HelperFunctions/Helper';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 
 import {AuthContext} from '../../Context/AuthContext';
-import {COLORS} from '../../Constants/DesignConstants';
+import {COLORS, FONTFAMILY} from '../../Constants/DesignConstants';
 import CustomButton from '../../CustomComponents/CustomButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/MaterialIcons';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Loader from '../../CustomComponents/Loader';
 import {useNavigation} from '@react-navigation/native';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -82,7 +83,7 @@ const Login = () => {
         setLoader(false);
         showToastGreen(result?.message);
       } else {
-        showToastGreen(result?.message);
+        // showToastRed(result?.message);
         setLoader(false);
       }
     }
@@ -148,12 +149,7 @@ const Login = () => {
                       color={COLORS.primary}
                     />
                     <Text
-                      style={{
-                        marginTop: 3,
-                        marginLeft: 10,
-                        fontSize: 14,
-                        fontWeight: 'bold',
-                      }}>
+                      style={styles.labeltext}>
                       Email I'd
                     </Text>
 
@@ -182,13 +178,7 @@ const Login = () => {
 
                   <TextInput
                     keyboardType="email-address"
-                    style={{
-                      width: wp(80),
-                      borderBottomWidth: 0.5,
-                      height: 40,
-                      borderBottomColor: 'gray',
-                      marginBottom: 20,
-                    }}
+                    style={styles.input}
                     name="email"
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -202,12 +192,7 @@ const Login = () => {
                       color={COLORS.primary}
                     />
                     <Text
-                      style={{
-                        marginTop: 5,
-                        marginLeft: 10,
-                        fontSize: 14,
-                        fontWeight: 'bold',
-                      }}>
+                      style={styles.labeltext}>
                       Password
                     </Text>
 
@@ -236,13 +221,7 @@ const Login = () => {
                   </View>
                   <View style={{flexDirection: 'row'}}>
                     <TextInput
-                      style={{
-                        width: wp(80),
-                        borderBottomWidth: 0.5,
-                        height: 40,
-                        borderBottomColor: 'gray',
-                        marginBottom: 10,
-                      }}
+                      style={styles.input}
                       name="password"
                       autoCapitalize="none"
                       autoCorrect={false}
@@ -443,4 +422,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.white,
   },
+  input:{
+    width: wp(80),
+    borderBottomWidth: 0.5,
+    height: 40,
+    borderBottomColor: 'gray',
+    marginBottom: 20,
+    color:COLORS.textcolor,
+    fontFamily:FONTFAMILY.HelveticaNeuMedium,
+    fontSize:RFValue(14)
+  },
+  labeltext:{
+    marginTop: 5,
+    marginLeft: 10,
+    fontSize: RFValue(14),
+    fontWeight: 'bold',
+    color:COLORS.textcolor
+  }
 });

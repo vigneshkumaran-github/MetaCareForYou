@@ -4,6 +4,7 @@ import {
   Dimensions,
   FlatList,
   Image,
+  RefreshControl,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -30,6 +31,7 @@ import {HistoryList} from './Components/Components';
 import {RFValue} from 'react-native-responsive-fontsize';
 import ResponsiveImage from 'react-native-responsive-image';
 import {useNavigation} from '@react-navigation/native';
+import NoData from '../../CustomComponents/NoData';
 
 const History = () => {
   const navigation = useNavigation();
@@ -38,17 +40,21 @@ const History = () => {
   const [loading, setLoading] = useState(true);
   const [loading2, setLoading2] = useState(false);
   const [page, setPage] = useState(1);
+  const [refreshing, setRefreshing] = useState(false);
   const [pageCount, setPageCount] = useState();
 
   const getData = async () => {
+    console.log('called')
     const response = await GetHistory(1);
     if (response?.status === true) {
       setLoading(false);
       setData(response?.data);
       setPageCount(response?.data?.length);
-      console.log(response);
+      setRefreshing(false);
+      console.log(response?.data)
     } else {
       setLoading(false);
+      setRefreshing(false);
       console.log(response, 'eee');
     }
   };
@@ -75,8 +81,14 @@ const History = () => {
     }
   };
 
-  useEffect(() => {
+  const onRefresh = () => {
+    setRefreshing(true);
+    getData();
     setPage(1)
+  };
+
+  useEffect(() => {
+    setPage(1);
     getData();
   }, []);
 
@@ -90,76 +102,85 @@ const History = () => {
         Booking History
       </Text>
 
-      {!loading ?
-      <View>
-       { data?.length ?
-       <FlatList
-          onScroll={loadMore}
-          data={data}
-          style={{
-            marginTop: responsiveHeight(2),
-            marginBottom: responsiveHeight(6),
-          }}
-          keyExtractor={(item, index) => index}
-          renderItem={({item, index}) => (
-            <View style={styles.card}>
-              {/* Section 1 */}
-              <View style={styles.rowView}>
-                <ResponsiveImage
-                  source={{
-                    uri: 'https://ui-avatars.com/api/?background=F4740D&color=fff&name=Cena',
-                  }}
-                  style={styles.image1}
-                  borderRadius={15}
+      {!loading ? (
+        <View>
+          {data?.length ? (
+            <FlatList
+              onScroll={loadMore}
+              data={data}
+              style={{
+                marginTop: responsiveHeight(2),
+                marginBottom: responsiveHeight(6),
+              }}
+              keyExtractor={(item, index) => index}
+              refreshControl={
+                <RefreshControl
+                  colors={[COLORS.primary]}
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
                 />
+              }
+              renderItem={({item, index}) => (
+                <View style={styles.card}>
+                  {/* Section 1 */}
+                  <View style={styles.rowView}>
+                    <ResponsiveImage
+                      source={{
+                        uri: item?.hospital?.profile_photo,
+                      }}
+                      style={styles.image1}
+                      borderRadius={15}
+                    />
 
-                <View
-                  style={{
-                    height: responsiveHeight(6),
-                    justifyContent: 'space-between',
-                    marginStart: 7,
-                  }}>
-                  <Text style={styles.text1}>{item?.hospital?.name}</Text>
-                  <Text style={styles.text2}>{item?.appointment_date}</Text>
+                    <View
+                      style={{
+                        height: responsiveHeight(6),
+                        justifyContent: 'space-between',
+                        marginStart: 7,
+                      }}>
+                      <Text style={styles.text1}>{item?.hospital?.name}</Text>
+                      <Text style={styles.text2}>{item?.appointment_date}</Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      height: 0.7,
+                      backgroundColor: COLORS.primary,
+                      marginVertical: responsiveHeight(1),
+                    }}
+                  />
+                  {/* Section2 */}
+
+                  <View style={[styles.rowView, {}]}>
+                    <ResponsiveImage
+                      source={{
+                        uri: item?.therapist?.profile_photo,
+                      }}
+                      style={styles.image2}
+                      borderRadius={responsiveWidth(11) / 2}
+                    />
+                    <Text
+                      style={[
+                        styles.text1,
+                        {width: responsiveWidth(40), marginStart: 2},
+                      ]}>
+                      {item?.therapist?.name}
+                    </Text>
+                    <Text style={[styles.text2, {width: responsiveWidth(40)}]}>
+                      {item?.service?.name}
+                    </Text>
+                  </View>
+                  <Text style={styles.statustext}>{item?.status}</Text>
                 </View>
-              </View>
-              <View
-                style={{
-                  height: 0.7,
-                  backgroundColor: COLORS.primary,
-                  marginVertical: responsiveHeight(1),
-                }}
-              />
-              {/* Section2 */}
-
-              <View style={[styles.rowView, {}]}>
-                <ResponsiveImage
-                  source={{
-                    uri: 'https://ui-avatars.com/api/?background=F4740D&color=fff&name=Cena',
-                  }}
-                  style={styles.image2}
-                  borderRadius={responsiveWidth(11) / 2}
-                />
-                <Text
-                  style={[
-                    styles.text1,
-                    {width: responsiveWidth(40), marginStart: 2},
-                  ]}>
-                  {item?.therapist?.name}
-                </Text>
-                <Text style={[styles.text2, {width: responsiveWidth(40)}]}>
-                  {item?.service?.name}
-                </Text>
-              </View>
-              <Text style={styles.statustext}>{item?.status}</Text>
-            </View>
+              )}
+            />
+          ) : (
+            <NoData text1={'No Bookings Yet !'} />
           )}
-        />
-      :
-      <Text style={[styles.headtext,{alignSelf:'center'}]}>No Booking History !</Text>}
-      </View>
-      :
-      <ActivityLoader style={{flex:1}} size={'large'} />}
+        </View>
+      ) : (
+        <ActivityLoader style={{flex: 1}} size={'large'} />
+      )}
     </View>
   );
 };
@@ -171,7 +192,7 @@ const styles = StyleSheet.create({
   },
   headtext: {
     color: COLORS.textcolor,
-    fontSize: RFValue(14),
+    fontSize: RFValue(18),
     fontFamily: FONTFAMILY.HelveticaNeuBold,
     fontWeight: '700',
   },

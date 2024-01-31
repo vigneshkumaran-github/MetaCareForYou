@@ -19,6 +19,7 @@ import axios from 'axios';
 import moment from 'moment';
 import {showToastGreen} from '../../HelperFunctions/Helper';
 import {useNavigation} from '@react-navigation/native';
+import NoData from '../../CustomComponents/NoData';
 
 const DoctorList = ({route}) => {
   const navigation = useNavigation();
@@ -67,10 +68,17 @@ const DoctorList = ({route}) => {
   }
 
   function onDateSelected(event, value) {
-    setDate(value);
-    setDatePicker(false);
-    const formatedDate = moment(value).format('YYYY-MM-DD');
-    checkDateAvailable(formatedDate);
+    if (event.type === 'dismissed') {
+      console.log(value);
+      setDate(value);
+      setDatePicker(false);
+    } else {
+      console.log(value);
+      setDate(value);
+      setDatePicker(false);
+      const formatedDate = moment(value).format('YYYY-MM-DD');
+      checkDateAvailable(formatedDate);
+    }
   }
 
   const checkDateAvailable = async date => {
@@ -89,7 +97,7 @@ const DoctorList = ({route}) => {
   const bookAppointment = async date => {
     const result = await BookAppointment(id, date);
     if (result?.status === true) {
-      console.log(result)
+      console.log(result);
       setIsloading(false);
       showToastGreen(result?.message);
     } else {
@@ -116,7 +124,7 @@ const DoctorList = ({route}) => {
     <View style={styles.container}>
       <CustomNavbar title="Our Doctors" onPress={() => navigation.goBack()} />
 
-      <>
+     { loading ?<>
         {data?.length > 0 ? (
           <ScrollView>
             {data?.map((item, index) => (
@@ -191,7 +199,9 @@ const DoctorList = ({route}) => {
                 display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                 is24Hour={true}
                 onChange={onDateSelected}
-                onTouchCancel={()=>{console.log('cancelled')}}
+                onTouchCancel={() => {
+                  console.log('cancelled');
+                }}
                 // style={styleSheet.datePicker}
               />
             )}
@@ -200,17 +210,10 @@ const DoctorList = ({route}) => {
           <Text style={{alignSelf: 'center'}}>No Data Found !</Text>
         )}
       </>
+      :
+      <NoData text1={'No Doctors Found !'} text2={'No doctors available right now !'} />}
 
-      {loading && (
-        <View
-          style={{
-            position: 'absolute',
-            height: responsiveHeight(100),
-            backgroundColor: 'rgba(0,0,0,0.2)',
-          }}>
-          <ActivityLoader size={'large'} style={{flex: 1}} />
-        </View>
-      )}
+     
 
       <Modal
         animationType="fade"

@@ -3,7 +3,7 @@ import { AuthStackScreen, OnBoardStackScreen } from './StackNav';
 import React from 'react';
 
 const Routes = () => {
-    const alreadyLaunched = false;
+    const alreadyLaunched = true;
 
     // Skip onboarding screen
 

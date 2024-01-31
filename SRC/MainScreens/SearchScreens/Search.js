@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   Image,
+  RefreshControl,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -32,49 +33,49 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from 'axios';
 import {getInitials} from '../../HelperFunctions/Helper';
 import {useNavigation} from '@react-navigation/native';
+import Lottie from 'lottie-react-native';
 
 const Search = () => {
   const [searchKey, setSearchKey] = useState('');
   const [data, setData] = useState([]);
   const navigation = useNavigation();
-  const {GetHospitals,locationData} = useContext(AuthContext);
+  const {SearchHospitals, locationData} = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [loading2, setLoading2] = useState(false);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
+  const [refreshing, setRefreshing] = useState(false);
 
   const searchText = text => {
     setSearchKey(text);
-    if (text?.length && text?.length > 2) {
-      getData();
-    }
-    else{
-      getData()
-    }
+    getData(text)
   };
 
-  const getData = async () => {
+  const getData = async (text) => {
+    setLoading(true)
     console.log(searchKey);
-    const response = await GetHospitals(
+    const response = await SearchHospitals(
       locationData?.latitude,
       locationData?.longitude,
       1,
-      searchKey,
+      text,
     );
     if (response?.status === true) {
       setLoading(false);
       setData(response?.data);
       setPageCount(response?.data?.length);
       console.log(response);
+      setRefreshing(false);
     } else {
       setLoading(false);
       console.log(response, 'eee');
+      setRefreshing(false);
     }
   };
 
   const getData2 = async pagenum => {
     setLoading2(true);
-    const response = await GetHospitals(lat, lang, pagenum, searchKey);
+    const response = await SearchHospitals(lat, lang, pagenum, searchKey);
     if (response?.status === true) {
       setLoading2(false);
       setData([...data, ...response?.data]);
@@ -94,13 +95,21 @@ const Search = () => {
     }
   };
 
+  const onRefresh = () => {
+    setSearchKey('')
+    setRefreshing(true);
+    getData('');
+    setPage(1);
+  };
+
   useEffect(() => {
-    setPage(1)
-    getData();
-  }, []);
+    setPage(1);
+    getData('');
+  }, [locationData]);
 
   useEffect(() => {
     navigation.addListener('blur', () => setSearchKey(''));
+    navigation.addListener('focus',()=>getData(searchKey))
     return () => {
       navigation.removeListener('blur', () => setSearchKey(''));
     };
@@ -120,7 +129,16 @@ const Search = () => {
           title="Find For More"
           onPress={() => navigation.goBack()}
         />
-        <ScrollView onScroll={loadMore} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          onScroll={loadMore}
+          refreshControl={
+            <RefreshControl
+              colors={[COLORS.primary]}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+          showsVerticalScrollIndicator={false}>
           <KeyboardAwareScrollView
             enableOnAndroid={true}
             style={{flex: 1}}
@@ -136,7 +154,7 @@ const Search = () => {
                   placeholder={'Search for Hospitals...'}
                   underlineColorAndroid="transparent"
                   onChangeText={text => searchText(text)}
-                  // onClear={(text) => searchFilterFunction('')}
+                  onClear={text => setSearchKey('')}
                   returnKeyType="done"
                 />
                 <TouchableOpacity
@@ -202,6 +220,17 @@ const Search = () => {
                     <Text style={[styles.Designation]}>
                       Your Search "{searchKey}" didn't match any results...
                     </Text>
+                    <Lottie
+                      source={require('../../Resources/JSON/empty.json')}
+                      loader
+                      autoPlay
+                      resizeMode="cover"
+                      loop
+                      style={{
+                        width: responsiveWidth(90),
+                        height: responsiveHeight(30),
+                      }}
+                    />
                   </View>
                 )}
               </View>

@@ -34,10 +34,12 @@ const GetHelpComponent = () => {
   const RenderGetHelp = () => (
     <View style={[styles.Main2]}>
       <View style={[styles.InnerStyle]}>
-        <TouchableOpacity >
+      <TouchableOpacity
+          style={[styles.callLayout]}
+          onPress={() => RequestCall()}>
           <Image
-            source={require("../../../Resources/Images/logo.png")}
-            style={[styles.HelpImage1]}
+            source={require('../../../Resources/Images/logo.png')}
+            style={[styles.callImage]}
           />
         </TouchableOpacity>
         <TouchableOpacity
@@ -45,27 +47,21 @@ const GetHelpComponent = () => {
           onPress={()=>{}}
         >
           <Text style={[styles.getcarebuttonText]}>
-            Any quries ask us to find solutions
+          CareAi Companion, 
           </Text>
-          <Text style={[styles.getcarebuttonText]}>24X7 helpline service</Text>
+          <Text style={[styles.getcarebuttonText]}>Your 24/7 Mental Wellness Ally</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity >
-          <Image
-            source={require("../../../Resources/Images/logo.png")}
-            style={[styles.HelpImage2]}
-          />
-        </TouchableOpacity>
       </View>
 
-      <View style={{ alignItems: "center" }}>
+      {/* <View style={{ alignItems: "center" }}>
         <Pressable
           style={styles.button}
           onPress={()=>{Linking.openURL(`tel:${'+60 163631793'}`)}}
         >
           <Text style={styles.Buttontext}>{"Get Help"}</Text>
         </Pressable>
-      </View>
+      </View> */}
     </View>
   );
 
@@ -93,7 +89,7 @@ const styles = StyleSheet.create({
     height: hp("11"),
     flexDirection: "row",
     alignItems: "center",
-    // justifyContent: "space-evenly",
+    justifyContent: "space-evenly",
   },
   getHelp: {
     width: wp("70"),
@@ -143,6 +139,24 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "white",
+  },
+  callImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 40 / 2,
+  },
+  callLayout: {
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.white,
+    shadowOffset: {width: 2, height: 2},
+    shadowOpacity: 0.12,
+    shadowRadius: 3.84,
+    elevation: 6,
+    shadowColor: COLORS.black,
   },
 });
 
