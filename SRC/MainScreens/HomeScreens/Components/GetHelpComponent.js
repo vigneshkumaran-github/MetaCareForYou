@@ -11,47 +11,41 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { COLORS, FONTFAMILY, FONTS } from "../../../Constants/DesignConstants";
-import React, { useEffect, useState } from "react";
+} from 'react-native';
+import {COLORS, FONTFAMILY, FONTS} from '../../../Constants/DesignConstants';
+import React, {useEffect, useState} from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
-import Toast from "react-native-simple-toast";
-import { showToastGreen } from "../../../HelperFunctions/Helper";
+import Toast from 'react-native-simple-toast';
+import {showToastGreen} from '../../../HelperFunctions/Helper';
 
 //Specialist data
 
 const GetHelpComponent = () => {
-  const [mainTitle, setMainTitle] = useState("Get Care");
+  const [mainTitle, setMainTitle] = useState('Get Care');
 
   const RequestCall = async () => {
-    Toast.show("Under Construction...", Toast.LONG);
+    Toast.show('Under Construction...', Toast.LONG);
   };
 
   const RenderGetHelp = () => (
     <View style={[styles.Main2]}>
       <View style={[styles.InnerStyle]}>
-      <TouchableOpacity
-          style={[styles.callLayout]}
-          onPress={() => RequestCall()}>
+        <TouchableOpacity style={[styles.callLayout]} onPress={() => {}}>
           <Image
             source={require('../../../Resources/Images/logo.png')}
             style={[styles.callImage]}
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.getHelp]}
-          onPress={()=>{}}
-        >
+        <TouchableOpacity style={[styles.getHelp]} onPress={() => {RequestCall()}}>
+          <Text style={[styles.getcarebuttonText]}>CareAi Companion,</Text>
           <Text style={[styles.getcarebuttonText]}>
-          CareAi Companion, 
+            Your 24/7 Mental Wellness Ally
           </Text>
-          <Text style={[styles.getcarebuttonText]}>Your 24/7 Mental Wellness Ally</Text>
         </TouchableOpacity>
-
       </View>
 
       {/* <View style={{ alignItems: "center" }}>
@@ -69,15 +63,15 @@ const GetHelpComponent = () => {
 };
 const styles = StyleSheet.create({
   Main2: {
-    width: wp("100%"),
-    backgroundColor: "white",
-    alignItems: "center",
+    width: wp('100%'),
+    backgroundColor: 'white',
+    alignItems: 'center',
     padding: 5,
   },
   Main3: {
-    width: wp("90%"),
-    flexDirection: "row",
-    alignItems: "center",
+    width: wp('90%'),
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: COLORS.white,
   },
   mainHeading: {
@@ -85,20 +79,20 @@ const styles = StyleSheet.create({
   },
 
   InnerStyle: {
-    width: wp("95%"),
-    height: hp("11"),
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
+    width: wp('95%'),
+    height: hp('11'),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
   },
   getHelp: {
-    width: wp("70"),
+    width: wp('70'),
     padding: 15,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 25,
     backgroundColor: COLORS.white,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.12,
     shadowRadius: 3.84,
     elevation: 5,
@@ -120,13 +114,13 @@ const styles = StyleSheet.create({
   getcarebuttonText: {
     ...FONTS.getcare,
     fontSize: 14,
-    lineHeight:22,
+    lineHeight: 22,
     color: COLORS.textcolor,
   },
   button: {
     marginTop: 10,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 25,
@@ -136,9 +130,9 @@ const styles = StyleSheet.create({
   Buttontext: {
     fontSize: 14,
     lineHeight: 21,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     letterSpacing: 0.25,
-    color: "white",
+    color: 'white',
   },
   callImage: {
     width: 40,

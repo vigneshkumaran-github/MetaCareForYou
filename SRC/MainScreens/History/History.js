@@ -44,14 +44,13 @@ const History = () => {
   const [pageCount, setPageCount] = useState();
 
   const getData = async () => {
-    console.log('called')
     const response = await GetHistory(1);
     if (response?.status === true) {
       setLoading(false);
       setData(response?.data);
       setPageCount(response?.data?.length);
       setRefreshing(false);
-      console.log(response?.data)
+      console.log(response?.data);
     } else {
       setLoading(false);
       setRefreshing(false);
@@ -84,13 +83,16 @@ const History = () => {
   const onRefresh = () => {
     setRefreshing(true);
     getData();
-    setPage(1)
+    setPage(1);
   };
 
   useEffect(() => {
-    setPage(1);
-    getData();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      getData();
+      setPage(1);
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -99,7 +101,7 @@ const History = () => {
           styles.headtext,
           {alignSelf: 'center', marginTop: responsiveHeight(2)},
         ]}>
-        Booking History
+        Appointment History
       </Text>
 
       {!loading ? (

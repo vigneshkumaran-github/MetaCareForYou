@@ -179,6 +179,7 @@ const Search = () => {
                 {data.length ? (
                   data.map((item, index) => (
                     <TouchableOpacity
+                    key={index}
                       style={styles.card}
                       onPress={() => {
                         navigation.navigate('ServiceLists', {

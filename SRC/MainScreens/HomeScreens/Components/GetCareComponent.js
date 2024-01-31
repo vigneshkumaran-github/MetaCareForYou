@@ -55,7 +55,7 @@ const GetCareComponent = () => {
 
         <TouchableOpacity
           style={[styles.callLayout]}
-          onPress={() => RequestCall()}>
+          onPress={() => {}}>
           <Image
             source={require('../../../Resources/Images/logo.png')}
             style={[styles.callImage]}

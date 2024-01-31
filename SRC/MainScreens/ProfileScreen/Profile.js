@@ -24,8 +24,9 @@ import {IMAGE_BASE_URL} from '../../ApiService/Config';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ResponsiveImage from 'react-native-responsive-image';
 import {getInitials} from '../../HelperFunctions/Helper';
-import { responsiveWidth } from 'react-native-responsive-dimensions';
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import {useNavigation} from '@react-navigation/native';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 const Profile = () => {
   const navigation = useNavigation();
@@ -84,7 +85,7 @@ const Profile = () => {
                   <ResponsiveImage
                     style={[styles.Image]}
                     source={{uri: profileData?.profile_photo}}
-                    borderRadius={responsiveWidth(20/2)}
+                    borderRadius={responsiveWidth(25/2)}
                   />
                 ) : (
                   <View style={[styles.cardInner1]}>
@@ -118,14 +119,7 @@ const Profile = () => {
                 <Text style={[styles.subTexts]}>Email Id</Text>
                 <TextInput
                   keyboardType="email-address"
-                  style={{
-                    width: wp('85'),
-                    borderWidth: 0.5,
-                    height: 40,
-                    borderColor: 'gray',
-                    marginBottom: 10,
-                    paddingHorizontal: 10,
-                  }}
+                  style={styles.input}
                   name="email"
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -139,14 +133,7 @@ const Profile = () => {
                 <TextInput
                   editable={false}
                   keyboardType="default"
-                  style={{
-                    width: wp('85'),
-                    borderWidth: 0.5,
-                    height: 40,
-                    borderColor: 'gray',
-                    marginBottom: 10,
-                    paddingHorizontal: 10,
-                  }}
+                  style={styles.input}
                   name="mobile"
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -158,14 +145,7 @@ const Profile = () => {
                 <Text style={[styles.subTexts]}>Gender</Text>
                 <TextInput
                   keyboardType="default"
-                  style={{
-                    width: wp('85'),
-                    borderWidth: 0.5,
-                    height: 40,
-                    borderColor: 'gray',
-                    marginBottom: 10,
-                    paddingHorizontal: 10,
-                  }}
+                  style={styles.input}
                   name="email"
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -183,14 +163,7 @@ const Profile = () => {
                 <Text style={[styles.subTexts]}>Age</Text>
                 <TextInput
                   keyboardType="default"
-                  style={{
-                    width: wp('85'),
-                    borderWidth: 0.5,
-                    height: 40,
-                    borderColor: 'gray',
-                    marginBottom: 10,
-                    paddingHorizontal: 10,
-                  }}
+                  style={styles.input}
                   name="email"
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -204,14 +177,7 @@ const Profile = () => {
                 <Text style={[styles.subTexts]}>Nationality</Text>
                 <TextInput
                   keyboardType="default"
-                  style={{
-                    width: wp('85'),
-                    borderWidth: 0.5,
-                    height: 40,
-                    borderColor: 'gray',
-                    marginBottom: 10,
-                    paddingHorizontal: 10,
-                  }}
+                  style={styles.input}
                   name="bloodGroup"
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -229,14 +195,7 @@ const Profile = () => {
                 <Text style={[styles.subTexts]}>Health issues if any</Text>
                 <TextInput
                   keyboardType="default"
-                  style={{
-                    width: wp('85'),
-                    borderWidth: 0.5,
-                    height: 40,
-                    borderColor: 'gray',
-                    marginBottom: 10,
-                    paddingHorizontal: 10,
-                  }}
+                  style={styles.input}
                   name="email"
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -256,14 +215,7 @@ const Profile = () => {
                 </Text>
                 <TextInput
                   keyboardType="email-address"
-                  style={{
-                    width: wp('85'),
-                    borderWidth: 0.5,
-                    height: 40,
-                    borderColor: 'gray',
-                    marginBottom: 10,
-                    paddingHorizontal: 10,
-                  }}
+                  style={styles.input}
                   name="email"
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -283,14 +235,7 @@ const Profile = () => {
                 </Text>
                 <TextInput
                   keyboardType="email-address"
-                  style={{
-                    width: wp('85'),
-                    borderWidth: 0.5,
-                    height: 40,
-                    borderColor: 'gray',
-                    marginBottom: 10,
-                    paddingHorizontal: 10,
-                  }}
+                  style={styles.input}
                   name="email"
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -327,17 +272,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   imageCard: {
-    width: 110,
-    height: 110,
+    width: responsiveWidth(25),
+    height: responsiveWidth(25),
     borderColor: COLORS.primary,
     borderWidth: 2.5,
-    borderRadius: 110 / 2,
+    borderRadius: responsiveWidth(25) / 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
   Image: {
-    width: responsiveWidth(20),
-    height: responsiveWidth(20),
+    width: responsiveWidth(23),
+    height: responsiveWidth(23),
     borderWidth: 1,
     resizeMode: 'contain',
     borderColor:COLORS.white
@@ -354,7 +299,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     fontFamily: FONTFAMILY.poppinsregular,
-    fontSize: 14,
+    fontSize: RFValue(14),
     fontWeight: 'bold',
     lineHeight: 22,
     color: COLORS.black,
@@ -411,4 +356,16 @@ const styles = StyleSheet.create({
     fontSize: 28,
     lineHeight: 32,
   },
+  input:{
+    width: wp('85'),
+    borderWidth: 0.5,
+    height: responsiveHeight(6),
+    borderColor: 'gray',
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    borderRadius:7,
+    color: COLORS.textcolor,
+    fontSize: RFValue(14),
+    fontFamily: FONTFAMILY.HelveticaNeuMedium,
+  }
 });

@@ -36,7 +36,7 @@ export function emailValidator(email) {
         } else if (reg.test(email) === false) {
             return {
                 status: false,
-                msg: "Check Your Email Address!",
+                msg: "Enter Valid Email Id!",
             };
         } else {
             return {
@@ -57,12 +57,12 @@ export function passwordValidator(password) {
         if (password.length == 0) {
             return {
                 status: false,
-                msg: "Password is required!",
+                msg: "Enter Valid Password!",
             };
         } else if (password.length < 6) {
             return {
                 status: false,
-                msg: "Minimum 6 characters!",
+                msg: "Enter Minimum 6 characters!",
             };
         } else if (password.indexOf(" ") >= 0) {
             return {
@@ -147,7 +147,7 @@ export function MobileValidator(mobile) {
     } else if (mobile.length <= 9) {
       return {
         status: false,
-        msg: "Check Your Mobile Number!",
+        msg: "Enter Valid Mobile Number!",
       };
     } else if (mobile.indexOf(" ") >= 0) {
       return {

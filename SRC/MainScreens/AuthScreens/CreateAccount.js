@@ -17,6 +17,7 @@ import { AuthContext } from "../../Context/AuthContext";
 import CustomButton from "../../CustomComponents/CustomButton";
 import { useNavigation } from '@react-navigation/native';
 import { widthPercentageToDP } from "react-native-responsive-screen";
+import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 
 const CreateAccount = () => {
     const navigation = useNavigation()
@@ -26,10 +27,10 @@ const CreateAccount = () => {
         <SafeAreaView style={[styles.SafeAreaView]}>
             <StatusBar barStyle="dark-content" backgroundColor={COLORS.primary} />
             <View style={{
-                width: 140,
-                height: 140,
-                borderRadius: 140 / 2,
-                backgroundColor: COLORS.white,
+                width: responsiveWidth(40),
+                height: responsiveWidth(40),
+                borderRadius: responsiveWidth(40) / 2,
+                backgroundColor: COLORS.primary,
                 alignItems: 'center',
                 justifyContent: 'center',
                 shadowOffset: { width: 0, height: 8 },
@@ -37,20 +38,20 @@ const CreateAccount = () => {
                 shadowRadius: 3.84,
                 elevation: 5,
                 shadowColor: COLORS.shadowcolor,
+                marginBottom:responsiveHeight(1)
             }}>
                 <Image
                     source={require("../../Resources/Images/logo.png")}
                     style={{
-                        width: 140,
-                        height: 140,
-                        borderRadius: 140 / 2,
-
+                        width: responsiveWidth(40),
+                        height: responsiveWidth(40),
+                        borderRadius: responsiveWidth(40) / 2,
                     }}
                 />
             </View>
             <View style={{ alignItems: "center" }} >
                 <Text style={[styles.Freetext]}>{"Create your free account now"}</Text>
-                <View style={{ alignItems: "center" }}>
+                <View style={{ alignItems: "center" ,marginBottom:responsiveHeight(0.5)}}>
                     <CustomButton
                         backgroundColor={COLORS.primary}
                         title="Create an account"
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#D9D9D9",
         alignItems: "center",
-        justifyContent: "space-evenly",
+        justifyContent: "center",
     },
     MainContainer: {
         flex: 1,
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
         lineHeight: 22,
         fontWeight: "bold",
         letterSpacing: 0.25,
-        color: COLORS.textcolor
+        color: COLORS.textcolor,
+        marginVertical:responsiveHeight(1)
     },
 });

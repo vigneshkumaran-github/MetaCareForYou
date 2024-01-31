@@ -11,6 +11,10 @@ import {
 import React, {useContext, useEffect, useState} from 'react';
 import {getLocations, showToastGreen} from '../../../HelperFunctions/Helper';
 import {
+  promptForEnableLocationIfNeeded,
+  isLocationEnabled,
+} from 'react-native-android-location-enabler';
+import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
@@ -25,6 +29,7 @@ import {SvgXml} from 'react-native-svg';
 import {getUserLocationInfo} from '../../../ApiService/API/LocationApi';
 import {useNavigation} from '@react-navigation/native';
 import {verifiedsvg} from '../../../Resources/Svg/Service';
+// import { isLocationEnabled } from 'react-native-device-info';
 
 const HospitalComponent = () => {
   const [data, setData] = useState([]);
@@ -173,9 +178,50 @@ const HospitalComponent = () => {
     );
   };
 
+  async function handleCheckPressed() {
+    if (Platform.OS === 'android') {
+      const checkEnabled = await isLocationEnabled();
+      console.log('checkEnabled', checkEnabled);
+      if (checkEnabled === true) {
+        startup();
+      } else {
+        handleEnabledPressed();
+      }
+    }
+  }
+
+  async function handleEnabledPressed() {
+    if (Platform.OS === 'android') {
+      try {
+        const enableResult = await promptForEnableLocationIfNeeded();
+        console.log('enableResult', enableResult);
+        if (enableResult === 'enabled') {
+          startup();
+        } else {
+          handleCheckPressed();
+        }
+        // The user has accepted to enable the location services
+        // data can be :
+        //  - "already-enabled" if the location services has been already enabled
+        //  - "enabled" if user has clicked on OK button in the popup
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error.message);
+          handleCheckPressed();
+          // The user has not accepted to enable the location services or something went wrong during the process
+          // "err" : { "code" : "ERR00|ERR01|ERR02|ERR03", "message" : "message"}
+          // codes :
+          //  - ERR00 : The user has clicked on Cancel button in the popup
+          //  - ERR01 : If the Settings change are unavailable
+          //  - ERR02 : If the popup has failed to open
+          //  - ERR03 : Internal error
+        }
+      }
+    }
+  }
+
   useEffect(() => {
-    // getData();
-    startup();
+    handleCheckPressed();
   }, []);
 
   return (

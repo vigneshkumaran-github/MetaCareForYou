@@ -28,19 +28,15 @@ const slides = [
       'Unlimited consultations with Top doctors for your entire family.',
   },
   {
-    id: '2',
-    image: require('../../Resources/Images/onboarding-7.png'),
-    title: 'Video Consultations',
-    subtitle: 'Consult Doctors from Top Hospitals with Video Consultations',
-  },
-  {
     id: '3',
-    image: require('../../Resources/Images/onboarding2.png'),
+    image: require('../../Resources/Images/onboarding-7.png'),
     title: ' Book your Appointment',
     subtitle:
       'Unlimited consultations with Top doctors for your entire family.',
   },
 ];
+
+/* */
 
 const Slide = ({item}) => {
   return (
@@ -129,7 +125,7 @@ const OnBoarding = () => {
               <TouchableOpacity
                 style={styles.btn}
                 onPress={() => {
-                  onStartBtn()
+                  onStartBtn();
                 }}>
                 <Text
                   style={{

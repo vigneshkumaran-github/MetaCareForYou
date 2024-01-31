@@ -33,8 +33,11 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Loader from '../../CustomComponents/Loader';
 import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import {RFValue} from 'react-native-responsive-fontsize';
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
 
 const EditProfile = ({route}) => {
   const {data} = route?.params;
@@ -97,77 +100,76 @@ const EditProfile = ({route}) => {
     // if (singleFile !== null) {
     // setIsloading(true);
     // If file selected then create FormData
-    const fileToUpload = singleFile;
-    console.log(fileToUpload);
-    const data = new FormData();
-    data.append('name', firstName);
-    data.append('mobile_number', mobile);
 
-    gender && data.append('gender', gender);
-    data.append('age', age);
-    data.append('nationality', nationality);
-    data.append('health_issue', healthIsseue);
-    data.append('mental_health_issue_before', mentalHealthIsseue);
-    data.append('thought_of_suicide', suicide);
-    data.append('email', email);
-    data.append('profile_photo', singleFile ? fileToUpload[0] : '');
-    console.log(data);
+    if (firstName === '') {
+      showToastRed('Please enter your name');
+    } else if(email===''){
 
-    // let url = BASE_URL + 'auth/update_profile';
-    // response = await fetch(BASE_URL + '/profile/update', {
-    //   method: 'POST',
-    //   body: formData,
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //     Accept: 'application/json',
-    //     Authorization: 'Bearer ' + (await AsyncStorage.getItem('userToken')),
-    //   },
-    // });
+    }
+    else {
+      const fileToUpload = singleFile;
+      console.log(fileToUpload);
+      const data = new FormData();
+      data.append('name', firstName);
+      data.append('mobile_number', mobile);
 
-    try {
-      setIsloading(true);
-      console.log('1');
-      // const response = await fetch(BASE_URL + '/customer', {
-      //   method: 'PUT',
-      //   body: data,
+      gender && data.append('gender', gender);
+      data.append('age', age);
+      data.append('nationality', nationality);
+      data.append('health_issue', healthIsseue);
+      data.append('mental_health_issue_before', mentalHealthIsseue);
+      data.append('thought_of_suicide', suicide);
+      data.append('email', email);
+      data.append('profile_photo', singleFile ? fileToUpload[0] : '');
+      console.log(data);
+
+      // let url = BASE_URL + 'auth/update_profile';
+      // response = await fetch(BASE_URL + '/profile/update', {
+      //   method: 'POST',
+      //   body: formData,
       //   headers: {
       //     'Content-Type': 'multipart/form-data',
-      //     "Accept": 'application/json',
-      //     "Authorization": 'Bearer ' + (await AsyncStorage.getItem('userToken')),
+      //     Accept: 'application/json',
+      //     Authorization: 'Bearer ' + (await AsyncStorage.getItem('userToken')),
       //   },
-      //   timeout:15000,
       // });
-      const response = await axios.putForm(BASE_URL + '/customer', data, {
-        headers: {
-          timeout: 15000,
-          'Content-Type': 'multipart/form-data',
-          Accept: 'application/json',
-          Authorization: 'Bearer ' + (await AsyncStorage.getItem('userToken')),
-        },
-      });
-      console.log('2');
-      let responseJson = await response.data;
-      console.log(responseJson, 'responseJson');
-      if (responseJson?.status === true) {
-        navigation.goBack();
-        showToastGreen(responseJson.message);
+
+      try {
+        setIsloading(true);
+        // const response = await fetch(BASE_URL + '/customer', {
+        //   method: 'PUT',
+        //   body: data,
+        //   headers: {
+        //     'Content-Type': 'multipart/form-data',
+        //     "Accept": 'application/json',
+        //     "Authorization": 'Bearer ' + (await AsyncStorage.getItem('userToken')),
+        //   },
+        //   timeout:15000,
+        // });
+        const response = await axios.putForm(BASE_URL + '/customer', data, {
+          headers: {
+            timeout: 15000,
+            'Content-Type': 'multipart/form-data',
+            Accept: 'application/json',
+            Authorization:
+              'Bearer ' + (await AsyncStorage.getItem('userToken')),
+          },
+        });
+        console.log(response,'response')
+        let responseJson = await response.data;
+        if (responseJson?.status === true) {
+          navigation.goBack();
+          showToastGreen(responseJson.message);
+          setIsloading(false);
+        } else {
+          showToastRed(responseJson?.error?.message);
+          setIsloading(false);
+        }
+      } catch (err) {
         setIsloading(false);
-      } else {
-        showToastRed(responseJson?.error?.message);
-        setIsloading(false);
+        console.log(err.response, 'from catch');
       }
-    } catch (err) {
-      setIsloading(false);
-      console.log(err, 'from catch');
     }
-
-    // if (response) {
-    //   navigation.goBack();
-    // }
-
-    // } else {
-
-    // }
   };
   return (
     <>
@@ -350,7 +352,7 @@ const EditProfile = ({route}) => {
                     autoCorrect={false}
                     onChangeText={text => setAge(text)}
                     value={age === null ? 'Not Updated' : age?.toString()}
-                    placeholder="Not updated"></TextInput>
+                    placeholder="Enter your age"></TextInput>
                 </View>
 
                 <View>
@@ -364,7 +366,7 @@ const EditProfile = ({route}) => {
                     autoCorrect={false}
                     onChangeText={text => setNationality(text)}
                     value={nationality == 'null' ? 'Not Updated' : nationality}
-                    placeholder="Not updated"></TextInput>
+                    placeholder="Enter your Nationality"></TextInput>
                 </View>
 
                 <View>
@@ -378,7 +380,7 @@ const EditProfile = ({route}) => {
                     autoCorrect={false}
                     onChangeText={text => setHealthIsseue(text)}
                     value={healthIsseue == 'null' ? '' : healthIsseue}
-                    placeholder="Not updated"></TextInput>
+                    placeholder="Enter your health issues"></TextInput>
                 </View>
 
                 <View>
@@ -594,7 +596,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     lineHeight: 32,
   },
-  input:{
+  input: {
     width: wp('85'),
     borderWidth: 0.5,
     height: responsiveHeight(6),
@@ -604,8 +606,8 @@ const styles = StyleSheet.create({
     color: COLORS.textcolor,
     fontSize: RFValue(14),
     fontFamily: FONTFAMILY.HelveticaNeuMedium,
-    borderRadius:7
-  }
+    borderRadius: 7,
+  },
 });
 
 // #endregion

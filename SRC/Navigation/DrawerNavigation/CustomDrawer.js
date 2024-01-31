@@ -302,7 +302,7 @@ const CustomDrawer = props => {
           Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
-          <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+          <View style={{flex:1,alignItems:'center',justifyContent:'center',backgroundColor:'rgba(0,0,0,0.5)'}}>
          <LogoutPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} />
          </View>
         </Modal>

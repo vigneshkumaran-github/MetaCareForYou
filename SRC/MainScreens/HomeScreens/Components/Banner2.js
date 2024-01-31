@@ -45,12 +45,12 @@ const Banner2 = () => {
 
   const getBanners1 = async () => {
     data1?.map((item, index) => {
-        let arr = banners;
-        arr.push(item.image);
-        setBanners(arr);
-      });
-      setisLoading(false)
-  }
+      let arr = banners;
+      arr.push(item.image);
+      setBanners(arr);
+    });
+    setisLoading(false);
+  };
 
   const getBanners = async () => {
     const response = await GetBanners();
@@ -72,38 +72,47 @@ const Banner2 = () => {
   useEffect(() => {
     getBanners1();
   }, []);
+
   return (
-    <View style={{backgroundColor:COLORS.white,marginVertical:responsiveHeight(1)}}>
-      {!isLoading ? (
-        <SliderBox
-          images={banners}
-          sliderBoxHeight={responsiveHeight(20)}
-          onCurrentImagePressed={index =>
-            // console.log(`image ${data[index]?.link} pressed`)
-            Linking.openURL(data1[index]?.link)
-          }
-          ImageComponentStyle={{
-            borderRadius: 15,
-            width: responsiveWidth(80),
-            height:responsiveHeight(17),
-            marginTop: 5,
-          }}
-          imageLoadingColor={COLORS.primary}
-          autoplay
-          circleLoop
-          autoplayInterval={3000}
-        />
-      ) : (
+    <>
+      {data1?.length > 0 ? (
         <View
           style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: responsiveHeight(20),
+            backgroundColor: COLORS.white,
+            marginVertical: responsiveHeight(1),
           }}>
-          <ActivityIndicator size={'small'} color={COLORS.primary} />
+          {!isLoading ? (
+            <SliderBox
+              images={banners}
+              sliderBoxHeight={responsiveHeight(20)}
+              onCurrentImagePressed={index =>
+                // console.log(`image ${data[index]?.link} pressed`)
+                Linking.openURL(data1[index]?.link)
+              }
+              ImageComponentStyle={{
+                borderRadius: 15,
+                width: responsiveWidth(80),
+                height: responsiveHeight(17),
+                marginTop: 5,
+              }}
+              imageLoadingColor={COLORS.primary}
+              autoplay
+              circleLoop
+              autoplayInterval={3000}
+            />
+          ) : (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: responsiveHeight(20),
+              }}>
+              <ActivityIndicator size={'small'} color={COLORS.primary} />
+            </View>
+          )}
         </View>
-      )}
-    </View>
+      ) : null}
+    </>
   );
 };
 

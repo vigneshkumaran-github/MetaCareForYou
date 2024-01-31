@@ -9,12 +9,17 @@ import React from "react";
 import Search from "../../MainScreens/SearchScreens/Search";
 import TabBar from "./TabBar";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { responsiveWidth } from "react-native-responsive-dimensions";
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = ({ navigation }) => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={
+      {
+        tabBarStyle:{alignSelf:'center',width:responsiveWidth(100),justifyContent:'space-between'},
+      }
+    }>
       <Tab.Screen
         name="Home"
         component={Home}
@@ -24,7 +29,8 @@ const TabNavigation = ({ navigation }) => {
             <Icon name="home-outline" color={focused ?COLORS.primary : COLORS.black} size={22} />
           ),
           tabBarInactiveTintColor:COLORS.black,
-          tabBarActiveTintColor:COLORS.primary
+          tabBarActiveTintColor:COLORS.primary,
+          tabBarItemStyle:{marginHorizontal:responsiveWidth(4)}
         }}
       />
       <Tab.Screen
@@ -37,7 +43,8 @@ const TabNavigation = ({ navigation }) => {
             <Icon name="head-check-outline" color={focused ?COLORS.primary :COLORS.black} size={22} />
           ),
           tabBarInactiveTintColor:COLORS.black,
-          tabBarActiveTintColor:COLORS.primary
+          tabBarActiveTintColor:COLORS.primary,
+          tabBarItemStyle:{marginHorizontal:responsiveWidth(4)}
         }}
       />
       {/* <Tab.Screen
@@ -61,7 +68,9 @@ const TabNavigation = ({ navigation }) => {
             <Icon name="history" color={focused ?COLORS.primary :COLORS.black} size={22} />
           ),
           tabBarInactiveTintColor:COLORS.black,
-          tabBarActiveTintColor:COLORS.primary
+          tabBarActiveTintColor:COLORS.primary,
+          tabBarItemStyle:{marginHorizontal:responsiveWidth(4)}
+        
         }}
       />
       <Tab.Screen
@@ -74,7 +83,8 @@ const TabNavigation = ({ navigation }) => {
             <Icon name="account-check-outline" color={focused ?COLORS.primary :COLORS.black} size={22} />
           ),
           tabBarInactiveTintColor:COLORS.black,
-          tabBarActiveTintColor:COLORS.primary
+          tabBarActiveTintColor:COLORS.primary,
+          tabBarItemStyle:{marginHorizontal:responsiveWidth(4)}
         }}
       />
     </Tab.Navigator>
