@@ -94,10 +94,10 @@ export const searchHospitalsApi = async (lat, long, page, searchkey) => {
   }
 };
 
-export const getServicesApi = async id => {
+export const getServicesApi = async (id,page) => {
   try {
     const response = await axiosInstanceWithAuth.get(
-      `/customer/hospitals/${id}/services?page=1`,
+      `/customer/hospitals/${id}/services?page=${page}`,
     );
     return response?.data;
   } catch (err) {

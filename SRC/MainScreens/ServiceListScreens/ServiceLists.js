@@ -30,9 +30,13 @@ const ServiceLists = ({route}) => {
   const [data, setData] = useState([]);
   const {GetServices} = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(false);
+  const [page, setPage] = useState(1);
+  const [refreshing, setRefreshing] = useState(false);
+  const [pageCount, setPageCount] = useState();
 
   const getData = async () => {
-    const response = await GetServices(hospitalData?.id);
+    const response = await GetServices(hospitalData?.id,1);
     if (response?.status === true) {
       setData(response?.data);
       setLoading(false);
@@ -41,8 +45,33 @@ const ServiceLists = ({route}) => {
       setLoading(false);
     }
   };
+
+  const getData2 = async pagenum => {
+    setLoading2(true);
+    const response = await GetServices(hospitalData?.id,pagenum);
+    if (response?.status === true) {
+      setLoading2(false);
+      setData([...data, ...response?.data]);
+      setPageCount(response?.data?.length);
+    } else {
+      setLoading2(false);
+      console.log(response, 'eee');
+    }
+  };
+
+  const loadMore = async () => {
+    console.log(page);
+    console.log(pageCount);
+    if (pageCount === 10 && !loading2) {
+      getData2(page + 1);
+      setPage(page + 1);
+    }
+  };
+
+
   useEffect(() => {
     getData();
+    setPage(1)
   }, []);
 
   return (
