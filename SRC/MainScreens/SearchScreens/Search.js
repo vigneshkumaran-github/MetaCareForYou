@@ -45,31 +45,38 @@ const Search = () => {
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
   const [refreshing, setRefreshing] = useState(false);
+  console.log(locationData)
 
   const searchText = text => {
     setSearchKey(text);
-    getData(text)
+    if (text?.length > 3) {
+      getData(text);
+    }
+    if (text?.length === 0) {
+      getData('');
+    }
   };
 
-  const getData = async (text) => {
-    setLoading(true)
-    console.log(searchKey);
-    const response = await SearchHospitals(
-      locationData?.latitude,
-      locationData?.longitude,
-      1,
-      text,
-    );
-    if (response?.status === true) {
-      setLoading(false);
-      setData(response?.data);
-      setPageCount(response?.data?.length);
-      console.log(response);
-      setRefreshing(false);
-    } else {
-      setLoading(false);
-      console.log(response, 'eee');
-      setRefreshing(false);
+  const getData = async text => {
+    setLoading(true);
+    if(locationData){
+      const response = await SearchHospitals(
+        locationData?.latitude,
+        locationData?.longitude,
+        1,
+        text,
+      );
+      if (response?.status === true) {
+        setLoading(false);
+        setData(response?.data);
+        setPageCount(response?.data?.length);
+        console.log(response);
+        setRefreshing(false);
+      } else {
+        setLoading(false);
+        console.log(response, 'eee');
+        setRefreshing(false);
+      }
     }
   };
 
@@ -96,7 +103,7 @@ const Search = () => {
   };
 
   const onRefresh = () => {
-    setSearchKey('')
+    setSearchKey('');
     setRefreshing(true);
     getData('');
     setPage(1);
@@ -109,7 +116,7 @@ const Search = () => {
 
   useEffect(() => {
     navigation.addListener('blur', () => setSearchKey(''));
-    navigation.addListener('focus',()=>getData(searchKey))
+    navigation.addListener('focus', () => getData(searchKey));
     return () => {
       navigation.removeListener('blur', () => setSearchKey(''));
     };
@@ -154,7 +161,7 @@ const Search = () => {
                   placeholder={'Search for Hospitals...'}
                   underlineColorAndroid="transparent"
                   onChangeText={text => searchText(text)}
-                  onClear={text => setSearchKey('')}
+                  // onClear={text => setSearchKey('')}
                   returnKeyType="done"
                 />
                 <TouchableOpacity
@@ -179,7 +186,7 @@ const Search = () => {
                 {data.length ? (
                   data.map((item, index) => (
                     <TouchableOpacity
-                    key={index}
+                      key={index}
                       style={styles.card}
                       onPress={() => {
                         navigation.navigate('ServiceLists', {
@@ -218,9 +225,6 @@ const Search = () => {
                   ))
                 ) : (
                   <View style={{alignItems: 'center'}}>
-                    <Text style={[styles.Designation]}>
-                      Your Search "{searchKey}" didn't match any results...
-                    </Text>
                     <Lottie
                       source={require('../../Resources/JSON/empty.json')}
                       loader
@@ -232,6 +236,15 @@ const Search = () => {
                         height: responsiveHeight(30),
                       }}
                     />
+                     {searchKey?.length > 3 ? (
+                      <Text style={[styles.Designation]}>
+                        Your Search "{searchKey}" didn't match any results...
+                      </Text>
+                    ) : (
+                      <Text style={[styles.Designation]}>
+                        No nearby healthcare available...!
+                      </Text>
+                    )}
                   </View>
                 )}
               </View>

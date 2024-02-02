@@ -226,6 +226,7 @@ const Login = () => {
                       autoCapitalize="none"
                       autoCorrect={false}
                       textContentType="newPassword"
+                      maxLength={16}
                       secureTextEntry={passwordVisibility}
                       value={password}
                       onChangeText={text => setPassword(text)}></TextInput>

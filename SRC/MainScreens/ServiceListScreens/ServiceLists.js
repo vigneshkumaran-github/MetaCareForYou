@@ -1,5 +1,5 @@
 import {COLORS, FONTFAMILY} from '../../Constants/DesignConstants';
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -11,10 +11,11 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
+import Lottie from 'lottie-react-native';
 
 import ActivityLoader from '../../CustomComponents/ActivityLoader';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { AuthContext } from '../../Context/AuthContext';
+import {AuthContext} from '../../Context/AuthContext';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import CustomNavbar from '../../CustomComponents/CustomNavbar';
 import {RFValue} from 'react-native-responsive-fontsize';
@@ -26,24 +27,23 @@ import {verifiedsvg} from '../../Resources/Svg/Service';
 const ServiceLists = ({route}) => {
   const navigation = useNavigation();
   const {hospitalData} = route.params;
-  const [data,setData] = useState([])
-  const {GetServices} = useContext(AuthContext)
-  const [loading,setLoading] = useState(true)
+  const [data, setData] = useState([]);
+  const {GetServices} = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
 
- const getData=async()=>{
-  const response = await GetServices(hospitalData?.id);
-  if(response?.status===true){
-    setData(response?.data)
-    setLoading(false)
-  }
-  else{
-    console.log(response,'eee')
-    setLoading(false)
-  }
- }
+  const getData = async () => {
+    const response = await GetServices(hospitalData?.id);
+    if (response?.status === true) {
+      setData(response?.data);
+      setLoading(false);
+    } else {
+      console.log(response, 'eee');
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-  getData()
-  }, [])
+    getData();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -65,114 +65,129 @@ const ServiceLists = ({route}) => {
           />
         </View>
       )}
-      {!loading ?<ScrollView style={{marginTop: responsiveHeight(2)}}>
-        <View
-          style={{
-            marginHorizontal: responsiveWidth(5),
-            width: responsiveWidth(90),
-          }}>
-          <ResponsiveImage
-            source={{
-              uri: hospitalData?.profile_photo,
-            }}
+      {!loading ? (
+        <ScrollView style={{marginTop: responsiveHeight(2)}}>
+          <View
             style={{
+              marginHorizontal: responsiveWidth(5),
               width: responsiveWidth(90),
-              height: responsiveHeight(20),
-            }}
-          />
-
-          <Text style={[styles.headtext, {marginTop: responsiveHeight(2)}]}>
-            About Us{' '}
-          </Text>
-          <Text style={[styles.text2, {lineHeight: 20}]}>
-            {hospitalData?.about_us}
-          </Text>
-
-          <Text style={[styles.headtext, {marginTop: responsiveHeight(1)}]}>
-            Address{' '}
-          </Text>
-          <Text style={[styles.text2, {lineHeight: 20}]}>
-            {hospitalData?.address}
-          </Text>
-
-          {/* <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: responsiveHeight(1),
             }}>
-            <Text style={[styles.text1, {}]}>Phone : </Text>
-            <Text style={styles.text2}>xxxx</Text>
-          </View> */}
+            <ResponsiveImage
+              source={{
+                uri: hospitalData?.profile_photo,
+              }}
+              style={{
+                width: responsiveWidth(90),
+                height: responsiveHeight(20),
+              }}
+            />
 
-          {/* <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: responsiveHeight(1),
-            }}>
-            <Text style={[styles.text1, {}]}>Email : </Text>
-            <Text style={styles.text2}>xxxx@gmail.com</Text>
-          </View> */}
-        </View>
+            <Text style={[styles.headtext, {marginTop: responsiveHeight(2)}]}>
+              About Us{' '}
+            </Text>
+            <Text style={[styles.text2, {lineHeight: 20}]}>
+              {hospitalData?.about_us}
+            </Text>
 
-        {/* Service section */}
-        <Text
-          style={[
-            styles.headtext,
-            {marginTop: responsiveHeight(2), marginStart: responsiveWidth(5)},
-          ]}>
-          Services
-        </Text>
-        <View style={styles.cardContainer}>
-          {data?.map((item, index) => (
-            <View key={index}>
-              <TouchableOpacity style={styles.card} onPress={() => {}}>
-                {/* <ResponsiveImage
+            <Text style={[styles.headtext, {marginTop: responsiveHeight(1)}]}>
+              Address{' '}
+            </Text>
+            <Text style={[styles.text2, {lineHeight: 20}]}>
+              {hospitalData?.address}
+            </Text>
+          </View>
+
+          {/* Service section */}
+          <Text
+            style={[
+              styles.headtext,
+              {marginTop: responsiveHeight(2), marginStart: responsiveWidth(5)},
+            ]}>
+            Services
+          </Text>
+          {data?.length && data?.length > 0 ? (
+            <View style={styles.cardContainer}>
+              {data?.map((item, index) => (
+                <View key={index}>
+                  <TouchableOpacity style={styles.card} onPress={() => {}}>
+                    {/* <ResponsiveImage
                                         source={{ uri: 'https://th.bing.com/th/id/OIP.PpzvEJQj-fSERsMEC7nqbQHaG2?rs=1&pid=ImgDetMain' }}
                                         style={styles.image}
                                         resizeMode={'contain'} /> */}
 
-                <Text
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
-                  style={[
-                    styles.text1,
-                    {alignSelf: 'center', textAlign: 'center', width: '95%'},
-                  ]}>
-                  {item?.name}
-                </Text>
+                    <Text
+                      numberOfLines={2}
+                      ellipsizeMode="tail"
+                      style={[
+                        styles.text1,
+                        {
+                          alignSelf: 'center',
+                          textAlign: 'center',
+                          width: '95%',
+                        },
+                      ]}>
+                      {item?.name}
+                    </Text>
 
-                <Text
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
-                  style={[
-                    styles.text2,
-                    {alignSelf: 'center', textAlign: 'center', width: '95%'},
-                  ]}>
-                  {item?.about_us}
-                </Text>
+                    <Text
+                      numberOfLines={2}
+                      ellipsizeMode="tail"
+                      style={[
+                        styles.text2,
+                        {
+                          alignSelf: 'center',
+                          textAlign: 'center',
+                          width: '95%',
+                        },
+                      ]}>
+                      {item?.about_us}
+                    </Text>
 
-                {hospitalData?.appointments_open ? (
-                  <TouchableOpacity
-                    style={styles.btn}
-                    onPress={() => {
-                      navigation.navigate('DoctorList',{serviceData:item});
-                    }}>
-                    <Text style={styles.btntext}>Explore</Text>
+                    {hospitalData?.appointments_open ? (
+                      <TouchableOpacity
+                        style={styles.btn}
+                        onPress={() => {
+                          navigation.navigate('DoctorList', {
+                            serviceData: item,
+                          });
+                        }}>
+                        <Text style={styles.btntext}>Explore</Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity style={[styles.btn, {opacity: 0.6}]}>
+                        <Text style={styles.btntext}>Closed</Text>
+                      </TouchableOpacity>
+                    )}
                   </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity style={[styles.btn, {opacity: 0.6}]}>
-                    <Text style={styles.btntext}>Closed</Text>
-                  </TouchableOpacity>
-                )}
-              </TouchableOpacity>
+                </View>
+              ))}
             </View>
-          ))}
-        </View>
-      </ScrollView>
-      :
-     <ActivityLoader size={'large'} style={{flex:1}} />}
+          ) : (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginVertical: responsiveHeight(1),
+              }}>
+              
+              <Lottie
+                source={require('../../Resources/JSON/help.json')}
+                loader
+                autoPlay
+                resizeMode="cover"
+                loop
+                style={{
+                  width: responsiveWidth(50),
+                  height: responsiveHeight(18),
+                }}
+              />
+              <Text style={styles.text1}>Services will be provided soon... !</Text>
+            </View>
+          )}
+        </ScrollView>
+      ) : (
+        <ActivityLoader size={'large'} style={{flex: 1}} />
+      )}
     </View>
   );
 };

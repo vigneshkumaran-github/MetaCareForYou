@@ -85,7 +85,7 @@ const QuestionsComponent = () => {
     );
   };
   const SpacialistClick = () => {
-    Toast.show('Under Construction...', Toast.LONG);
+    // Toast.show('Under Construction...', Toast.LONG);
   };
 
   const RenderIssues = () => (

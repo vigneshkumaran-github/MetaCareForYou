@@ -24,15 +24,19 @@ import {IMAGE_BASE_URL} from '../../ApiService/Config';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ResponsiveImage from 'react-native-responsive-image';
 import {getInitials} from '../../HelperFunctions/Helper';
-import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
 import {useNavigation} from '@react-navigation/native';
-import { RFValue } from 'react-native-responsive-fontsize';
+import {RFValue} from 'react-native-responsive-fontsize';
 
 const Profile = () => {
   const navigation = useNavigation();
   const {GetUserInfo, GetProfile, profileData, setProfileData} =
     useContext(AuthContext);
   const [loading, setLoading] = useState(true);
+  const [height, setHeight] = useState(responsiveHeight(6));
 
   // const profileData = {
   //   name: 'mahendran',
@@ -50,7 +54,7 @@ const Profile = () => {
   const SetbasicDetails = async () => {
     //to get profile Details
     const response = await GetProfile();
-    console.log(response)
+    console.log(response);
     if (response?.status === true) {
       setProfileData(response?.data);
       setLoading(false);
@@ -85,7 +89,7 @@ const Profile = () => {
                   <ResponsiveImage
                     style={[styles.Image]}
                     source={{uri: profileData?.profile_photo}}
-                    borderRadius={responsiveWidth(25/2)}
+                    borderRadius={responsiveWidth(25 / 2)}
                   />
                 ) : (
                   <View style={[styles.cardInner1]}>
@@ -175,38 +179,46 @@ const Profile = () => {
 
               <View>
                 <Text style={[styles.subTexts]}>Nationality</Text>
-                <TextInput
-                  keyboardType="default"
-                  style={styles.input}
-                  name="bloodGroup"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  onChangeText={text => setbloodGroup(text)}
-                  value={
-                    profileData?.nationality === 'null'
-                      ? 'Not Updated'
-                      : profileData?.nationality
-                  }
-                  editable={false}
-                  placeholder="Not updated"></TextInput>
+                      <View
+                  style={[
+                    styles.input,
+                    {height: responsiveHeight(7), justifyContent: 'center'},
+                  ]}>
+                  <Text
+                    style={{
+                      color: COLORS.gray,
+                      fontSize: RFValue(14),
+                      fontFamily: FONTFAMILY.HelveticaNeuMedium,
+                    }}>
+                    {profileData?.nationality
+                      ? profileData?.nationality === 'null'
+                        ? 'Not Updated'
+                        : profileData?.nationality
+                      : 'Not Updated'}
+                  </Text>
+                </View>
               </View>
 
               <View>
                 <Text style={[styles.subTexts]}>Health issues if any</Text>
-                <TextInput
-                  keyboardType="default"
-                  style={styles.input}
-                  name="email"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  onChangeText={text => setHeight(text)}
-                  value={
-                    profileData?.health_issue === 'null'
-                      ? 'Not Updated'
-                      : profileData?.health_issue
-                  }
-                  editable={false}
-                  placeholder="Not updated"></TextInput>
+                <View
+                  style={[
+                    styles.input,
+                    {height: responsiveHeight(7), justifyContent: 'center'},
+                  ]}>
+                  <Text
+                    style={{
+                      color: COLORS.gray,
+                      fontSize: RFValue(14),
+                      fontFamily: FONTFAMILY.HelveticaNeuMedium,
+                    }}>
+                    {profileData?.health_issue
+                      ? profileData?.health_issue === 'null'
+                        ? 'Not Updated'
+                        : profileData?.health_issue
+                      : 'Not Updated'}
+                  </Text>
+                </View>
               </View>
 
               <View>
@@ -221,9 +233,11 @@ const Profile = () => {
                   autoCorrect={false}
                   onChangeText={text => setWeight(text)}
                   value={
-                    profileData?.mental_health_issue_before === false
-                      ? 'No'
-                      : 'Yes'
+                    profileData?.mental_health_issue_before
+                      ? profileData?.mental_health_issue_before === false
+                        ? 'No'
+                        : 'Yes'
+                      : 'No'
                   }
                   editable={false}
                   placeholder="Not updated"></TextInput>
@@ -241,9 +255,11 @@ const Profile = () => {
                   autoCorrect={false}
                   onChangeText={text => setWeignt(text)}
                   value={
-                    profileData?.thought_of_suicide  === false
-                    ? 'No'
-                    : 'Yes'
+                    profileData?.thought_of_suicide
+                      ? profileData?.thought_of_suicide === false
+                        ? 'No'
+                        : 'Yes'
+                      : 'No'
                   }
                   editable={false}
                   placeholder="Not updated"></TextInput>
@@ -285,7 +301,7 @@ const styles = StyleSheet.create({
     height: responsiveWidth(23),
     borderWidth: 1,
     resizeMode: 'contain',
-    borderColor:COLORS.white
+    borderColor: COLORS.white,
   },
   Textheads: {
     marginTop: 4,
@@ -356,16 +372,16 @@ const styles = StyleSheet.create({
     fontSize: 28,
     lineHeight: 32,
   },
-  input:{
+  input: {
     width: wp('85'),
     borderWidth: 0.5,
     height: responsiveHeight(6),
     borderColor: 'gray',
     marginBottom: 10,
     paddingHorizontal: 10,
-    borderRadius:7,
+    borderRadius: 7,
     color: COLORS.textcolor,
     fontSize: RFValue(14),
     fontFamily: FONTFAMILY.HelveticaNeuMedium,
-  }
+  },
 });

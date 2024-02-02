@@ -14,6 +14,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import React from 'react';
 import {RFValue} from 'react-native-responsive-fontsize';
+import { responsiveWidth } from 'react-native-responsive-dimensions';
 
 const CustomNavbar = ({title, onPress}) => {
   return (
@@ -42,10 +43,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   navBarTitleStyle: {
-    flex: 2,
     height: 55,
     alignItems: 'center',
     justifyContent: 'center',
+    width:responsiveWidth(67)
   },
   navBarItemStyle: {
     flex: 1,

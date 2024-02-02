@@ -139,8 +139,9 @@ const History = () => {
                         height: responsiveHeight(6),
                         justifyContent: 'space-between',
                         marginStart: 7,
+                        width:responsiveWidth(48)
                       }}>
-                      <Text style={styles.text1}>{item?.hospital?.name}</Text>
+                      <Text numberOfLines={1} ellipsizeMode='tail' style={styles.text1}>{item?.hospital?.name}</Text>
                       <Text style={styles.text2}>{item?.appointment_date}</Text>
                     </View>
                   </View>
@@ -172,7 +173,20 @@ const History = () => {
                       {item?.service?.name}
                     </Text>
                   </View>
-                  <Text style={styles.statustext}>{item?.status}</Text>
+                  <Text
+                    style={[
+                      styles.statustext,
+                      {
+                        backgroundColor:
+                          item?.status === 'pending'
+                            ? 'orange'
+                            : item?.status === 'completed'
+                            ? 'green'
+                            : 'red',
+                      },
+                    ]}>
+                    {item?.status}
+                  </Text>
                 </View>
               )}
             />
@@ -213,6 +227,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: responsiveHeight(0.5),
     padding: 10,
+    elevation:5
   },
   rowView: {
     flexDirection: 'row',
@@ -231,13 +246,17 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   statustext: {
-    color: COLORS.primary,
-    fontSize: RFValue(13),
+    fontSize: RFValue(12),
     fontFamily: FONTFAMILY.HelveticaNeuMedium,
     fontWeight: '500',
     position: 'absolute',
     right: responsiveWidth(2),
-    top: responsiveHeight(0.5),
+    top: responsiveHeight(0),
+    paddingHorizontal:8,
+    paddingVertical:responsiveHeight(0.5),
+    borderBottomLeftRadius:6,
+    borderBottomRightRadius:6,
+    color:COLORS.white
   },
 });
 

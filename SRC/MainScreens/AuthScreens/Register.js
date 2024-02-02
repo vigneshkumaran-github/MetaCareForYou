@@ -138,6 +138,10 @@ const Register = () => {
       setPasswordError(passwordValidation.msg);
     }
 
+    if (!checked) {
+      showToastRed('Please accept the terms & conditions')
+    }
+
     if (
       emailValid &&
       passwordValid &&
@@ -218,42 +222,13 @@ const Register = () => {
                     keyboardType="default"
                     style={[styles.keyBoardStyle]}
                     name="firstname"
+                    maxLength={30}
                     autoCapitalize="none"
                     autoCorrect={false}
                     onChangeText={text => setfirstName(text)}
                     value={firstName}></TextInput>
-                  {/*........................................Input End ............................................................*/}
 
-                  {/* <View
-                    style={{
-                      flexDirection: 'row',
-                    }}>
-                    <Icon name="account" size={25} color={COLORS.primary} />
-                    <Text style={[styles.Lable]}>Last Name</Text>
-                    {lastNameError.length > 0 && (
-                      <>
-                        <Text style={[styles.Error]}>{lastNameError}</Text>
-                        <Icon1
-                          name="error"
-                          size={18}
-                          color={'red'}
-                          style={{marginLeft: 10}}
-                        />
-                      </>
-                    )}
-                  </View> */}
-
-                  {/* <TextInput
-                    style={styles.keyBoardStyle}
-                    keyboardType="default"
-                    underlineColorAndroid="transparent"
-                    name="lastname"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onChangeText={text => setlastName(text)}
-                    value={lastName}
-                  /> */}
-
+            
                   {/*........................................Input End ............................................................*/}
                   <View
                     style={{
@@ -316,6 +291,7 @@ const Register = () => {
                     name="phone"
                     autoCapitalize="none"
                     autoCorrect={false}
+                    maxLength={11}
                     onChangeText={text => setmobileNumber(text)}
                     value={mobileNumber}></TextInput>
 
@@ -355,6 +331,7 @@ const Register = () => {
                       textContentType="newPassword"
                       secureTextEntry={passwordVisibility}
                       value={password}
+                      maxLength={16}
                       onChangeText={text => setPassword(text)}></TextInput>
 
                     <TouchableOpacity
@@ -380,9 +357,11 @@ const Register = () => {
                     />
                     <Text style={[styles.LableCheck]}>I accept the </Text>
                     <TouchableOpacity
-                    onPress={() =>
-                      Linking.openURL('https://metacare4u.life/terms-and-conditions')
-                    }>
+                      onPress={() =>
+                        Linking.openURL(
+                          'https://metacare4u.life/terms-and-conditions',
+                        )
+                      }>
                       <Text style={[styles.LableColor]}>
                         terms and conditions{' '}
                       </Text>
@@ -604,9 +583,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginLeft: 5,
     fontWeight: 'bold',
-    color:COLORS.textcolor,
-    fontFamily:FONTFAMILY.HelveticaNeuMedium,
-    fontSize:RFValue(14)
+    color: COLORS.textcolor,
+    fontFamily: FONTFAMILY.HelveticaNeuMedium,
+    fontSize: RFValue(14),
   },
   HaveAccount: {
     marginTop: 10,

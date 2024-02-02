@@ -24,7 +24,7 @@ import {IMAGE_BASE_URL} from '../../ApiService/Config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {getInitials} from '../../HelperFunctions/Helper';
-import { responsiveWidth } from 'react-native-responsive-dimensions';
+import {responsiveWidth} from 'react-native-responsive-dimensions';
 import {useNavigation} from '@react-navigation/native';
 import LogoutPopUp from './LogoutPopUp';
 
@@ -34,13 +34,13 @@ const CustomDrawer = props => {
 
   const [name, setName] = React.useState();
   const [profile, setProfile] = React.useState();
-  const [modalVisible,setModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
   const onShare = async () => {
     try {
       const result = await Share.share({
         title: 'App link',
         message:
-          'Hi, I just invited you to use the Metacare4U app! Step1: Use my link to download the app Step2: Register using your Email Address to register your Acoount. Step3: Start using  24x7 online  Consulting  & more . 40+ Crore Indians consult with Metacare4u. It`s 100% safe & secure Download the app now.',
+          'Hi, I just invited you to use the Metacare4U app! Step1: Use my link to download the app Step2: Register using your Email Address to register your Acoount. Step3: Start using  24x7 online  Healthcare service  & more . 40+ Crore users consult with Metacare4u. It`s 100% safe & secure Download the app now.  https://play.google.com/store/apps/details?id=com.metacareforyou',
         url: 'https://play.google.com/store/apps/details?id=com.metacareforyou',
       });
       if (result.action === Share.sharedAction) {
@@ -58,7 +58,7 @@ const CustomDrawer = props => {
   };
 
   const remove = async () => {
-    setModalVisible(!modalVisible)
+    setModalVisible(!modalVisible);
   };
 
   return (
@@ -295,16 +295,25 @@ const CustomDrawer = props => {
           </View>
         </TouchableOpacity>
         <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
-          <View style={{flex:1,alignItems:'center',justifyContent:'center',backgroundColor:'rgba(0,0,0,0.5)'}}>
-         <LogoutPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} />
-         </View>
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            // Alert.alert('Modal has been closed.');
+            setModalVisible(!modalVisible);
+          }}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'rgba(0,0,0,0.5)',
+            }}>
+            <LogoutPopUp
+              modalVisible={modalVisible}
+              setModalVisible={setModalVisible}
+            />
+          </View>
         </Modal>
       </View>
     </View>
@@ -336,8 +345,8 @@ const styles = StyleSheet.create({
     borderRadius: responsiveWidth(13) / 2,
     resizeMode: 'contain',
     marginRight: 10,
-    borderWidth:0.5,
-    borderColor:'white'
+    borderWidth: 0.5,
+    borderColor: 'white',
   },
 });
 

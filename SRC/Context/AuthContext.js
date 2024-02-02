@@ -17,6 +17,7 @@ export const AuthProvider = ({children}) => {
   const [profilePhoto, setProfilePhoto] = useState('');
   const [profileData, setProfileData] = useState();
   const [locationData, setLocationData] = useState();
+  const [netConnected,setNetConnected] = useState(null)
   let a = 'HELLO';
   const [UserToken, setUserToken] = useState(null);
 
@@ -114,7 +115,7 @@ export const AuthProvider = ({children}) => {
 
   useEffect(() => {
     checkUser();
-  }, []);
+  }, [netConnected]);
 
   let contextValue = {
     a,
@@ -133,6 +134,7 @@ export const AuthProvider = ({children}) => {
     setLocationData,
     UserToken,
     setUserToken,
+    netConnected,setNetConnected,
     GetUserInfo: apiCall.getUserInfoRemote,
     SendOtp: apiCall.sendOtpApi,
     ResendOtp: apiCall.resendOtpApi,
@@ -148,6 +150,7 @@ export const AuthProvider = ({children}) => {
     BookAppointment: apiCall.bookAppointmentApi,
     GetHistory: apiCall.getHistoryApi,
     SearchHospitals:apiCall.searchHospitalsApi,
+    CheckVersion:apiCall.checkVersionApi,
   };
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

@@ -46,11 +46,7 @@ const DATA = [
   },
 ];
 
-const TopDoctors = () => {
-  const [banners, setBanners] = useState([]);
-  const [isLoading, setisLoading] = useState(true);
-  const {GetBanners} = useContext(AuthContext);
-  const [data, setData] = useState([]);
+const TopDoctors = ({banner,data,isLoading}) => {
   // const data = [
   //   {
   //     image: 'https://source.unsplash.com/1024x768/?nature',
@@ -62,28 +58,7 @@ const TopDoctors = () => {
   //   },
   // ];
 
-  //     let url=BASE_URL+'auth/banners';
 
-  const getBanners = async () => {
-    const response = await GetBanners();
-    console.log(response);
-    if (response?.status === true) {
-      setData(response?.data);
-      response?.data.map((item, index) => {
-        let arr = banners;
-        arr.push(item.image);
-        setBanners(arr);
-      });
-      console.log(banners);
-      setisLoading(false);
-    } else {
-      setisLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getBanners();
-  }, []);
 
   const ItemSeparatorView = () => {
     return (
@@ -96,14 +71,14 @@ const TopDoctors = () => {
   };
 
   return (
-    <View style={{backgroundColor: COLORS.white}}>
+    <View style={{backgroundColor: COLORS.white,marginVertical:responsiveHeight(1.5)}}>
       {!isLoading ? (
         <SliderBox
-          images={banners}
+          images={banner}
           sliderBoxHeight={responsiveHeight(20)}
           onCurrentImagePressed={index =>
             // console.log(`image ${data[index]?.link} pressed`)
-            Linking.openURL(data[index]?.link)
+            Linking.openURL(data[index]?.target_url)
           }
           ImageComponentStyle={{
             borderRadius: 15,

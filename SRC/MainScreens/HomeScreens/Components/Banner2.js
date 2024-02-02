@@ -26,56 +26,21 @@ import {
 import {AuthContext} from '../../../Context/AuthContext';
 import {SliderBox} from 'react-native-image-slider-box';
 
-const Banner2 = () => {
-  const [banners, setBanners] = useState([]);
-  const [isLoading, setisLoading] = useState(true);
-  const {GetBanners} = useContext(AuthContext);
-  const [data, setData] = useState([]);
-
-  const data1 = [
-    {
-      image: 'https://source.unsplash.com/1024x768/?nature',
-      link: 'https://www.google.com/',
-    },
-    {
-      image: 'https://source.unsplash.com/1024x768/?tree',
-      link: 'https://www.google.com/',
-    },
-  ];
-
-  const getBanners1 = async () => {
-    data1?.map((item, index) => {
-      let arr = banners;
-      arr.push(item.image);
-      setBanners(arr);
-    });
-    setisLoading(false);
-  };
-
-  const getBanners = async () => {
-    const response = await GetBanners();
-    console.log(response);
-    if (response?.status === true) {
-      setData(response?.data);
-      response?.data.map((item, index) => {
-        let arr = banners;
-        arr.push(item.image);
-        setBanners(arr);
-      });
-      console.log(banners);
-      setisLoading(false);
-    } else {
-      setisLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getBanners1();
-  }, []);
+const Banner2 = ({banner, data, isLoading}) => {
+  // const data1 = [
+  //   {
+  //     image: 'https://source.unsplash.com/1024x768/?nature',
+  //     link: 'https://www.google.com/',
+  //   },
+  //   {
+  //     image: 'https://source.unsplash.com/1024x768/?tree',
+  //     link: 'https://www.google.com/',
+  //   },
+  // ];
 
   return (
     <>
-      {data1?.length > 0 ? (
+      {banner.length > 0 ? (
         <View
           style={{
             backgroundColor: COLORS.white,
@@ -83,12 +48,12 @@ const Banner2 = () => {
           }}>
           {!isLoading ? (
             <SliderBox
-              images={banners}
+              images={banner}
               sliderBoxHeight={responsiveHeight(20)}
-              onCurrentImagePressed={index =>
-                // console.log(`image ${data[index]?.link} pressed`)
-                Linking.openURL(data1[index]?.link)
-              }
+              onCurrentImagePressed={index => {
+                console.log(data);
+                Linking.openURL(data[index]?.target_url);
+              }}
               ImageComponentStyle={{
                 borderRadius: 15,
                 width: responsiveWidth(80),

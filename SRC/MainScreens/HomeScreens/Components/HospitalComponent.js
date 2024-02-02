@@ -18,6 +18,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
+import Lottie from 'lottie-react-native';
 
 import ActivityLoader from '../../../CustomComponents/ActivityLoader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -29,6 +30,7 @@ import {SvgXml} from 'react-native-svg';
 import {getUserLocationInfo} from '../../../ApiService/API/LocationApi';
 import {useNavigation} from '@react-navigation/native';
 import {verifiedsvg} from '../../../Resources/Svg/Service';
+import NoData from '../../../CustomComponents/NoData';
 // import { isLocationEnabled } from 'react-native-device-info';
 
 const HospitalComponent = () => {
@@ -154,7 +156,7 @@ const HospitalComponent = () => {
         console.log(position);
 
         const jsonValue = JSON.stringify(position.coords);
-        AsyncStorage.setItem('location_details', jsonValue);
+        // AsyncStorage.setItem('location_details', jsonValue);
         // setLocationData(jsonValue);
         //getting the Longitude from the location json
         const currentLongitude = JSON.stringify(position.coords.longitude);
@@ -226,9 +228,11 @@ const HospitalComponent = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.headtext, {marginStart: responsiveWidth(5)}]}>
-        Nearby Healthcare Provider
-      </Text>
+      {data?.length && data?.length>0 ? (
+        <Text style={[styles.headtext, {marginStart: responsiveWidth(5)}]}>
+          Nearby Healthcare Provider
+        </Text>
+      ) : null}
 
       {!loading ? (
         <>
@@ -289,7 +293,18 @@ const HospitalComponent = () => {
                 justifyContent: 'center',
                 marginVertical: responsiveHeight(2),
               }}>
-              <Text style={styles.headtext}>No HealthCare Near You !</Text>
+              <Text style={styles.headtext}>No HealthCare is available nearby !</Text>
+              <Lottie
+                source={require('../../../Resources/JSON/help.json')}
+                loader
+                autoPlay
+                resizeMode="cover"
+                loop
+                style={{
+                  width: responsiveWidth(40),
+                  height: responsiveHeight(15),
+                }}
+              />
             </View>
           )}
         </>

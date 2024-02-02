@@ -30,9 +30,14 @@ import Banner2 from './Components/Banner2';
 
 const Home = () => {
   const [headerlocation, setHeaderLoaction] = useState({});
-  const {profileData, setProfileData, GetProfile} = useContext(AuthContext);
+  const {profileData, setProfileData, GetProfile,GetBanners,CheckVersion} = useContext(AuthContext);
   const Version = DeviceInfo.getVersion();
   const [loading,setLoading] = useState(true)
+  const [bannerData,setBannerData] = useState()
+  const [banner1,setBanner1] = useState([])
+  const [banner2,setBanner2] = useState([]);
+  const [loading2,setLoading2] = useState(true)
+
 
   const SetbasicDetails = async () => {
     //to get profile Details
@@ -71,24 +76,53 @@ const Home = () => {
     );
   };
 
-  // const checkVersion = async () => {
-  //   const result = await CheckVersion("student", Platform.OS, Version)
-  //   if (result?.status === true) {
-  //     if (result?.data?.version === true) {
-  //       getData()
-  //     }
-  //     else {
-  //       updateApp()
-  //     }
-  //   }
-  //   else {
+  const checkVersion = async () => {
+    const result = await CheckVersion(Platform.OS, Version)
+    console.log(result)
+    if (result?.status === true) {
+      if (result?.data?.version === true) {
+        SetbasicDetails()
+        getBanners()
+      }
+      else {
+        updateApp()
+      }
+    }
+    else {
 
-  //   }
+    }
 
-  // }
+  }
+
+  const getBanners = async () => {
+    const response = await GetBanners();
+    console.log(response);
+    if (response?.status === true) {
+      setBannerData(response?.data);
+      console.log(response?.data)
+      response?.data?.top_banner?.map((item, index) => {
+        let arr = banner1;
+        arr.push(item.image);
+        setBanner1(arr);
+      });
+
+      // second banner
+      response?.data?.middle_banner?.map((item, index) => {
+        let arr = banner2;
+        arr.push(item.image);
+        setBanner2(arr);
+      });
+      setLoading2(false);
+    } else {
+      setLoading2(false);
+    }
+  };
+
+
+
 
   useEffect(() => {
-    SetbasicDetails();
+    checkVersion();
   }, []);
 
   return (
@@ -97,11 +131,11 @@ const Home = () => {
       <ScrollView>
         <HeaderComponent data={profileData} location={headerlocation} />
         {/* <SpecialistComponent /> */}
-        <TopDoctors />
+        <TopDoctors banner={banner1} data={bannerData?.top_banner} isLoading={loading2} />
         <HospitalComponent />
         {/* <FindDoctorComponent /> */}
         <GetCareComponent />
-        <Banner2 />
+        <Banner2 banner={banner2} data={bannerData?.middle_banner} isLoading={loading2} />
         {/*  */}
         {/* <IssuesComponent /> */}
         <GetHelpComponent />

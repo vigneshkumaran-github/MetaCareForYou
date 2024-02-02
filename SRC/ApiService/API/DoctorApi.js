@@ -1,11 +1,11 @@
 import {axiosInstanceWithAuth} from '../Config';
 import {showToastRed} from '../../HelperFunctions/Helper';
 
-export const getTherapistsApi = async id => {
+export const getTherapistsApi = async (id,page) => {
   console.log(id);
   try {
     const response = await axiosInstanceWithAuth.get(
-      `/customer/hospitals/services/${id}?page=1`,
+      `/customer/hospitals/services/${id}?page=${page}`,
     );
     return response?.data;
   } catch (err) {

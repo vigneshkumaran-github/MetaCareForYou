@@ -22,6 +22,7 @@ import { SvgXml } from 'react-native-svg';
 import { whatsappsvg } from '../../../Resources/Svg/Service';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { showToastGreen } from '../../../HelperFunctions/Helper';
 
 //Specialist data
 
@@ -55,7 +56,8 @@ const GetCareComponent = () => {
 
         <TouchableOpacity
           style={[styles.callLayout]}
-          onPress={() => {}}>
+          // onPress={() => {showToastGreen('hiiiii')}}
+          >
           <Image
             source={require('../../../Resources/Images/logo.png')}
             style={[styles.callImage]}
@@ -72,7 +74,6 @@ const styles = StyleSheet.create({
     width: wp('100%'),
     backgroundColor: 'white',
     alignItems: 'center',
-    padding: 5,
   },
   Main3: {
     width: wp('90%'),
@@ -86,10 +87,11 @@ const styles = StyleSheet.create({
 
   InnerStyle: {
     width: wp('95%'),
-    height: hp('11'),
+    height: hp('6'),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
+    marginBottom:responsiveHeight(1.5)
   },
   getCare: {
     width: wp('70'),

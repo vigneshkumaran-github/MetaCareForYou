@@ -92,7 +92,7 @@ const HeaderComponent = ({data}) => {
             </View>
           )}
 
-          <View style={{flex: 1}}>
+          <View style={{}}>
             <Text style={[styles.ProfileName]}>{data?.name}</Text>
             <Text style={[styles.ProfileStatic]}>
               {Locality != undefined
@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
   },
   ProfileTouch: {
     marginTop: 10,
-    flex: 1,
     flexDirection: 'row',
   },
   ProfileImage: {

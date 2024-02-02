@@ -199,6 +199,7 @@ const ResetPassword = ({navigation, route}) => {
                   name="password"
                   autoCapitalize="none"
                   autoCorrect={false}
+                  maxLength={16}
                   textContentType="newPassword"
                   secureTextEntry={passwordVisibility}
                   value={password}

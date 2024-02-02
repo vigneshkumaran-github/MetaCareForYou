@@ -24,6 +24,7 @@ import NoData from '../../CustomComponents/NoData';
 const DoctorList = ({route}) => {
   const navigation = useNavigation();
   const [loading, setIsloading] = useState(true);
+  const [loading2, setLoading2] = useState(false);
   const [TherapistList, setTherapist] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [datePicker, setDatePicker] = useState(false);
@@ -33,6 +34,10 @@ const DoctorList = ({route}) => {
   const {serviceData} = route.params;
   const {GetTherapists, CheckDate, BookAppointment} = useContext(AuthContext);
   const [id, setId] = useState('');
+  const [loading3, setLoading3] = useState(false);
+  const [page, setPage] = useState(1);
+  const [refreshing, setRefreshing] = useState(false);
+  const [pageCount, setPageCount] = useState();
 
   //To COLLECT All DAta
   // useEffect(() => {
@@ -82,7 +87,7 @@ const DoctorList = ({route}) => {
   }
 
   const checkDateAvailable = async date => {
-    setIsloading(true);
+    setLoading2(true);
     const response = await CheckDate(id, date);
     console.log(response);
     if (response?.status === true) {
@@ -90,29 +95,56 @@ const DoctorList = ({route}) => {
       bookAppointment(date);
     } else {
       console.log(response, 'eee');
-      setIsloading(false);
+      setLoading2(false);
     }
   };
 
   const bookAppointment = async date => {
+    console.log('booked,', date);
     const result = await BookAppointment(id, date);
     if (result?.status === true) {
       console.log(result);
-      setIsloading(false);
+      setLoading2(false);
       showToastGreen(result?.message);
     } else {
       console.log(result, 'eee');
-      setIsloading(false);
+      setLoading2(false);
     }
   };
 
   const getData = async () => {
-    const response = await GetTherapists(serviceData?.hospital_service_id);
+    const response = await GetTherapists(serviceData?.hospital_service_id, 1);
     if (response?.status === true) {
       setData(response?.data);
       setIsloading(false);
+      console.log(response);
     } else {
       setIsloading(false);
+    }
+  };
+
+  const getData2 = async pagenum => {
+    setLoading2(true);
+    const response = await GetTherapists(
+      serviceData?.hospital_service_id,
+      pagenum,
+    );
+    if (response?.status === true) {
+      setLoading3(false);
+      setData([...data, ...response?.data]);
+      setPageCount(response?.data?.length);
+    } else {
+      setLoading3(false);
+      console.log(response, 'eee');
+    }
+  };
+
+  const loadMore = async () => {
+    console.log(page);
+    console.log(pageCount);
+    if (pageCount === 10 && !loading3) {
+      getData2(page + 1);
+      setPage(page + 1);
     }
   };
 
@@ -124,96 +156,94 @@ const DoctorList = ({route}) => {
     <View style={styles.container}>
       <CustomNavbar title="Our Doctors" onPress={() => navigation.goBack()} />
 
-     { loading ?<>
-        {data?.length > 0 ? (
-          <ScrollView>
-            {data?.map((item, index) => (
-              <TouchableOpacity key={index} style={styles.card}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <ResponsiveImage
-                    source={{uri: item?.profile_photo}}
-                    style={styles.image}
-                    borderRadius={responsiveWidth(20) / 2}
-                    resizeMode={'contain'}
-                  />
+      {!loading ? (
+        <>
+          {data?.length > 0 ? (
+            <ScrollView
+              onScroll={loadMore}
+              showsVerticalScrollIndicator={false}>
+              {data?.map((item, index) => (
+                <TouchableOpacity key={index} style={styles.card}>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <ResponsiveImage
+                      source={{uri: item?.profile_photo}}
+                      style={styles.image}
+                      borderRadius={responsiveWidth(20) / 2}
+                      resizeMode={'contain'}
+                    />
 
-                  <View
-                    style={{
-                      justifyContent: 'space-evenly',
-                      marginStart: responsiveWidth(2),
-                      width: responsiveWidth(60),
-                    }}>
-                    <Text style={styles.text1}>{item?.name}</Text>
-                    <>
-                      {item?.specialists?.map((item, index) => (
-                        <Text key={index} style={styles.text3}>
-                          {item}
-                        </Text>
-                      ))}
-                    </>
                     <View
                       style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
+                        justifyContent: 'space-evenly',
+                        marginStart: responsiveWidth(2),
+                        width: responsiveWidth(60),
                       }}>
-                      <Text style={styles.text3}>Gender : {item?.gender}</Text>
-                      <Text style={styles.text3}>
-                        exp : {item?.experience}yrs
-                      </Text>
+                      <Text style={styles.text1}>{item?.name}</Text>
+                      <>
+                        {item?.specialists?.map((item, index) => (
+                          <Text key={index} style={styles.text3}>
+                            {item}
+                          </Text>
+                        ))}
+                      </>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        }}>
+                        <Text style={styles.text3}>
+                          Gender : {item?.gender}
+                        </Text>
+                        <Text style={styles.text3}>
+                          exp : {item?.experience}yrs
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
 
-                {/* <Text
-              numberOfLines={3}
-              ellipsizeMode="tail"
-              style={[
-                styles.text2,
-                {
-                  marginTop: responsiveHeight(0.5),
-                  width: responsiveWidth(80),
-                  alignSelf: 'center',
-                },
-              ]}>
-              {item?.}
-            </Text> */}
-
-                <TouchableOpacity
-                  style={styles.btn}
-                  onPress={() => {
-                    // navigation.navigate('AppointmentScreen')
-                    setId(item.id);
-                    onBookPress();
-                  }}>
-                  <Text style={styles.btntext}>Book Appointment</Text>
+                  <TouchableOpacity
+                    style={styles.btn}
+                    onPress={() => {
+                      // navigation.navigate('AppointmentScreen')
+                      setId(item.id);
+                      onBookPress();
+                    }}>
+                    <Text style={styles.btntext}>Book Appointment</Text>
+                  </TouchableOpacity>
                 </TouchableOpacity>
-              </TouchableOpacity>
-            ))}
+              ))}
 
-            {datePicker && (
-              <DateTimePicker
-                minimumDate={new Date()}
-                value={date}
-                mode={'date'}
-                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                is24Hour={true}
-                onChange={onDateSelected}
-                onTouchCancel={() => {
-                  console.log('cancelled');
-                }}
-                // style={styleSheet.datePicker}
-              />
-            )}
-          </ScrollView>
-        ) : (
-          <Text style={{alignSelf: 'center'}}>No Data Found !</Text>
-        )}
-      </>
-      :
-      <NoData text1={'No Doctors Found !'} text2={'No doctors available right now !'} />}
+              {datePicker && (
+                <DateTimePicker
+                  minimumDate={new Date()}
+                  value={date}
+                  mode={'date'}
+                  display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                  is24Hour={true}
+                  onChange={onDateSelected}
+                  onTouchCancel={() => {
+                    console.log('cancelled');
+                  }}
+                  // style={styleSheet.datePicker}
+                />
+              )}
+            </ScrollView>
+          ) : (
+            <NoData
+              text1={'Service Currently Unavailable!'}
+              text2={'Service is unavailable at the moment please try after some time... !'}
+            />
+          )}
+        </>
+      ) : (
+        <ActivityLoader
+          style={{marginTop: responsiveHeight(30)}}
+          size={'large'}
+        />
+      )}
 
-     
+      {}
 
       <Modal
         animationType="fade"

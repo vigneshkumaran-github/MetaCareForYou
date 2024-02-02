@@ -53,7 +53,7 @@ const OtpScreen = ({navigation, route}) => {
   React.useEffect(() => {
     let timerId;
     if (runTimer) {
-      setCountDown(60 * 15);
+      setCountDown(60);
       timerId = setInterval(() => {
         setCountDown(countDown => countDown - 1);
       }, 1000);
@@ -83,6 +83,7 @@ const OtpScreen = ({navigation, route}) => {
     if (response?.status === true) {
       showToastGreen(response?.message);
       setLoading(false);
+      setRunTimer(1);
     } else {
       setLoading(false);
     }
@@ -200,7 +201,12 @@ const OtpScreen = ({navigation, route}) => {
                 onChangeText={text => setOtp(text)}
                 value={otp}></TextInput>
 
-              <View style={{}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
                 {runTimer ? (
                   <Text
                     style={{
@@ -209,29 +215,22 @@ const OtpScreen = ({navigation, route}) => {
                     }}>
                     Resend OTP After {minutes}:{seconds} minutes
                   </Text>
-                ) : null}
+                ) : (
+                  <TouchableOpacity onPress={() => resendotp()}>
+                    <Text style={styles.resendtext}>Resend</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
 
-            {runTimer ? (
-              <CustomButton
-                backgroundColor={COLORS.primary}
-                title="Submit OTP"
-                titleColor={COLORS.white}
-                size="60"
-                loading={loading}
-                onPress={() => clickOnpress()}
-              />
-            ) : (
-              <CustomButton
-                backgroundColor={COLORS.primary}
-                title="Resend Otp"
-                titleColor={COLORS.white}
-                size="60"
-                loading={loading}
-                onPress={() => resendotp()}
-              />
-            )}
+            <CustomButton
+              backgroundColor={COLORS.primary}
+              title="Submit OTP"
+              titleColor={COLORS.white}
+              size="60"
+              loading={loading}
+              onPress={() => clickOnpress()}
+            />
           </View>
 
           {/* </View> */}
@@ -352,6 +351,12 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderWidth: 1,
     borderColor: COLORS.white,
+  },
+  resendtext: {
+    color: COLORS.secondary,
+    textDecorationLine: 'underline',
+    fontWeight: '700',
+    fontSize: RFValue(14),
   },
 });
 

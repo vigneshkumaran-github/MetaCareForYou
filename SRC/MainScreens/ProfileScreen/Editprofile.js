@@ -3,6 +3,7 @@ import {
   Dimensions,
   FlatList,
   Image,
+  Platform,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -15,6 +16,7 @@ import {
 import {BASE_URL, IMAGE_BASE_URL} from '../../ApiService/Config';
 import {COLORS, FONTFAMILY, FONTS} from '../../Constants/DesignConstants';
 import React, {useContext, useEffect, useState} from 'react';
+import ImagePicker from 'react-native-image-crop-picker';
 import {
   getInitials,
   showToastGreen,
@@ -38,6 +40,8 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
+import { SvgXml } from 'react-native-svg';
+import DeviceInfo from 'react-native-device-info';
 
 const EditProfile = ({route}) => {
   const {data} = route?.params;
@@ -62,112 +66,122 @@ const EditProfile = ({route}) => {
 
   const [singleFile, setSingleFile] = useState(null);
 
+
   useEffect(() => {}, []);
 
-  const selectFile = async () => {
-    // Opening Document Picker to select one file
-    try {
-      const res = await DocumentPicker.pick({
-        // Provide which type of file you want user to pick
-        type: [DocumentPicker.types.images],
-        // There can me more options as well
-        // DocumentPicker.types.allFiles
-        // DocumentPicker.types.images
-        // DocumentPicker.types.plainText
-        // DocumentPicker.types.audio
-        // DocumentPicker.types.pdf
-      });
-      // Printing the log realted to the file
-      console.log('res : ' + JSON.stringify(res));
-      // Setting the state to show single file attributes
-      setSingleFile(res);
-    } catch (err) {
-      setSingleFile(null);
-      // Handling any exception (If any)
-      if (DocumentPicker.isCancel(err)) {
-        // If user canceled the document selection
-        // alert('Canceled');
-      } else {
-        // For Unknown Error
-        alert('Unknown Error: ' + JSON.stringify(err));
-        throw err;
-      }
-    }
+  // const selectFile = async () => {
+  //   // Opening Document Picker to select one file
+  //   try {
+  //     const res = await DocumentPicker.pick({
+  //       // Provide which type of file you want user to pick
+  //       type: [DocumentPicker.types.images],
+  //       // There can me more options as well
+  //       // DocumentPicker.types.allFiles
+  //       // DocumentPicker.types.images
+  //       // DocumentPicker.types.plainText
+  //       // DocumentPicker.types.audio
+  //       // DocumentPicker.types.pdf
+  //     });
+  //     // Printing the log realted to the file
+  //     console.log('res : ' + JSON.stringify(res));
+  //     // Setting the state to show single file attributes
+  //     setSingleFile(res);
+  //   } catch (err) {
+  //     setSingleFile(null);
+  //     // Handling any exception (If any)
+  //     if (DocumentPicker.isCancel(err)) {
+  //       // If user canceled the document selection
+  //       // alert('Canceled');
+  //     } else {
+  //       // For Unknown Error
+  //       alert('Unknown Error: ' + JSON.stringify(err));
+  //       throw err;
+  //     }
+  //   }
+  // };
+
+  const getFilename = url => {
+    console.log(
+      url.substr(url.lastIndexOf('/') + 1),
+      'fdhgfhgffhgfhffjhfjfhgfjgj',
+    );
+    return url.substr(url.lastIndexOf('/') + 1);
+  };
+
+  const openFiles = async () => {
+    // setModalVisible(false)
+    ImagePicker.openPicker({
+      multiple: false,
+      cropping: true,
+      freeStyleCropEnabled: true,
+      mediaType: 'photo',
+    })
+      .then(images => {
+        console.log(images, '****Images****');
+        // setImageUri(images.path);
+        setSingleFile({
+          uri:
+            Platform.OS === 'android'
+              ? images.path
+              : images.path.replace('file://', ''),
+          type: images.mime,
+          name: getFilename(images.path),
+        });
+      })
+      .catch(err => console.log(err));
   };
 
   const updateProfile = async () => {
-    // Check if any file is selected or not
-    // if (singleFile !== null) {
-    // setIsloading(true);
-    // If file selected then create FormData
-
     if (firstName === '') {
       showToastRed('Please enter your name');
-    } else if(email===''){
-
-    }
-    else {
-      const fileToUpload = singleFile;
-      console.log(fileToUpload);
+    } else if (firstName?.length<4) {
+      showToastRed('Name must contain atleast 4 characters');
+    } else if (email === '') {
+      showToastRed('Please enter valid email');
+    } else if (mobile === '' || mobile.length < 10) {
+      showToastRed('Mobile Number must contain 10 to 11 digits');
+    } else {
       const data = new FormData();
       data.append('name', firstName);
       data.append('mobile_number', mobile);
-
       gender && data.append('gender', gender);
-      data.append('age', age);
-      data.append('nationality', nationality);
+      age !== null && age !== '' && data.append('age', age);
+      nationality !== null && data.append('nationality', nationality);
       data.append('health_issue', healthIsseue);
       data.append('mental_health_issue_before', mentalHealthIsseue);
       data.append('thought_of_suicide', suicide);
       data.append('email', email);
-      data.append('profile_photo', singleFile ? fileToUpload[0] : '');
+      data.append('profile_photo', singleFile ? singleFile : '');
       console.log(data);
-
-      // let url = BASE_URL + 'auth/update_profile';
-      // response = await fetch(BASE_URL + '/profile/update', {
-      //   method: 'POST',
-      //   body: formData,
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //     Accept: 'application/json',
-      //     Authorization: 'Bearer ' + (await AsyncStorage.getItem('userToken')),
-      //   },
-      // });
+      console.log(singleFile, 'PROFILE PHOTOOOOOO');
 
       try {
         setIsloading(true);
-        // const response = await fetch(BASE_URL + '/customer', {
-        //   method: 'PUT',
-        //   body: data,
-        //   headers: {
-        //     'Content-Type': 'multipart/form-data',
-        //     "Accept": 'application/json',
-        //     "Authorization": 'Bearer ' + (await AsyncStorage.getItem('userToken')),
-        //   },
-        //   timeout:15000,
-        // });
         const response = await axios.putForm(BASE_URL + '/customer', data, {
           headers: {
-            timeout: 15000,
+            // timeout: 15000,
             'Content-Type': 'multipart/form-data',
             Accept: 'application/json',
             Authorization:
               'Bearer ' + (await AsyncStorage.getItem('userToken')),
           },
         });
-        console.log(response,'response')
+        console.log(response.data, 'response');
         let responseJson = await response.data;
         if (responseJson?.status === true) {
-          navigation.goBack();
+          
           showToastGreen(responseJson.message);
           setIsloading(false);
+          navigation.goBack();
         } else {
           showToastRed(responseJson?.error?.message);
           setIsloading(false);
         }
       } catch (err) {
         setIsloading(false);
-        console.log(err.response, 'from catch');
+        showToastRed(err?.response?.data?.error?.message);
+        console.log(err?.response?.data, 'from catch');
+        console.log(err, 'from catch err');
       }
     }
   };
@@ -190,7 +204,7 @@ const EditProfile = ({route}) => {
                   {singleFile != null ? (
                     <Image
                       style={[styles.Image]}
-                      source={{uri: singleFile[0].uri}}
+                      source={{uri: singleFile.uri}}
                     />
                   ) : data?.profile_photo ? (
                     <Image
@@ -218,7 +232,9 @@ const EditProfile = ({route}) => {
                     borderColor: 'black',
                     borderWidth: 0.5,
                   }}
-                  onPress={selectFile}>
+                  onPress={() => {
+                    openFiles();
+                  }}>
                   <Icon name="account-edit" size={25} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style={[styles.Textheads]}>{data?.name}</Text>
@@ -231,6 +247,7 @@ const EditProfile = ({route}) => {
                     keyboardType="default"
                     style={styles.input}
                     name="email"
+                    maxLength={30}
                     autoCapitalize="none"
                     autoCorrect={false}
                     onChangeText={text => setFirstName(text)}
@@ -275,7 +292,8 @@ const EditProfile = ({route}) => {
                 <View>
                   <Text style={[styles.subTexts]}>Mobile Number</Text>
                   <TextInput
-                    keyboardType="default"
+                    keyboardType="numeric"
+                    maxLength={11}
                     placeholderTextColor={COLORS.lightGray}
                     style={styles.input}
                     name="mobile"
@@ -344,14 +362,15 @@ const EditProfile = ({route}) => {
                 <View>
                   <Text style={[styles.subTexts]}>Age</Text>
                   <TextInput
-                    keyboardType="default"
+                    keyboardType="numeric"
                     placeholderTextColor={COLORS.lightGray}
                     style={styles.input}
-                    name="email"
+                    name="age"
+                    maxLength={3}
                     autoCapitalize="none"
                     autoCorrect={false}
                     onChangeText={text => setAge(text)}
-                    value={age === null ? 'Not Updated' : age?.toString()}
+                    value={age?.toString()}
                     placeholder="Enter your age"></TextInput>
                 </View>
 
@@ -361,11 +380,12 @@ const EditProfile = ({route}) => {
                     keyboardType="default"
                     placeholderTextColor={COLORS.lightGray}
                     style={styles.input}
-                    name="bloodGroup"
+                    name="nationality"
                     autoCapitalize="none"
                     autoCorrect={false}
+                    maxLength={50}
                     onChangeText={text => setNationality(text)}
-                    value={nationality == 'null' ? 'Not Updated' : nationality}
+                    value={nationality}
                     placeholder="Enter your Nationality"></TextInput>
                 </View>
 
@@ -375,12 +395,14 @@ const EditProfile = ({route}) => {
                     keyboardType="default"
                     placeholderTextColor={COLORS.lightGray}
                     style={styles.input}
+                    maxLength={50}
                     name="email"
                     autoCapitalize="none"
                     autoCorrect={false}
                     onChangeText={text => setHealthIsseue(text)}
                     value={healthIsseue == 'null' ? '' : healthIsseue}
-                    placeholder="Enter your health issues"></TextInput>
+                    placeholder="Enter your health issues">
+                    </TextInput>
                 </View>
 
                 <View>
