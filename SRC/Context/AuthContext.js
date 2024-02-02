@@ -102,6 +102,11 @@ export const AuthProvider = ({children}) => {
       } else {
         setIsLoading(false);
       } //
+      const loc = await AsyncStorage.getItem('location');
+      if(loc){
+        const val = JSON.parse(loc);
+        setLocationData(val)
+      }
     } catch (err) {
       setIsLoading(false);
     }
@@ -110,6 +115,7 @@ export const AuthProvider = ({children}) => {
   const Logout = async () => {
     await AsyncStorage.removeItem('userToken');
     await AsyncStorage.removeItem('refreshToken');
+    await AsyncStorage.removeItem('location')
     setUserToken(null);
   };
 

@@ -44,8 +44,10 @@ const AppNav = () => {
         bottomOffset: 40,
       });
     } else {
-      showToastGreen('Back Online')
-      Toast.hide();
+      // showToastGreen('Back Online')
+      setTimeout(() => {
+        Toast.hide();
+      }, 2000);
     }
   };
 

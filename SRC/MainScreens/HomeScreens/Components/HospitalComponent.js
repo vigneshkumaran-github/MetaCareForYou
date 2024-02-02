@@ -2,6 +2,7 @@ import {COLORS, FONTFAMILY, FONTS} from '../../../Constants/DesignConstants';
 import {
   PermissionsAndroid,
   Platform,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -31,6 +32,7 @@ import {getUserLocationInfo} from '../../../ApiService/API/LocationApi';
 import {useNavigation} from '@react-navigation/native';
 import {verifiedsvg} from '../../../Resources/Svg/Service';
 import NoData from '../../../CustomComponents/NoData';
+import {localeData} from 'moment';
 // import { isLocationEnabled } from 'react-native-device-info';
 
 const HospitalComponent = () => {
@@ -41,6 +43,7 @@ const HospitalComponent = () => {
   const [loading2, setLoading2] = useState(false);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
+  const [refreshing, setRefreshing] = useState(false);
 
   const getData = async latlong => {
     const response = await GetHospitals(
@@ -60,7 +63,11 @@ const HospitalComponent = () => {
 
   const getData2 = async pagenum => {
     setLoading2(true);
-    const response = await GetHospitals(lat, lang, pagenum);
+    const response = await GetHospitals(
+      locationData?.latitude,
+      localeData?.longitude,
+      pagenum,
+    );
     if (response?.status === true) {
       setLoading2(false);
       setData([...data, ...response?.data]);
@@ -125,7 +132,8 @@ const HospitalComponent = () => {
 
         //getting the Latitude from the location json
         const currentLatitude = JSON.stringify(position.coords.latitude);
-
+        const jsonValue = JSON.stringify(position.coords);
+        AsyncStorage.setItem('location', jsonValue);
         setLocationData(position.coords);
         getData(position?.coords);
 
@@ -156,6 +164,7 @@ const HospitalComponent = () => {
         console.log(position);
 
         const jsonValue = JSON.stringify(position.coords);
+        setLocationData(position.coords);
         // AsyncStorage.setItem('location_details', jsonValue);
         // setLocationData(jsonValue);
         //getting the Longitude from the location json
@@ -197,6 +206,7 @@ const HospitalComponent = () => {
       try {
         const enableResult = await promptForEnableLocationIfNeeded();
         console.log('enableResult', enableResult);
+        startup();
         if (enableResult === 'enabled') {
           startup();
         } else {
@@ -222,13 +232,19 @@ const HospitalComponent = () => {
     }
   }
 
+  // const onRefresh = () => {
+  //   setRefreshing(true);
+  //   getData(locationData);
+  //   setPage(1);
+  // };
+
   useEffect(() => {
     handleCheckPressed();
   }, []);
 
   return (
     <View style={styles.container}>
-      {data?.length && data?.length>0 ? (
+      {data?.length && data?.length > 0 ? (
         <Text style={[styles.headtext, {marginStart: responsiveWidth(5)}]}>
           Nearby Healthcare Provider
         </Text>
@@ -293,7 +309,9 @@ const HospitalComponent = () => {
                 justifyContent: 'center',
                 marginVertical: responsiveHeight(2),
               }}>
-              <Text style={styles.headtext}>No HealthCare is available nearby !</Text>
+              <Text style={styles.headtext}>
+                No HealthCare is available nearby !
+              </Text>
               <Lottie
                 source={require('../../../Resources/JSON/help.json')}
                 loader
