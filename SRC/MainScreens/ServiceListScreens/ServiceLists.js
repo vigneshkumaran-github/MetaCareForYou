@@ -40,6 +40,7 @@ const ServiceLists = ({route}) => {
     if (response?.status === true) {
       setData(response?.data);
       setLoading(false);
+      setPageCount(response?.data?.length);
     } else {
       console.log(response, 'eee');
       setLoading(false);
@@ -60,8 +61,8 @@ const ServiceLists = ({route}) => {
   };
 
   const loadMore = async () => {
-    console.log(page);
-    console.log(pageCount);
+    // console.log(page);
+    // console.log(pageCount);
     if (pageCount === 10 && !loading2) {
       getData2(page + 1);
       setPage(page + 1);
@@ -95,7 +96,7 @@ const ServiceLists = ({route}) => {
         </View>
       )}
       {!loading ? (
-        <ScrollView style={{marginTop: responsiveHeight(2)}}>
+        <ScrollView onScroll={loadMore} style={{marginTop: responsiveHeight(2)}}>
           <View
             style={{
               marginHorizontal: responsiveWidth(5),
