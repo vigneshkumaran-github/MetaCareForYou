@@ -65,7 +65,7 @@ const HospitalComponent = () => {
     setLoading2(true);
     const response = await GetHospitals(
       locationData?.latitude,
-      localeData?.longitude,
+      locationData?.longitude,
       pagenum,
     );
     if (response?.status === true) {
@@ -165,6 +165,7 @@ const HospitalComponent = () => {
 
         const jsonValue = JSON.stringify(position.coords);
         setLocationData(position.coords);
+        AsyncStorage.setItem('location', jsonValue);
         // AsyncStorage.setItem('location_details', jsonValue);
         // setLocationData(jsonValue);
         //getting the Longitude from the location json
@@ -206,7 +207,6 @@ const HospitalComponent = () => {
       try {
         const enableResult = await promptForEnableLocationIfNeeded();
         console.log('enableResult', enableResult);
-        startup();
         if (enableResult === 'enabled') {
           startup();
         } else {
@@ -237,6 +237,12 @@ const HospitalComponent = () => {
   //   getData(locationData);
   //   setPage(1);
   // };
+
+  useEffect(() => {
+    if(locationData){
+      getData(locationData)
+    }
+  }, [locationData]);
 
   useEffect(() => {
     handleCheckPressed();
