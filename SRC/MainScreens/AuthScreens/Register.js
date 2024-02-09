@@ -22,7 +22,7 @@ import {
   showToastGreen,
   showToastRed,
 } from '../../HelperFunctions/Helper';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -38,9 +38,15 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Loader from '../../CustomComponents/Loader';
 import {useNavigation} from '@react-navigation/native';
 import {RFValue} from 'react-native-responsive-fontsize';
+import {SelectList} from 'react-native-dropdown-select-list';
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const Register = () => {
-  const {createAccount} = useContext(AuthContext);
+  const {createAccount, GetCountries} = useContext(AuthContext);
   const navigation = useNavigation();
 
   const [firstName, setfirstName] = useState('');
@@ -65,6 +71,9 @@ const Register = () => {
 
   const [checked, setChecked] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [value, setValue] = useState();
+  const [defop, setDefop] = useState({});
+  const [dropData, setDropData] = useState([]);
 
   const handlePasswordVisibility = () => {
     if (passwordIcon === 'eye') {
@@ -139,7 +148,7 @@ const Register = () => {
     }
 
     if (!checked) {
-      showToastRed('Please accept the terms & conditions')
+      showToastRed('Please accept the terms & conditions');
     }
 
     if (
@@ -160,6 +169,7 @@ const Register = () => {
       mobileNumber,
       email,
       password,
+      value,
     );
     console.log(result);
     if (result?.status === true) {
@@ -169,6 +179,30 @@ const Register = () => {
       setLoader(false);
     }
   };
+
+  const getCountries = async () => {
+    setLoader(true);
+    const response = await GetCountries();
+    // console.log(response?.data)
+    if (response?.status === true) {
+      let newArray = [];
+      response?.data?.map((item, index) => {
+        newArray.push({
+          key: item?.id,
+          value: item?.country_code + ' ' + item?.name.slice(0, 3),
+        });
+      });
+      setDropData(newArray);
+      console.log(response?.data);
+      setLoader(false);
+    } else {
+      setLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    getCountries();
+  }, []);
 
   return (
     <>
@@ -180,6 +214,7 @@ const Register = () => {
           <ScrollView>
             <KeyboardAwareScrollView
               enableOnAndroid={true}
+              nestedScrollEnabled
               style={{flex: 1}}
               behavior="padding">
               {/* <View style={[styles.MainContainer]}> */}
@@ -228,7 +263,6 @@ const Register = () => {
                     onChangeText={text => setfirstName(text)}
                     value={firstName}></TextInput>
 
-            
                   {/*........................................Input End ............................................................*/}
                   <View
                     style={{
@@ -262,7 +296,6 @@ const Register = () => {
                     autoCorrect={false}
                     onChangeText={text => setEmail(text)}
                     value={email}></TextInput>
-
                   {/*........................................Input End ............................................................*/}
 
                   <View
@@ -285,15 +318,60 @@ const Register = () => {
                       </>
                     )}
                   </View>
-                  <TextInput
-                    keyboardType="number-pad"
-                    style={[styles.keyBoardStyle]}
-                    name="phone"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    maxLength={11}
-                    onChangeText={text => setmobileNumber(text)}
-                    value={mobileNumber}></TextInput>
+
+                  <View style={{flexDirection: 'row', zIndex: 2}}>
+                    <SelectList
+                      boxStyles={{
+                        width: responsiveWidth(25),
+                        borderWidth: 0,
+                        borderBottomWidth: 0.5,
+                        height: responsiveHeight(6),
+                        borderColor: 'gray',
+                        marginBottom: 10,
+                        borderRadius: 7,
+                        marginTop: responsiveHeight(1),
+                      }}
+                      dropdownStyles={{
+                        width: responsiveWidth(25),
+                        borderTopWidth: 0,
+                        borderWidth: 0.5,
+                        borderRadius: 0,
+                        maxHeight: responsiveHeight(15),
+                        backgroundColor: COLORS.white,
+                        marginTop: -responsiveHeight(1),
+                        marginStart: 2,
+                      }}
+                      inputStyles={{
+                        color: COLORS.textcolor,
+                        fontFamily: FONTFAMILY.poppinsbold,
+                        fontSize: RFValue(13),
+                      }}
+                      dropdownTextStyles={{
+                        color: COLORS.textcolor,
+                        fontFamily: FONTFAMILY.poppinsbold,
+                      }}
+                      setSelected={val => {
+                        setValue(val);
+                      }}
+                      defaultOption={dropData[0]}
+                      data={dropData}
+                      save="key"
+                      placeholder="Select Country"
+                      search={false}
+                      key={'key'}
+                    />
+
+                    <TextInput
+                      keyboardType="number-pad"
+                      style={[styles.keyBoardStyle2]}
+                      name="phone"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      maxLength={11}
+                      onChangeText={text => setmobileNumber(text)}
+                      value={mobileNumber}
+                    />
+                  </View>
 
                   {/*........................................Input End ............................................................*/}
                   <View
@@ -558,13 +636,24 @@ const styles = StyleSheet.create({
   },
   keyBoardStyle: {
     width: wp(80),
-    height: 40,
+    height: responsiveHeight(5),
     marginBottom: 20,
     borderBottomWidth: 0.5,
     borderBottomColor: 'gray',
     color: COLORS.textcolor,
     fontFamily: FONTFAMILY.HelveticaNeuMedium,
     fontSize: RFValue(14),
+  },
+  keyBoardStyle2: {
+    width: wp(55),
+    height: responsiveHeight(5),
+    marginBottom: 20,
+    borderBottomWidth: 0.5,
+    borderBottomColor: 'gray',
+    color: COLORS.textcolor,
+    fontFamily: FONTFAMILY.HelveticaNeuMedium,
+    fontSize: RFValue(14),
+    marginTop: responsiveHeight(2),
   },
   Logostyle: {
     width: 100,

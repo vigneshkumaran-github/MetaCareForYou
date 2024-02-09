@@ -139,10 +139,29 @@ const History = () => {
                         height: responsiveHeight(6),
                         justifyContent: 'space-between',
                         marginStart: 7,
-                        width:responsiveWidth(48)
+                        width: responsiveWidth(48),
                       }}>
-                      <Text numberOfLines={1} ellipsizeMode='tail' style={styles.text1}>{item?.hospital?.name}</Text>
-                      <Text style={styles.text2}>{item?.appointment_date}</Text>
+                      <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={styles.text1}>
+                        {item?.hospital?.name}
+                      </Text>
+                      <Text style={styles.text2}>
+                        {item?.appointment_date}
+                        {' | '}
+                        {item?.from_time?.slice(0, 2) > 12
+                          ? item?.from_time?.slice(0, 2) - 12
+                          : item?.from_time?.slice(0, 2)}
+                        {item?.from_time?.slice(2, 5)}
+                        {item?.from_time?.slice(0, 2) > 12 ? ' PM' : ' AM'}
+                        {' - '}
+                        {item?.to_time?.slice(0, 2) > 12
+                          ? item?.to_time?.slice(0, 2) - 12
+                          : item?.to_time?.slice(0, 2)}
+                        {item?.to_time?.slice(2, 5)}
+                        {item?.to_time?.slice(0, 2) > 12 ? ' PM' : ' AM'}
+                      </Text>
                     </View>
                   </View>
                   <View
@@ -227,7 +246,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: responsiveHeight(0.5),
     padding: 10,
-    elevation:5
+    elevation: 5,
   },
   rowView: {
     flexDirection: 'row',
@@ -241,7 +260,7 @@ const styles = StyleSheet.create({
   },
   text2: {
     color: COLORS.lightGray,
-    fontSize: RFValue(13),
+    fontSize: RFValue(11),
     fontFamily: FONTFAMILY.HelveticaNeuMedium,
     fontWeight: '500',
   },
@@ -252,11 +271,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: responsiveWidth(2),
     top: responsiveHeight(0),
-    paddingHorizontal:8,
-    paddingVertical:responsiveHeight(0.5),
-    borderBottomLeftRadius:6,
-    borderBottomRightRadius:6,
-    color:COLORS.white
+    paddingHorizontal: 8,
+    paddingVertical: responsiveHeight(0.5),
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+    color: COLORS.white,
   },
 });
 

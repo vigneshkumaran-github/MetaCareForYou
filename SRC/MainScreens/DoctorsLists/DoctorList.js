@@ -38,6 +38,7 @@ const DoctorList = ({route}) => {
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [pageCount, setPageCount] = useState();
+  const [slotData, setSlotData] = useState([]);
 
   //To COLLECT All DAta
   // useEffect(() => {
@@ -75,7 +76,7 @@ const DoctorList = ({route}) => {
   function onDateSelected(event, value) {
     if (event.type === 'dismissed') {
       console.log(value);
-      setDate(value);
+      setDate(new Date());
       setDatePicker(false);
     } else {
       console.log(value);
@@ -92,20 +93,21 @@ const DoctorList = ({route}) => {
     console.log(response);
     if (response?.status === true) {
       showToastGreen(response?.message);
-      bookAppointment(date);
+      // bookAppointment(date);
+      setModalVisible(true);
     } else {
       console.log(response, 'eee');
       setLoading2(false);
     }
   };
 
-  const bookAppointment = async date => {
-    console.log('booked,', date);
-    const result = await BookAppointment(id, date);
+  const bookAppointment = async () => {
+    const result = await BookAppointment(id, moment(date).format('YYYY-MM-DD'),selected);
     if (result?.status === true) {
       console.log(result);
       setLoading2(false);
       showToastGreen(result?.message);
+      setSelected('')
     } else {
       console.log(result, 'eee');
       setLoading2(false);
@@ -206,7 +208,9 @@ const DoctorList = ({route}) => {
                     style={styles.btn}
                     onPress={() => {
                       // navigation.navigate('AppointmentScreen')
+                      setSlotData(item?.slots);
                       setId(item.id);
+                      console.log(item?.slots)
                       onBookPress();
                     }}>
                     <Text style={styles.btntext}>Book Appointment</Text>
@@ -232,7 +236,9 @@ const DoctorList = ({route}) => {
           ) : (
             <NoData
               text1={'Service Currently Unavailable!'}
-              text2={'Service is unavailable at the moment please try after some time... !'}
+              text2={
+                'Service is unavailable at the moment please try after some time... !'
+              }
             />
           )}
         </>
@@ -264,90 +270,34 @@ const DoctorList = ({route}) => {
                 alignSelf: 'center',
                 justifyContent: 'space-evenly',
               }}>
-              <TouchableOpacity
-                onPress={() => {
-                  setSelected(1);
-                }}
-                style={[
-                  styles.modalbtn,
-                  {
-                    backgroundColor:
-                      selected === 1 ? COLORS.primary : COLORS.white,
-                  },
-                ]}>
-                <Text
+              {slotData?.map((itm, index) => (
+                <TouchableOpacity
+                key={index}
+                  onPress={() => {
+                    setSelected(itm?.id);
+                  }}
                   style={[
-                    styles.modalbtntext,
-                    {color: selected === 1 ? COLORS.white : COLORS.textcolor},
+                    styles.modalbtn,
+                    {
+                      backgroundColor:
+                        selected === itm?.id ? COLORS.primary : COLORS.white,
+                    },
                   ]}>
-                  10:00 AM-12:00 PM
-                </Text>
-                <Text
-                  style={[
-                    styles.modalbtntext2,
-                    {color: selected === 1 ? COLORS.white : COLORS.gray},
-                  ]}>
-                  23-05-2024
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setSelected(2);
-                }}
-                style={[
-                  styles.modalbtn,
-                  {
-                    backgroundColor:
-                      selected === 2 ? COLORS.primary : COLORS.white,
-                  },
-                ]}>
-                <Text
-                  style={[
-                    styles.modalbtntext,
-                    {color: selected === 2 ? COLORS.white : COLORS.textcolor},
-                  ]}>
-                  10:00 AM-12:00 PM
-                </Text>
-                <Text
-                  style={[
-                    styles.modalbtntext2,
-                    {color: selected === 2 ? COLORS.white : COLORS.gray},
-                  ]}>
-                  23-05-2024
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setSelected(3);
-                }}
-                style={[
-                  styles.modalbtn,
-                  {
-                    backgroundColor:
-                      selected === 3 ? COLORS.primary : COLORS.white,
-                  },
-                ]}>
-                <Text
-                  style={[
-                    styles.modalbtntext,
-                    {color: selected === 3 ? COLORS.white : COLORS.textcolor},
-                  ]}>
-                  10:00 AM-12:00 PM
-                </Text>
-                <Text
-                  style={[
-                    styles.modalbtntext2,
-                    {color: selected === 3 ? COLORS.white : COLORS.gray},
-                  ]}>
-                  23-05-2024
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={[
+                      styles.modalbtntext,
+                      {color: selected === itm?.id ? COLORS.white : COLORS.textcolor},
+                    ]}>
+                    {itm?.from_time}-{itm?.to_time}
+                  </Text>
+                </TouchableOpacity>
+              ))}
 
               {selected !== '' && (
                 <TouchableOpacity
                   onPress={() => {
                     setModalVisible(!modalVisible);
-                    setSelected('');
+                    bookAppointment()
                   }}
                   style={[styles.btn, {}]}>
                   <Text style={styles.btntext}>Book</Text>
@@ -438,6 +388,7 @@ const styles = StyleSheet.create({
   },
   modalbtn: {
     width: responsiveWidth(37),
+    height: responsiveHeight(6),
     justifyContent: 'space-evenly',
     alignItems: 'center',
     marginRight: responsiveWidth(1),
@@ -448,8 +399,9 @@ const styles = StyleSheet.create({
     borderWidth: 0.7,
   },
   modalbtntext: {
-    fontSize: RFValue(12),
-    fontFamily: FONTFAMILY.HelveticaNeuMedium,
+    fontSize: RFValue(11),
+    fontFamily: FONTFAMILY.HelveticaNeuBold,
+    fontWeight:'700'
   },
   modalbtntext2: {
     fontSize: RFValue(11),

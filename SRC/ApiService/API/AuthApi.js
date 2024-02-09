@@ -61,3 +61,15 @@ export const resetPasswordApi = async (email, password) => {
     return err.response.data;
   }
 };
+
+export const getCountriesApi = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/base/countries`);
+    return response?.data;
+  } catch (err) {
+    console.log(err.response.data.error.message);
+    showToastRed(err.response.data.error.message);
+    console.log(err);
+    return err.response.data;
+  }
+};

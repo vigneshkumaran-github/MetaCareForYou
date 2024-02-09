@@ -40,13 +40,15 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { SvgXml } from 'react-native-svg';
+import {SvgXml} from 'react-native-svg';
 import DeviceInfo from 'react-native-device-info';
+import {SelectList} from 'react-native-dropdown-select-list';
+import ActivityLoader from '../../CustomComponents/ActivityLoader';
 
 const EditProfile = ({route}) => {
   const {data} = route?.params;
   const navigation = useNavigation();
-  const {GetUserInfo} = useContext(AuthContext);
+  const {GetUserInfo, GetCountries} = useContext(AuthContext);
   const [firstName, setFirstName] = useState(data?.name);
   const [email, setEmail] = useState(data?.email);
   const [mobile, setMobile] = useState(data?.mobile_number);
@@ -62,43 +64,15 @@ const EditProfile = ({route}) => {
   );
   const [UserInfo, setUserInfoData] = useState(data);
   const [isLoadig, setIsloading] = useState(false);
+  const [isLoading2, setIsloading2] = useState(true);
   const [profilePhoto, setProfilePhoto] = useState(data?.profile_photo);
-
+  const [value, setValue] = useState(data?.country?.id);
+  const [defop,setDefop] = useState({})
+  const [dropData, setDropData] = useState([
+  ]);
   const [singleFile, setSingleFile] = useState(null);
 
-
   useEffect(() => {}, []);
-
-  // const selectFile = async () => {
-  //   // Opening Document Picker to select one file
-  //   try {
-  //     const res = await DocumentPicker.pick({
-  //       // Provide which type of file you want user to pick
-  //       type: [DocumentPicker.types.images],
-  //       // There can me more options as well
-  //       // DocumentPicker.types.allFiles
-  //       // DocumentPicker.types.images
-  //       // DocumentPicker.types.plainText
-  //       // DocumentPicker.types.audio
-  //       // DocumentPicker.types.pdf
-  //     });
-  //     // Printing the log realted to the file
-  //     console.log('res : ' + JSON.stringify(res));
-  //     // Setting the state to show single file attributes
-  //     setSingleFile(res);
-  //   } catch (err) {
-  //     setSingleFile(null);
-  //     // Handling any exception (If any)
-  //     if (DocumentPicker.isCancel(err)) {
-  //       // If user canceled the document selection
-  //       // alert('Canceled');
-  //     } else {
-  //       // For Unknown Error
-  //       alert('Unknown Error: ' + JSON.stringify(err));
-  //       throw err;
-  //     }
-  //   }
-  // };
 
   const getFilename = url => {
     console.log(
@@ -134,7 +108,7 @@ const EditProfile = ({route}) => {
   const updateProfile = async () => {
     if (firstName === '') {
       showToastRed('Please enter your name');
-    } else if (firstName?.length<4) {
+    } else if (firstName?.length < 4) {
       showToastRed('Name must contain atleast 4 characters');
     } else if (email === '') {
       showToastRed('Please enter valid email');
@@ -152,6 +126,7 @@ const EditProfile = ({route}) => {
       data.append('thought_of_suicide', suicide);
       data.append('email', email);
       data.append('profile_photo', singleFile ? singleFile : '');
+      data.append('country_id', value);
       console.log(data);
       console.log(singleFile, 'PROFILE PHOTOOOOOO');
 
@@ -169,7 +144,6 @@ const EditProfile = ({route}) => {
         console.log(response.data, 'response');
         let responseJson = await response.data;
         if (responseJson?.status === true) {
-          
           showToastGreen(responseJson.message);
           setIsloading(false);
           navigation.goBack();
@@ -185,6 +159,31 @@ const EditProfile = ({route}) => {
       }
     }
   };
+
+  const getCountries = async () => {
+    const response = await GetCountries();
+    if (response?.status === true) {
+      let newArray = [];
+      response?.data?.map((item, index) => {
+        newArray.push({
+          key: item?.id,
+          value: item?.name,
+        });
+      });
+      setDropData(newArray);
+      const initialData = newArray.filter((item) => item.value == data?.country?.name).map(({key,value}) => ({key,value}));
+      setDefop(initialData[0])
+      setIsloading2(false);
+      console.log(response?.data);
+    } else {
+      setIsloading2(false);
+    }
+  };
+
+  useEffect(() => {
+    getCountries();
+  }, []);
+
   return (
     <>
       {isLoadig ? (
@@ -305,6 +304,43 @@ const EditProfile = ({route}) => {
                 </View>
 
                 <View>
+                  <Text style={[styles.subTexts]}>Country</Text>
+                  <SelectList
+                    boxStyles={{
+                      paddingHorizontal: 20,
+                      width: responsiveWidth(85),
+                      borderWidth: 0.5,
+                      height: responsiveHeight(6),
+                      borderColor: 'gray',
+                      marginBottom: 10,
+                      borderRadius: 7,
+                    }}
+                    dropdownStyles={{
+                      width: responsiveWidth(85),
+                      borderTopWidth: 0.5,
+                      borderWidth: 0,
+                      borderRadius: 0,
+                      maxHeight: responsiveHeight(20),
+                    }}
+                    inputStyles={{
+                      color: COLORS.textcolor,
+                      fontFamily: FONTFAMILY.HelveticaNeuMedium,
+                      fontSize: RFValue(15),
+                    }}
+                    dropdownTextStyles={{color: COLORS.textcolor}}
+                    setSelected={val => {
+                      setValue(val);
+                    }}
+                    defaultOption={defop}
+                    data={dropData}
+                    save="key"
+                    placeholder="Select Country"
+                    search={false}
+                    key={'key'}
+                  />
+                </View>
+
+                <View>
                   <Text style={[styles.subTexts]}>Gender</Text>
 
                   <View style={{flexDirection: 'row', width: wp('85')}}>
@@ -401,8 +437,7 @@ const EditProfile = ({route}) => {
                     autoCorrect={false}
                     onChangeText={text => setHealthIsseue(text)}
                     value={healthIsseue == 'null' ? '' : healthIsseue}
-                    placeholder="Enter your health issues">
-                    </TextInput>
+                    placeholder="Enter your health issues"></TextInput>
                 </View>
 
                 <View>
@@ -495,6 +530,10 @@ const EditProfile = ({route}) => {
               </TouchableOpacity>
             </View>
           </ScrollView>
+
+        {isLoading2 &&
+           <ActivityLoader size={'large'} style={{height:responsiveHeight(100),width:responsiveWidth(100),backgroundColor:"rgba(0,0,0,0.9)"}}/>
+        }
         </SafeAreaView>
       )}
     </>

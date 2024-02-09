@@ -30,7 +30,7 @@ export const getUserInfoRemote = async () => {
 
 export const getBannersApi = async () => {
   try {
-    const response = await axiosInstanceWithAuth.get(`/customer/banners`);
+    const response = await axios.get(`${BASE_URL}/base/banners`);
     return response?.data;
   } catch (err) {
     console.log(err, 'err############################################');
@@ -42,7 +42,7 @@ export const getBannersApi = async () => {
 
 export const getTestimonialsApi = async () => {
   try {
-    const response = await axiosInstanceWithAuth.get(`/customer/testimonials`);
+    const response = await axios.get(`${BASE_URL}/base/testimonials`);
     return response?.data;
   } catch (err) {
     console.log(err.response.data.error.message);
@@ -62,7 +62,7 @@ export const getHospitalsApi = async (lat, long, page, searchkey) => {
   );
   try {
     const response = await axiosInstanceWithAuth.get(
-      `/customer/hospitals?search=&latitude=${lat}&longitude=${long}&page=${page}`,
+      `/customer/hospitals?search=&latitude=${'11.03733800'}&longitude=${'77.03668500'}&page=${page}`,
     );
     return response?.data;
   } catch (err) {
@@ -113,7 +113,7 @@ export const checkVersionApi = async (platform, version) => {
   try {
     const response = await axiosInstanceWithAuth.post(`/auth/check-version`, {
       platform: platform,
-      version:version.toString(),
+      version:'1.0',
     });
     return response?.data;
   } catch (err) {

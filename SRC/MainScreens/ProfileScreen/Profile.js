@@ -142,7 +142,20 @@ const Profile = () => {
                   autoCapitalize="none"
                   autoCorrect={false}
                   onChangeText={text => setMobile(text)}
-                  value={profileData?.mobile_number}></TextInput>
+                  value={profileData?.country?.country_code+' '+profileData?.mobile_number}></TextInput>
+              </View>
+
+              <View>
+                <Text style={[styles.subTexts]}>Country</Text>
+                <TextInput
+                  editable={false}
+                  keyboardType="default"
+                  style={styles.input}
+                  name="mobile"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  onChangeText={text => setMobile(text)}
+                  value={profileData?.country?.name}></TextInput>
               </View>
 
               <View>

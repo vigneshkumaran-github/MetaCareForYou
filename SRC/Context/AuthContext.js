@@ -56,13 +56,14 @@ export const AuthProvider = ({children}) => {
     }
   };
 
-  const createAccount = async (name, mobile_number, email, password) => {
+  const createAccount = async (name, mobile_number, email, password,value) => {
     try {
       const response = await axios.post(`${BASE_URL}/auth/customer`, {
         name: name,
         mobile_number: mobile_number,
         email: email,
         password: password,
+        country_id: value,
       });
       console.log('response', response?.data);
       if (response.data?.status === true) {
@@ -157,6 +158,7 @@ export const AuthProvider = ({children}) => {
     GetHistory: apiCall.getHistoryApi,
     SearchHospitals:apiCall.searchHospitalsApi,
     CheckVersion:apiCall.checkVersionApi,
+    GetCountries:apiCall.getCountriesApi,
   };
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

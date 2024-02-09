@@ -35,14 +35,15 @@ export const checkDateApi = async (id,date) => {
   }
 };
 
-export const bookAppointmentApi = async (id,date) => {
-    console.log(id,date);
+export const bookAppointmentApi = async (id,date,slotid) => {
+    console.log(id,date,slotid);
     try {
       const response = await axiosInstanceWithAuth.post(
         `/customer/appointments`,
         {
           therapist_id:id,
           appointment_date: date.toString(),
+          slot_id:slotid,
         },
       );
       return response?.data;

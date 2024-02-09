@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {emailValidator, passwordValidator, showToastGreen, showToastRed} from '../../HelperFunctions/Helper';
 import {
   heightPercentageToDP as hp,
@@ -89,6 +89,27 @@ const Login = () => {
     }
   };
 
+  const getCollegelist = async () => {
+    const result = await getColleges();
+    if (result?.status === true) {
+      let newArray = []
+      result?.data?.map((item, index) => {
+        newArray.push(
+          {
+            key: item?.id,
+            value: item?.name
+          }
+        )
+      })
+      setDropData(newArray)
+    }
+  }
+
+  // useEffect(() => {
+  //   getCollegelist()
+  // }, [])
+
+
   return (
     <>
       {loader ? (
@@ -136,11 +157,7 @@ const Login = () => {
                 {/*Inputs*/}
 
                 <View style={{padding: 15}}>
-                  {/* <View style={{ flexDirection: 'row', paddingBottom: 10, alignItems: 'center', justifyContent: 'center' }}>
-                                    <TouchableOpacity style={userOption === "Patient" ? styles.selected : styles.unselected} onPress={() => setUserOption("Patient")}><Text style={userOption === "Patient" ? styles.optionSelected : styles.optionUnSelected}>{"Patient"}</Text></TouchableOpacity>
-                                    <Text>Or</Text>
-                                    <TouchableOpacity style={userOption === "Therapist" ? styles.selected : styles.unselected} onPress={() => setUserOption("Therapist")}><Text style={userOption === "Therapist" ? styles.optionSelected : styles.optionUnSelected}> {"Therapist"}</Text></TouchableOpacity>
-                                </View> */}
+                 
 
                   <View style={{flexDirection: 'row'}}>
                     <Icon
@@ -253,17 +270,6 @@ const Login = () => {
                       <Text style={[styles.forgot]}>Forgot password?</Text>
                     </TouchableOpacity>
                   </View>
-
-                  {/* <View style={{ flexDirection: 'row', paddingTop: 10 }}>
-                                    <Text style={[styles.areYou]}>
-                                        Are you a Therapist?
-                                    </Text>
-                                    <TouchableOpacity onPress={() => { Linking.openURL(`mailto:${'metacare4u@gmail.com '}`) }}>
-                                        <Text style={[styles.register]} >
-                                            Click here!
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View> */}
 
                   <View
                     style={{
