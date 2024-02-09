@@ -63,7 +63,7 @@ const Banner2 = ({banner, data, isLoading}) => {
               imageLoadingColor={COLORS.primary}
               autoplay
               circleLoop
-              autoplayInterval={3000}
+              autoplayInterval={5000}
             />
           ) : (
             <View
