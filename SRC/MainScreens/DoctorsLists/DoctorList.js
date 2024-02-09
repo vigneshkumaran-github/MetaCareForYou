@@ -92,7 +92,7 @@ const DoctorList = ({route}) => {
     const response = await CheckDate(id, date);
     console.log(response);
     if (response?.status === true) {
-      showToastGreen(response?.message);
+      // showToastGreen(response?.message);
       // bookAppointment(date);
       setModalVisible(true);
     } else {
@@ -102,12 +102,16 @@ const DoctorList = ({route}) => {
   };
 
   const bookAppointment = async () => {
-    const result = await BookAppointment(id, moment(date).format('YYYY-MM-DD'),selected);
+    const result = await BookAppointment(
+      id,
+      moment(date).format('YYYY-MM-DD'),
+      selected,
+    );
     if (result?.status === true) {
       console.log(result);
       setLoading2(false);
       showToastGreen(result?.message);
-      setSelected('')
+      setSelected('');
     } else {
       console.log(result, 'eee');
       setLoading2(false);
@@ -210,7 +214,7 @@ const DoctorList = ({route}) => {
                       // navigation.navigate('AppointmentScreen')
                       setSlotData(item?.slots);
                       setId(item.id);
-                      console.log(item?.slots)
+                      console.log(item?.slots);
                       onBookPress();
                     }}>
                     <Text style={styles.btntext}>Book Appointment</Text>
@@ -261,48 +265,75 @@ const DoctorList = ({route}) => {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.text1}>Choose Slot</Text>
-
             <View
               style={{
+                width: responsiveWidth(80),
                 flexDirection: 'row',
-                flexWrap: 'wrap',
-                alignSelf: 'center',
-                justifyContent: 'space-evenly',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: responsiveHeight(1),
               }}>
-              {slotData?.map((itm, index) => (
-                <TouchableOpacity
-                key={index}
-                  onPress={() => {
-                    setSelected(itm?.id);
-                  }}
-                  style={[
-                    styles.modalbtn,
-                    {
-                      backgroundColor:
-                        selected === itm?.id ? COLORS.primary : COLORS.white,
-                    },
-                  ]}>
-                  <Text
-                    style={[
-                      styles.modalbtntext,
-                      {color: selected === itm?.id ? COLORS.white : COLORS.textcolor},
-                    ]}>
-                    {itm?.from_time}-{itm?.to_time}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+              <Text style={styles.text1}>Choose Slot</Text>
+              <TouchableOpacity
+                style={styles.xbtn}
+                onPress={() => {
+                  setModalVisible(false);
+                  setSelected('');
+                }}>
+                <Text style={styles.text1}>X</Text>
+              </TouchableOpacity>
+            </View>
 
+            <View>
+              <ScrollView style={{maxHeight:responsiveHeight(40)}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    alignSelf: 'center',
+                    justifyContent: 'space-evenly',
+                  }}>
+                  {slotData?.map((itm, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => {
+                        setSelected(itm?.id);
+                      }}
+                      style={[
+                        styles.modalbtn,
+                        {
+                          backgroundColor:
+                            selected === itm?.id
+                              ? COLORS.primary
+                              : COLORS.white,
+                        },
+                      ]}>
+                      <Text
+                        style={[
+                          styles.modalbtntext,
+                          {
+                            color:
+                              selected === itm?.id
+                                ? COLORS.white
+                                : COLORS.textcolor,
+                          },
+                        ]}>
+                        {itm?.from_time}-{itm?.to_time}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </ScrollView>
               {selected !== '' && (
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalVisible(!modalVisible);
-                    bookAppointment()
-                  }}
-                  style={[styles.btn, {}]}>
-                  <Text style={styles.btntext}>Book</Text>
-                </TouchableOpacity>
-              )}
+                    <TouchableOpacity
+                      onPress={() => {
+                        setModalVisible(!modalVisible);
+                        bookAppointment();
+                      }}
+                      style={[styles.btn, {}]}>
+                      <Text style={styles.btntext}>Book</Text>
+                    </TouchableOpacity>
+                  )}
             </View>
           </View>
         </View>
@@ -401,10 +432,19 @@ const styles = StyleSheet.create({
   modalbtntext: {
     fontSize: RFValue(11),
     fontFamily: FONTFAMILY.HelveticaNeuBold,
-    fontWeight:'700'
+    fontWeight: '700',
   },
   modalbtntext2: {
     fontSize: RFValue(11),
     fontFamily: FONTFAMILY.HelveticaNeuMedium,
+  },
+  xbtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 0.5,
+    borderColor: COLORS.textcolor,
+    height: responsiveHeight(3),
+    width: responsiveHeight(3),
+    borderRadius: responsiveHeight(3) / 2,
   },
 });

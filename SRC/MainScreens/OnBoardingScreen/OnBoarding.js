@@ -14,6 +14,7 @@ import React, {useRef, useState} from 'react';
 
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { responsiveWidth } from 'react-native-responsive-dimensions';
 
 // const COLORS = {primary: '#f7f7f7', white: '#000'};
 
@@ -123,7 +124,7 @@ const OnBoarding = () => {
           {currentSlideIndex == slides.length - 1 ? (
             <View style={{height: 50}}>
               <TouchableOpacity
-                style={styles.btn}
+                style={[styles.btn,{width:responsiveWidth(32),alignSelf:'center',}]}
                 onPress={() => {
                   onStartBtn();
                 }}>

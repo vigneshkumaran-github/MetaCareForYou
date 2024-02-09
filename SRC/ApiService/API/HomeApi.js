@@ -62,7 +62,7 @@ export const getHospitalsApi = async (lat, long, page, searchkey) => {
   );
   try {
     const response = await axiosInstanceWithAuth.get(
-      `/customer/hospitals?search=&latitude=${'11.03733800'}&longitude=${'77.03668500'}&page=${page}`,
+      `/customer/hospitals?search=&latitude=${lat}&longitude=${long}&page=${page}`,
     );
     return response?.data;
   } catch (err) {
@@ -113,7 +113,7 @@ export const checkVersionApi = async (platform, version) => {
   try {
     const response = await axiosInstanceWithAuth.post(`/auth/check-version`, {
       platform: platform,
-      version:'1.0',
+      version:version,
     });
     return response?.data;
   } catch (err) {
