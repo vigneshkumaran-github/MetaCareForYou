@@ -22,7 +22,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/MaterialIcons';
 import {getInitials} from '../../../HelperFunctions/Helper';
 import {getUserLocationInfo} from '../../../ApiService/API/LocationApi';
-import { responsiveWidth } from 'react-native-responsive-dimensions';
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import {useNavigation} from '@react-navigation/native';
 
 // import Toast from "react-native-simple-toast";
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     margin: 9,
   },
   ProfileTouch: {
-    marginTop: 10,
+    marginTop: responsiveHeight(1),
     flexDirection: 'row',
   },
   ProfileImage: {
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 12,
     marginLeft: 3,
-    marginTop: 3,
+    marginTop: hp(0.5),
   },
   NotificationTouch: {
     marginTop: 10,
@@ -193,11 +193,11 @@ const styles = StyleSheet.create({
   },
   SearchLayout: {
     width: wp('85%'),
-    height: 40,
+    height: hp(7),
     borderRadius: 15,
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     marginLeft: 25,
-    marginBottom: 22,
+    marginBottom: hp(2),
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#52006A',
@@ -209,14 +209,14 @@ const styles = StyleSheet.create({
 
   SearchTouch: {
     width: wp('90%'),
-    height: 50,
+    height: hp(7),
     backgroundColor: COLORS.white,
     borderColor: 'white',
     borderWidth: 1,
     borderRadius: 25,
     alignItems: 'center',
     flexDirection: 'row',
-    position: 'absolute',
+    // position: 'absolute',
   },
   SearchTextLayout: {
     width: wp('70%'),

@@ -46,7 +46,7 @@ const DATA = [
   },
 ];
 
-const TopDoctors = ({banner,data,isLoading}) => {
+const TopDoctors = ({banner, data, isLoading}) => {
   // const data = [
   //   {
   //     image: 'https://source.unsplash.com/1024x768/?nature',
@@ -57,8 +57,7 @@ const TopDoctors = ({banner,data,isLoading}) => {
   //     link: 'https://www.google.com/',
   //   },
   // ];
-
-
+  console.log(data)
 
   const ItemSeparatorView = () => {
     return (
@@ -71,7 +70,11 @@ const TopDoctors = ({banner,data,isLoading}) => {
   };
 
   return (
-    <View style={{backgroundColor: COLORS.white,marginVertical:responsiveHeight(1.5)}}>
+    <View
+      style={{
+        backgroundColor: COLORS.white,
+        marginVertical: responsiveHeight(1.5),
+      }}>
       {!isLoading ? (
         <SliderBox
           images={banner}

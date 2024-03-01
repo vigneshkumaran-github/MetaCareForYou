@@ -77,3 +77,24 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+
+
+@stripe/stripe-react-native@0.19.0 ++
+"@stripe/stripe-react-native": "^0.23.0", --
+ "@react-native-google-signin/google-signin": "^9.0.2",
+
+ //removed reanimated and started running
+
+ Removed Below packages
+  "@stripe/stripe-react-native": "^0.23.0",
+    "@zegocloud/zego-uikit-prebuilt-call-rn": "^4.1.2",
+    "@zegocloud/zego-uikit-prebuilt-video-conference-rn": "^1.0.0",
+    "@zegocloud/zego-uikit-rn": "^2.0.3",
+    "@zegocloud/zego-uikit-signaling-plugin-rn": "^1.2.7",
+
+    //
+        "lottie-react-native": "^6.6.0", removed
+
+  
+  

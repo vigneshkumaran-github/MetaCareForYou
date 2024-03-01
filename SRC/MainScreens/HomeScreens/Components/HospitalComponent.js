@@ -239,9 +239,9 @@ const HospitalComponent = () => {
   // };
 
   useEffect(() => {
-    if(locationData){
+    // if(locationData){
       getData(locationData)
-    }
+    // }
   }, [locationData]);
 
   useEffect(() => {

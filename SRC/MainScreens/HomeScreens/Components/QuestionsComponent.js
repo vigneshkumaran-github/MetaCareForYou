@@ -118,7 +118,7 @@ const QuestionsComponent = () => {
           <View style={[styles.flexbox]}>
             <View style={[styles.line]}></View>
             <Text style={[styles.cardDescription]}  numberOfLines={2} ellipsizeMode='tail'> 
-              {'“ ' + item?.content + ' ”'}shhhh shhhs hhhs hhbdhb hd hb dh
+              {'“ ' + item?.content + ' ”'}
             </Text>
           </View>
           <TouchableOpacity onPress={() => SpacialistClick()}>
@@ -218,6 +218,7 @@ const styles = StyleSheet.create({
   line: {
     borderWidth: 2,
     borderColor: COLORS.secondary,
+    height:hp(7)
   },
   flexbox: {
     padding: 5,

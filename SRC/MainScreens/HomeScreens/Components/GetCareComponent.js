@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   },
   getCare: {
     width: wp('70'),
-    padding: 15,
+    height:hp(7),
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',

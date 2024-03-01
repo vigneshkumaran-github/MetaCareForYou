@@ -54,7 +54,6 @@ const EditProfile = ({route}) => {
   const [mobile, setMobile] = useState(data?.mobile_number);
   const [age, setAge] = useState(data?.age);
   const [gender, setGender] = useState(data?.gender);
-  const [nationality, setNationality] = useState(data?.nationality);
   const [healthIsseue, setHealthIsseue] = useState(data?.health_issue);
   const [mentalHealthIsseue, setMentalHealthIsseue] = useState(
     data?.mental_health_issue_before ? data?.mental_health_issue_before : false,
@@ -120,7 +119,6 @@ const EditProfile = ({route}) => {
       data.append('mobile_number', mobile);
       gender && data.append('gender', gender);
       age !== null && age !== '' && data.append('age', age);
-      nationality !== null && data.append('nationality', nationality);
       data.append('health_issue', healthIsseue);
       data.append('mental_health_issue_before', mentalHealthIsseue);
       data.append('thought_of_suicide', suicide);
@@ -254,25 +252,7 @@ const EditProfile = ({route}) => {
                   />
                 </View>
 
-                {/* <View>
-                  <Text style={[styles.subTexts]}>Last Name</Text>
-                  <TextInput
-                    keyboardType="default"
-                    style={{
-                      width: wp('85'),
-                      borderWidth: 0.5,
-                      height: 40,
-                      borderColor: 'gray',
-                      marginBottom: 10,
-                      paddingHorizontal: 10,
-                    }}
-                    name="email"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onChangeText={text => setLastName(text)}
-                    value={lastName}
-                  />
-                </View> */}
+             
 
                 <View>
                   <Text style={[styles.subTexts]}>Email Id</Text>
@@ -408,21 +388,6 @@ const EditProfile = ({route}) => {
                     onChangeText={text => setAge(text)}
                     value={age?.toString()}
                     placeholder="Enter your age"></TextInput>
-                </View>
-
-                <View>
-                  <Text style={[styles.subTexts]}>Nationality</Text>
-                  <TextInput
-                    keyboardType="default"
-                    placeholderTextColor={COLORS.lightGray}
-                    style={styles.input}
-                    name="nationality"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    maxLength={50}
-                    onChangeText={text => setNationality(text)}
-                    value={nationality}
-                    placeholder="Enter your Nationality"></TextInput>
                 </View>
 
                 <View>

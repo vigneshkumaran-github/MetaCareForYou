@@ -24,9 +24,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../../Context/AuthContext';
 import {COLORS} from '../../Constants/DesignConstants';
 import DeviceInfo from 'react-native-device-info';
-import HospitalComponent from './Components/HospitalComponent';
-import SpecialistComponent from './Components/SpecialistComponent';
+// import HospitalComponent from './Components/HospitalComponent';
+// import SpecialistComponent from './Components/SpecialistComponent';
 import Banner2 from './Components/Banner2';
+import HospitalComponent from './Components/HospitalComponent';
 
 const Home = () => {
   const [headerlocation, setHeaderLoaction] = useState({});
@@ -80,7 +81,7 @@ const Home = () => {
     const result = await CheckVersion(Platform.OS, Version)
     console.log(result)
     if (result?.status === true) {
-      if (result?.data?.version === true) {
+      if (result?.data?.version === false) {
         SetbasicDetails()
         getBanners()
       }
@@ -131,11 +132,11 @@ const Home = () => {
       <ScrollView>
         <HeaderComponent data={profileData} location={headerlocation} />
         {/* <SpecialistComponent /> */}
-        <TopDoctors banner={banner1} data={bannerData?.top_banner} isLoading={loading2} />
+       <TopDoctors banner={banner1} data={bannerData?.top_banner} isLoading={loading2} /> 
         <HospitalComponent />
         {/* <FindDoctorComponent /> */}
         <GetCareComponent />
-        <Banner2 banner={banner2} data={bannerData?.middle_banner} isLoading={loading2} />
+        <Banner2 banner={banner2} data={bannerData?.middle_banner} isLoading={loading2} /> 
         {/*  */}
         {/* <IssuesComponent /> */}
         <GetHelpComponent />

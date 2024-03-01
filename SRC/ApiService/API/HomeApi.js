@@ -62,7 +62,7 @@ export const getHospitalsApi = async (lat, long, page, searchkey) => {
   );
   try {
     const response = await axiosInstanceWithAuth.get(
-      `/customer/hospitals?search=&latitude=${lat}&longitude=${long}&page=${page}`,
+      `/customer/hospitals?search=&latitude=${'11.03733800'}&longitude=${'77.03668500'}&page=${page}`,
     );
     return response?.data;
   } catch (err) {

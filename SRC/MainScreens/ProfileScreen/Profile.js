@@ -190,27 +190,7 @@ const Profile = () => {
                   placeholder="Not updated"></TextInput>
               </View>
 
-              <View>
-                <Text style={[styles.subTexts]}>Nationality</Text>
-                      <View
-                  style={[
-                    styles.input,
-                    {height: responsiveHeight(7), justifyContent: 'center'},
-                  ]}>
-                  <Text
-                    style={{
-                      color: COLORS.gray,
-                      fontSize: RFValue(14),
-                      fontFamily: FONTFAMILY.HelveticaNeuMedium,
-                    }}>
-                    {profileData?.nationality
-                      ? profileData?.nationality === 'null'
-                        ? 'Not Updated'
-                        : profileData?.nationality
-                      : 'Not Updated'}
-                  </Text>
-                </View>
-              </View>
+            
 
               <View>
                 <Text style={[styles.subTexts]}>Health issues if any</Text>

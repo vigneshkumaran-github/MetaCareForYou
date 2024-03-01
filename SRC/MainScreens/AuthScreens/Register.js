@@ -425,13 +425,14 @@ const Register = () => {
                   </View>
 
                   <View style={{flexDirection: 'row'}}>
-                    <Checkbox
+                    <Checkbox.Android
                       status={checked ? 'checked' : 'unchecked'}
                       onPress={() => {
                         setChecked(!checked);
                       }}
                       color={COLORS.primary}
-                      uncheckColor={'red'}
+                      uncheckColor={COLORS.gray}
+                      uncheckedColor={COLORS.gray}
                     />
                     <Text style={[styles.LableCheck]}>I accept the </Text>
                     <TouchableOpacity
