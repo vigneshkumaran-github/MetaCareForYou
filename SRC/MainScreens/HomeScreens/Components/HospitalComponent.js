@@ -326,7 +326,8 @@ const HospitalComponent = () => {
                 loop
                 style={{
                   width: responsiveWidth(40),
-                  height: responsiveHeight(15),
+                  height: responsiveHeight(17),
+                  marginTop:responsiveHeight(1)
                 }}
               />
             </View>

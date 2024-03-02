@@ -65,7 +65,7 @@ const Home = () => {
             BackHandler.exitApp();
             if (Platform.OS === 'android') {
               Linking.openURL(
-                'https://play.google.com/store/apps/details?id=com.shrewd.fiveserv',
+                'https://play.google.com/store/apps/details?id=com.metacareforyou',
               );
             } else {
               Linking.openURL('https://apps.apple.com/in/app');
@@ -81,7 +81,7 @@ const Home = () => {
     const result = await CheckVersion(Platform.OS, Version)
     console.log(result)
     if (result?.status === true) {
-      if (result?.data?.version === false) {
+      if (result?.data?.version === true) {
         SetbasicDetails()
         getBanners()
       }

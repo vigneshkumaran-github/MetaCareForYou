@@ -234,6 +234,7 @@ const Search = () => {
                       style={{
                         width: responsiveWidth(90),
                         height: responsiveHeight(30),
+                        marginVertical:responsiveHeight(7)
                       }}
                     />
                      {searchKey?.length > 3 ? (

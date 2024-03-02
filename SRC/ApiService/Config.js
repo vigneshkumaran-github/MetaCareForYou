@@ -5,8 +5,8 @@ import moment from 'moment';
 
 // @ts-ignore
 
-export const BASE_URL = 'http://54.179.118.199:8080/api/v2';
 // export const BASE_URL = 'http://54.179.118.199:8080/api/v2';
+export const BASE_URL = 'https://api.metacare4u.life/api/v2';
 // export const BASE_URL='https://api.metacare4u.online/api/v1/auth/'
 
 // export default {
