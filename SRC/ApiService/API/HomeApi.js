@@ -64,10 +64,11 @@ export const getHospitalsApi = async (lat, long, page, searchkey) => {
     const response = await axiosInstanceWithAuth.get(
       `/customer/hospitals?search=&latitude=${lat}&longitude=${long}&page=${page}`,
     );
+    console.log(response.data)
     return response?.data;
   } catch (err) {
     console.log(err.response.data.error.message);
-    showToastRed(err.response.data.error.message);
+    // showToastRed(err.response.data.error.message);
     console.log(err, 'err');
     return err.response.data;
   }

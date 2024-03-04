@@ -43,7 +43,7 @@ const Home = () => {
   const SetbasicDetails = async () => {
     //to get profile Details
     const response = await GetProfile();
-    console.log(response)
+    // console.log(response)
     if (response?.status === true) {
       setProfileData(response?.data);
       setLoading(false);
@@ -79,7 +79,7 @@ const Home = () => {
 
   const checkVersion = async () => {
     const result = await CheckVersion(Platform.OS, Version)
-    console.log(result)
+    // console.log(result)
     if (result?.status === true) {
       if (result?.data?.version === true) {
         SetbasicDetails()
@@ -133,7 +133,7 @@ const Home = () => {
         <HeaderComponent data={profileData} location={headerlocation} />
         {/* <SpecialistComponent /> */}
        <TopDoctors banner={banner1} data={bannerData?.top_banner} isLoading={loading2} /> 
-        <HospitalComponent />
+       <HospitalComponent />
         {/* <FindDoctorComponent /> */}
         <GetCareComponent />
         <Banner2 banner={banner2} data={bannerData?.middle_banner} isLoading={loading2} /> 
