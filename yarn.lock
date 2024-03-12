@@ -6199,7 +6199,7 @@ react-native-multiple-select@^0.5.12:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-onesignal@^4.5.0:
+react-native-onesignal@^4.5.2:
   version "4.5.2"
   resolved "https://registry.npmjs.org/react-native-onesignal/-/react-native-onesignal-4.5.2.tgz"
   integrity sha512-o7ksZAYzotmYsSSv5j+3779G5uoPbh7cPeJapJTPIfImtbsCjDhMVIix0qKxfT3R3V25BPxvMT0P5kM5ijVu9g==
