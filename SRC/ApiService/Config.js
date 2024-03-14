@@ -25,7 +25,7 @@ export const axiosInstanceWithAuth = axios.create({
 
 axiosInstanceWithAuth.interceptors.request.use(async config => {
   const token = await AsyncStorage.getItem('userToken');
-  console.log(token);
+  // console.log(token);
   const refreshToken = await AsyncStorage.getItem('refreshToken');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -39,12 +39,12 @@ axiosInstanceWithAuth.interceptors.request.use(async config => {
     return config;
   }
   if (decoded.exp < currentTime) {
-    console.log(token);
-    console.log(refreshToken);
+    // console.log(token);
+    // console.log(refreshToken);
     const response = await axios.post(`${BASE_URL}/auth/refresh-token`, {
       refresh_token: refreshToken,
     });
-    console.log(response);
+    // console.log(response);
     console.log('token expired');
     AsyncStorage.setItem('userToken', response.data.data.accessToken);
     AsyncStorage.setItem('refreshToken', response.data.data.refreshToken);

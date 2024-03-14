@@ -30,7 +30,6 @@ const CreateAccount = () => {
                 width: responsiveWidth(40),
                 height: responsiveWidth(40),
                 borderRadius: responsiveWidth(40) / 2,
-                backgroundColor: COLORS.primary,
                 alignItems: 'center',
                 justifyContent: 'center',
                 shadowOffset: { width: 0, height: 8 },
@@ -45,7 +44,6 @@ const CreateAccount = () => {
                     style={{
                         width: responsiveWidth(40),
                         height: responsiveWidth(40),
-                        borderRadius: responsiveWidth(40) / 2,
                     }}
                 />
             </View>

@@ -53,6 +53,7 @@ const EditProfile = ({route}) => {
   const [email, setEmail] = useState(data?.email);
   const [mobile, setMobile] = useState(data?.mobile_number);
   const [age, setAge] = useState(data?.age);
+  const [address, setAddress] = useState(data?.address);
   const [gender, setGender] = useState(data?.gender);
   const [healthIsseue, setHealthIsseue] = useState(data?.health_issue);
   const [mentalHealthIsseue, setMentalHealthIsseue] = useState(
@@ -119,6 +120,7 @@ const EditProfile = ({route}) => {
       data.append('mobile_number', mobile);
       gender && data.append('gender', gender);
       age !== null && age !== '' && data.append('age', age);
+      address !== null && address !== '' && data.append('address', address);
       data.append('health_issue', healthIsseue);
       data.append('mental_health_issue_before', mentalHealthIsseue);
       data.append('thought_of_suicide', suicide);
@@ -391,6 +393,21 @@ const EditProfile = ({route}) => {
                 </View>
 
                 <View>
+                  <Text style={[styles.subTexts]}>Address</Text>
+                  <TextInput
+                    keyboardType="default"
+                    placeholderTextColor={COLORS.lightGray}
+                    style={[styles.input,{height:'auto',textAlignVertical:'top'}]}
+                    name="Address"
+                    autoCapitalize="none"
+                    multiline
+                    autoCorrect={false}
+                    onChangeText={text => setAddress(text)}
+                    value={address}
+                    placeholder="Enter your Address"></TextInput>
+                </View>
+
+                <View>
                   <Text style={[styles.subTexts]}>Health issues if any</Text>
                   <TextInput
                     keyboardType="default"
@@ -497,7 +514,7 @@ const EditProfile = ({route}) => {
           </ScrollView>
 
         {isLoading2 &&
-           <ActivityLoader size={'large'} style={{height:responsiveHeight(100),width:responsiveWidth(100),backgroundColor:"rgba(0,0,0,0.9)"}}/>
+           <ActivityLoader size={'large'} style={{height:responsiveHeight(100),width:responsiveWidth(100),backgroundColor:"rgba(0,0,0,0.1)"}}/>
         }
         </SafeAreaView>
       )}
@@ -569,7 +586,7 @@ const styles = StyleSheet.create({
   },
   unselected: {
     width: wp(22),
-    backgroundColor: '#FFEDDF',
+    backgroundColor: '#f7cfcd',
     margin: 6,
     padding: 10,
     borderRadius: 10,
@@ -633,6 +650,7 @@ const styles = StyleSheet.create({
     fontSize: RFValue(14),
     fontFamily: FONTFAMILY.HelveticaNeuMedium,
     borderRadius: 7,
+    flexWrap:'wrap-reverse'
   },
 });
 

@@ -217,7 +217,6 @@ const Register = () => {
               nestedScrollEnabled
               style={{flex: 1}}
               behavior="padding">
-              {/* <View style={[styles.MainContainer]}> */}
               <View style={[styles.card, styles.elevation]}></View>
 
               <View style={{alignItems: 'center', bottom: 60}}>
@@ -455,41 +454,9 @@ const Register = () => {
                   size="60"
                   onPress={() => clickOnpress()}
                 />
-                {/* <TouchableOpacity
-              onPress={() => clickOnpress()}
-              style={styles.button}
-            >
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: COLORS.white,
-                  fontWeight: "bold",
-                  textAlign: "center",
-                }}
-              >
-                Sign up
-              </Text>
-            </TouchableOpacity> */}
-                {/* <View >
-          <Text style={[styles.HaveAccount]}>Have an account? </Text>
-          <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("LoginScreen")
-                  }}
-                >
-                  <Text style={[styles.HaveAccountLink]}>Sign in </Text>
-                </TouchableOpacity>
-          </View> */}
+                
               </View>
 
-              {/* <View style={{ marginTop: 10 }}>
-            <Image
-              style={{ width: wp(100), height: hp(28), resizeMode: "contain" }}
-              source={require("../.././Assets/images/sign.png")}
-            />
-          </View> */}
-
-              {/* </View> */}
             </KeyboardAwareScrollView>
           </ScrollView>
         </SafeAreaView>
@@ -659,7 +626,8 @@ const styles = StyleSheet.create({
   Logostyle: {
     width: 100,
     height: 100,
-    borderRadius: 100 / 2,
+    // backgroundColor:COLORS.white,
+    // borderRadius:20,
   },
   Lable: {
     marginTop: 3,
@@ -693,11 +661,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   LableColor: {
-    marginTop: 8,
+    marginTop: 9,
     marginLeft: 3,
     fontSize: 14,
     fontWeight: 'bold',
-    color: COLORS.blue,
+    color: COLORS.primary,
   },
   Error: {
     marginTop: 5,

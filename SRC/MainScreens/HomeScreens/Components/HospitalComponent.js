@@ -57,7 +57,7 @@ const HospitalComponent = () => {
       setPageCount(response?.data?.length);
     } else {
       setLoading(false);
-      console.log(response, 'eee');
+      // console.log(response, 'eee');
     }
   };
 
@@ -74,7 +74,7 @@ const HospitalComponent = () => {
       setPageCount(response?.data?.length);
     } else {
       setLoading2(false);
-      console.log(response, 'eee');
+      // console.log(response, 'eee');
     }
   };
 

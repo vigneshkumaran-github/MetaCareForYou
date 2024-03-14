@@ -57,7 +57,6 @@ const TopDoctors = ({banner, data, isLoading}) => {
   //     link: 'https://www.google.com/',
   //   },
   // ];
-  console.log(data)
 
   const ItemSeparatorView = () => {
     return (

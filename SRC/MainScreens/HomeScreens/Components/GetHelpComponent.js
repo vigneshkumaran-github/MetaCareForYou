@@ -135,9 +135,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   callImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 40 / 2,
+    width: 35,
+    height: 35,
   },
   callLayout: {
     width: 50,

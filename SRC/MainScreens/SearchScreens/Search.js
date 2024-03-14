@@ -47,6 +47,7 @@ const Search = () => {
   const [refreshing, setRefreshing] = useState(false);
   console.log(locationData)
 
+
   const searchText = text => {
     setSearchKey(text);
     if (text?.length > 3) {
@@ -204,7 +205,7 @@ const Search = () => {
                       <View
                         style={{
                           justifyContent: 'space-between',
-                          height: responsiveHeight(7),
+                          height: 'auto',
                           marginStart: responsiveWidth(2),
                           width: responsiveWidth(60),
                         }}>
@@ -218,7 +219,7 @@ const Search = () => {
                           numberOfLines={2}
                           ellipsizeMode="tail"
                           style={styles.Designation}>
-                          {item?.address}
+                          {item?.address} 
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 2.5,
     alignSelf: 'center',
-    height: responsiveHeight(10),
+    height: responsiveHeight(13),
     marginVertical: responsiveHeight(1),
     marginHorizontal: responsiveWidth(5),
     flexDirection: 'row',

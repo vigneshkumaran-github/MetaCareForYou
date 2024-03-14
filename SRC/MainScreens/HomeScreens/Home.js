@@ -97,10 +97,9 @@ const Home = () => {
 
   const getBanners = async () => {
     const response = await GetBanners();
-    console.log(response);
+    // console.log(response);
     if (response?.status === true) {
       setBannerData(response?.data);
-      console.log(response?.data)
       response?.data?.top_banner?.map((item, index) => {
         let arr = banner1;
         arr.push(item.image);

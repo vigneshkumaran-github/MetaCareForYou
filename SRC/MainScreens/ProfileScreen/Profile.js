@@ -142,7 +142,11 @@ const Profile = () => {
                   autoCapitalize="none"
                   autoCorrect={false}
                   onChangeText={text => setMobile(text)}
-                  value={profileData?.country?.country_code+' '+profileData?.mobile_number}></TextInput>
+                  value={
+                    profileData?.country?.country_code +
+                    ' ' +
+                    profileData?.mobile_number
+                  }></TextInput>
               </View>
 
               <View>
@@ -190,7 +194,20 @@ const Profile = () => {
                   placeholder="Not updated"></TextInput>
               </View>
 
-            
+              <View>
+                <Text style={[styles.subTexts]}>Address</Text>
+                <TextInput
+                  keyboardType="default"
+                  style={[styles.input,{height:'auto'}]}
+                  name="email"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  multiline
+                  onChangeText={text => setage(text)}
+                  value={profileData?.address?.toString()}
+                  editable={false}
+                  placeholder="Not updated"></TextInput>
+              </View>
 
               <View>
                 <Text style={[styles.subTexts]}>Health issues if any</Text>

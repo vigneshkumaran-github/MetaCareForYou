@@ -3,8 +3,10 @@ import { Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
 
 export const COLORS = {
-  primary:"#F4740D",
-  secondary:"#181065",
+  // primary:"#F4740D",
+  // secondary:"#181065",
+  primary:"#AA130C",
+  secondary:"#1B1364",
   onboardbackround:"#f1f3f4",
   onboardbackround:"#f1f3f4",
   lightGray:"#676a6c",//For Card Description

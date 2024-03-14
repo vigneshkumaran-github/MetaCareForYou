@@ -22,8 +22,12 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/MaterialIcons';
 import {getInitials} from '../../../HelperFunctions/Helper';
 import {getUserLocationInfo} from '../../../ApiService/API/LocationApi';
-import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
 import {useNavigation} from '@react-navigation/native';
+import {OneSignal} from 'react-native-onesignal';
 
 // import Toast from "react-native-simple-toast";
 
@@ -33,7 +37,7 @@ const notification = <Icon name="bell-badge" size={25} color="#fff" />;
 const search = <Icon1 name="search" size={23} color="#fff" />;
 
 const HeaderComponent = ({data}) => {
-  const {Logout, GetUserInfo,locationData} = useContext(AuthContext);
+  const {Logout, GetUserInfo, locationData} = useContext(AuthContext);
   const totalnotification = 0;
   const navigation = useNavigation();
   const [userInfoData, setUserInfoData] = useState({});
@@ -51,7 +55,7 @@ const HeaderComponent = ({data}) => {
   const getLocation = async () => {
     //   //To get location details
     const location = await getUserLocationInfo(locationData);
-    console.log(location);
+    // console.log(location);
     if (location) {
       setLocality(location.locality);
       setCity(location.city);
@@ -121,7 +125,9 @@ const HeaderComponent = ({data}) => {
           onPress={() => searchScreen()}
           style={[styles.SearchTouch]}>
           <View style={[styles.SearchTextLayout]}>
-            <Text style={[styles.SearchText]}>Search Hospitals & Explore More...</Text>
+            <Text style={[styles.SearchText]}>
+              Search Hospitals & Explore More...
+            </Text>
           </View>
           <View style={[styles.SearchIconLayout]}>
             {
@@ -168,8 +174,8 @@ const styles = StyleSheet.create({
     borderRadius: responsiveWidth(13) / 2,
     resizeMode: 'contain',
     marginRight: 10,
-    borderWidth:0.5,
-    borderColor:'white'
+    borderWidth: 0.5,
+    borderColor: 'white',
   },
   ProfileName: {
     color: COLORS.white,

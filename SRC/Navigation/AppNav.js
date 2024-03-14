@@ -21,8 +21,11 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import NoData from '../CustomComponents/NoData';
+import {OneSignal, LogLevel} from 'react-native-onesignal';
 
 const AppNav = () => {
+  
+
   const {
     UserDetails,
     isLoading,

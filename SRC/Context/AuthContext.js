@@ -6,7 +6,7 @@ import {Authprovider} from './AuthContext';
 import {BASE_URL, axiosInstanceWithAuth} from '../ApiService/Config';
 import apiCall from '../ApiService/API/index';
 import axios from 'axios';
-import { OneSignal } from 'react-native-onesignal';
+import { OneSignal,LogLevel } from 'react-native-onesignal';
 
 export const AuthContext = createContext();
 
@@ -47,7 +47,7 @@ export const AuthProvider = ({children}) => {
         );
 
         OneSignal.User.pushSubscription.optIn()
-        OneSignal.User.addTag("user_type", response.data?.data?.tokens?.user_type.toString());
+        OneSignal.User.addTag("user_type", "customer");
         OneSignal.User.pushSubscription.addEventListener('change', (subscription) => {
             UpdateSubId(subscription?.current?.id);
         });
@@ -58,7 +58,7 @@ export const AuthProvider = ({children}) => {
     } catch (err) {
       console.log(err.response.data.error.message);
       showToastRed(err.response.data.error.message);
-      console.log(err);
+      console.log(err,'errrrorrrr');
       return err.response?.data;
     }
   };
@@ -89,6 +89,11 @@ export const AuthProvider = ({children}) => {
         );
         setUserToken(response?.data?.data?.accessToken);
         setUserDetails(response?.data?.data);
+        OneSignal.User.pushSubscription.optIn()
+        OneSignal.User.addTag("user_type", "customer");
+        OneSignal.User.pushSubscription.addEventListener('change', (subscription) => {
+            UpdateSubId(subscription?.current?.id);
+        });
       }
       return response.data;
     } catch (err) {
@@ -101,6 +106,7 @@ export const AuthProvider = ({children}) => {
 
     // To send  subscription id to one signal
     const UpdateSubId = async (subscription_id) => {
+      console.log(subscription_id,"IDDDDD")
       try {
           const response = await axiosInstanceWithAuth.patch(
               '/customer/update-subscription',
@@ -145,6 +151,9 @@ export const AuthProvider = ({children}) => {
     await AsyncStorage.removeItem('refreshToken');
     await AsyncStorage.removeItem('location')
     setUserToken(null);
+    OneSignal.User.pushSubscription.removeEventListener('change', (subscription) => {
+      UpdateSubId(subscription?.current?.id);
+  });
   };
 
   useEffect(() => {
