@@ -159,7 +159,7 @@ const Search = () => {
                   value={searchKey}
                   placeholderTextColor={COLORS.textcolor}
                   keyboardType="default"
-                  placeholder={'Search for Hospitals...'}
+                  placeholder={'Search your service provider...'}
                   underlineColorAndroid="transparent"
                   onChangeText={text => searchText(text)}
                   // onClear={text => setSearchKey('')}

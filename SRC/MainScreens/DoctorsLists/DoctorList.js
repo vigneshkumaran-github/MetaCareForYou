@@ -160,7 +160,7 @@ const DoctorList = ({route}) => {
 
   return (
     <View style={styles.container}>
-      <CustomNavbar title="Our Doctors" onPress={() => navigation.goBack()} />
+      <CustomNavbar title="Book Your Service" onPress={() => navigation.goBack()} />
 
       {!loading ? (
         <>
