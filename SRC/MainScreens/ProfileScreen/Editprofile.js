@@ -397,7 +397,7 @@ const EditProfile = ({route}) => {
                   <TextInput
                     keyboardType="default"
                     placeholderTextColor={COLORS.lightGray}
-                    style={[styles.input,{height:'auto',textAlignVertical:'top'}]}
+                    style={[styles.input,{height:'auto',textAlignVertical:'center'}]}
                     name="Address"
                     autoCapitalize="none"
                     multiline

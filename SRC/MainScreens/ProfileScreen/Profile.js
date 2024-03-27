@@ -214,7 +214,7 @@ const Profile = () => {
                 <View
                   style={[
                     styles.input,
-                    {height: responsiveHeight(7), justifyContent: 'center'},
+                    {height: responsiveHeight(6), justifyContent: 'center'},
                   ]}>
                   <Text
                     style={{

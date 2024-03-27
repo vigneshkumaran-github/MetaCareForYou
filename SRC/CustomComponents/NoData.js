@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     fontWeight:'700',
     fontFamily:FONTFAMILY.HelveticaNeuMedium,
     fontSize:RFValue(16),
-    marginTop:responsiveHeight(2)
+    marginTop:responsiveHeight(5)
   },
   text2:{
     color:COLORS.gray,

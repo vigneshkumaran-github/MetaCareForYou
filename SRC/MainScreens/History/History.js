@@ -210,7 +210,7 @@ const History = () => {
               )}
             />
           ) : (
-            <NoData text1={'No Appointments Yet !'} />
+            <NoData  text1={'No Appointments Yet !'} />
           )}
         </View>
       ) : (
